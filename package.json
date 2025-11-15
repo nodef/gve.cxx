@@ -1,0 +1,27 @@
+{
+  "name": "gve.cxx",
+  "version": "0.0.1",
+  "description": "A high-performance parallel Graph interface supporting efficient Dynamic batch updates.",
+  "keywords": [
+    "c++",
+    "library",
+    "performance",
+    "parallel",
+    "graph",
+    "interface",
+    "dynamic",
+    "batch",
+    "update",
+    "gve"
+  ],
+  "license": "AGPL-3.0",
+  "author": "wolfram77@gmail.com",
+  "homepage": "https://github.com/nodef/gve.cxx#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nodef/gve.cxx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/nodef/gve.cxx/issues"
+  }
+}
