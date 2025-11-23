@@ -10,7 +10,7 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
-#include "_modules.hxx"
+#include "_compile.hxx"
 #ifdef _OPENMP
 #include <omp.h>
 #endif
@@ -1999,7 +1999,7 @@ inline ostream& operator<<(ostream& a, const DiGraphCsr<K, V, E, O>& x) {
 
 
 // Now, we export the public API.
-export namespace gve {
+EXPORT namespace gve {
   // Classes
   using detail::ArenaDiGraph;
   using detail::DiGraph;

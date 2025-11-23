@@ -1,6 +1,11 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <iterator>
-#include "_modules.hxx"
+// #include <cstdint>
+#include "_compile.hxx"
 
 
 
@@ -9,9 +14,6 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
-using std::iterator_traits;
-
-
 #pragma region CLASSES
 /**
  * A bounded (circular) deque view capable of storing N elements.
@@ -21,7 +23,7 @@ template <class I>
 class DequeView {
   #pragma region TYPES
   protected:
-  using T = typename iterator_traits<I>::value_type;
+  using T = typename std::iterator_traits<I>::value_type;
 
   public:
   /** Value type of the deque. */
@@ -166,7 +168,7 @@ template <class I>
 class UnsizedDequeView {
   #pragma region TYPES
   protected:
-  using T = typename iterator_traits<I>::value_type;
+  using T = typename std::iterator_traits<I>::value_type;
 
   public:
   /** Value type of the deque. */

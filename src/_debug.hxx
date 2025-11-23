@@ -1,9 +1,14 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
+#pragma once
+
 #define __STDC_WANT_LIB_EXT1__ 1
-#include <chrono>
 #include <ctime>
 #include <cassert>
 #include <cstdio>
-#include <cstdlib>
+// #include <cstdlib>
+#include <chrono>
 
 #if !defined(NDEBUG) && defined(BUILD) && BUILD>=1
 #include <signal.h>
@@ -13,7 +18,7 @@
 #endif
 #endif
 
-#include "_modules.hxx"
+#include "_compile.hxx"
 
 
 
@@ -22,13 +27,8 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
-using std::chrono::system_clock;
-using std::time_t;
-using std::tm;
-using std::localtime;
 using std::fprintf;
 using std::printf;
-using std::exit;
 
 
 #pragma region BUILD MODES
@@ -101,29 +101,29 @@ using std::exit;
 #pragma region PRINT
 #ifndef FPRINTFE
 /** File print using format only if build mode is error or higher. */
-#define FPRINTFE(...)  PERFORME(fprintf(__VA_ARGS__))
+#define FPRINTFE(...)  PERFORME(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is warning or higher. */
-#define FPRINTFW(...)  PERFORMW(fprintf(__VA_ARGS__))
+#define FPRINTFW(...)  PERFORMW(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is info or higher. */
-#define FPRINTFI(...)  PERFORMI(fprintf(__VA_ARGS__))
+#define FPRINTFI(...)  PERFORMI(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is debug or higher. */
-#define FPRINTFD(...)  PERFORMD(fprintf(__VA_ARGS__))
+#define FPRINTFD(...)  PERFORMD(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is trace. */
-#define FPRINTFT(...)  PERFORMT(fprintf(__VA_ARGS__))
+#define FPRINTFT(...)  PERFORMT(std::fprintf(__VA_ARGS__))
 #endif
 
 
 #ifndef PRINTFE
 /** Print using format only if build mode is error or higher. */
-#define PRINTFE(...)  PERFORME(printf(__VA_ARGS__))
+#define PRINTFE(...)  PERFORME(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is warning or higher. */
-#define PRINTFW(...)  PERFORMW(printf(__VA_ARGS__))
+#define PRINTFW(...)  PERFORMW(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is info or higher. */
-#define PRINTFI(...)  PERFORMI(printf(__VA_ARGS__))
+#define PRINTFI(...)  PERFORMI(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is debug or higher. */
-#define PRINTFD(...)  PERFORMD(printf(__VA_ARGS__))
+#define PRINTFD(...)  PERFORMD(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is trace. */
-#define PRINTFT(...)  PERFORMT(printf(__VA_ARGS__))
+#define PRINTFT(...)  PERFORMT(std::printf(__VA_ARGS__))
 #endif
 
 
@@ -156,7 +156,7 @@ using std::exit;
 
 
 #ifndef PRINTLNE
-#define println(...) do { printf(__VA_ARGS__); printf("\n"); } while(0)
+#define println(...) do { std::printf(__VA_ARGS__); std::printf("\n"); } while(0)
 /** Print line only if build mode is error or higher. */
 #define PRINTLNE(...)  PERFORME(println(__VA_ARGS__))
 /** Print line only if build mode is warning or higher. */
@@ -180,7 +180,7 @@ using std::exit;
  * @param time time
  * @param result time result
  */
-inline void localtime_safe(const time_t* time, tm* result) {
+inline void localtime_safe(const std::time_t* time, std::tm* result) {
   #if defined(_WIN32)
   localtime_s(result, time);
   #elif defined(__STDC_LIB_EXT1__)
@@ -194,7 +194,10 @@ inline void localtime_safe(const time_t* time, tm* result) {
  * Print log prefix.
  */
 inline void logPrefix() {
-  tm t; time_t s = system_clock::to_time_t(system_clock::now());
+  std::tm t;
+  std::time_t s = std::chrono::system_clock::to_time_t(
+    std::chrono::system_clock::now()
+  );
   localtime_safe(&s, &t);
   printf("%04d-%02d-%02d %02d:%02d:%02d"
     , t.tm_year + 1900
@@ -273,12 +276,12 @@ inline void on_sigsegv(int sig) {
   #if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
   void *entries[STACK_TRACE_SIZE];
   size_t n = backtrace(entries, STACK_TRACE_SIZE);
-  fprintf(stderr, "ERROR: SIGNAL %d:\n", sig);
+  std::fprintf(stderr, "ERROR: SIGNAL %d:\n", sig);
   backtrace_symbols_fd(entries, n, STDERR_FILENO);
   #else
-  fprintf(stderr, "ERROR: SIGNAL %d\n", sig);
+  std::fprintf(stderr, "ERROR: SIGNAL %d\n", sig);
   #endif
-  exit(1);
+  std::exit(1);
   #endif
 }
 // - https://stackoverflow.com/a/77336/1413259
@@ -303,6 +306,7 @@ inline void install_sigsegv() {
 
 // Now, we export the public API.
 EXPORT namespace gve {
+  // Methods
   using detail::on_sigsegv;
   using detail::install_sigsegv;
 }

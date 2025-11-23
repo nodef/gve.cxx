@@ -3,9 +3,17 @@
 // See LICENSE for full terms
 #pragma once
 
-// This is for C++20 modules.
+// Check for module support.
 #ifdef _MODULE_
 #define EXPORT export
 #else
 #define EXPORT
+#endif
+
+
+// Check for constexpr support.
+#if __has_feature(constexpr)
+#define IF_CONSTEXPR if constexpr
+#else
+#define IF_CONSTEXPR if
 #endif
