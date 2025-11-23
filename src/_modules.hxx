@@ -5,7 +5,7 @@
 
 // This is for C++20 modules.
 #ifdef _MODULE_
-#define GVE_EXPORT export
+#define EXPORT export
 #else
-#define GVE_EXPORT
+#define EXPORT
 #endif

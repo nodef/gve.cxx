@@ -1999,7 +1999,7 @@ inline ostream& operator<<(ostream& a, const DiGraphCsr<K, V, E, O>& x) {
 
 
 // Now, we export the public API.
-GVE_EXPORT namespace gve {
+export namespace gve {
   // Classes
   using detail::ArenaDiGraph;
   using detail::DiGraph;
