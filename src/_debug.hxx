@@ -209,7 +209,7 @@ inline void logPrefix() {
   );
 }
 
-#if defined(USE_MPI) || defined(MPI_ENABLED)
+#if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
 /**
  * Print log prefix.
  */

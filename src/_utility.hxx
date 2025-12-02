@@ -6,7 +6,7 @@
 #include <utility>
 #include <chrono>
 #include "_compile.hxx"
-#if defined(USE_MPI) || defined(MPI_ENABLED)
+#if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
 #include "_mpi.hxx"
 #endif
 
@@ -123,7 +123,7 @@ inline float measureDuration(F fn, int N=1) {
 }
 
 
-#if defined(USE_MPI) || defined(MPI_ENABLED)
+#if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
 /**
  * Measure the duration of execution of a function.
  * @param fn measured function
@@ -168,7 +168,7 @@ inline float measureDurationMarked(F fn, int N=1) {
 }
 
 
-#if defined(USE_MPI) || defined(MPI_ENABLED)
+#if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
 /**
  * Measure the duration of execution of marked sections in a function.
  * @param fn measured function (section marker)
@@ -303,7 +303,7 @@ EXPORT namespace gve {
   using detail::duration;
   using detail::measureDuration;
   using detail::measureDurationMarked;
-  #if defined(USE_MPI) || defined(MPI_ENABLED)
+  #if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
   using detail::measureDurationMpi;
   using detail::measureDurationMarkedMpi;
   #endif
