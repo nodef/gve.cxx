@@ -10,17 +10,18 @@
 #include <vector>
 #include <ostream>
 #include <algorithm>
-#include "_compile.hxx"
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include "_main.hxx"
 
 
 
 
 // An internal namespace helps to hide implementation details.
 // This is particularly useful for pre-C++20 modules.
-namespace gve::detail {
+namespace gve {
+namespace detail {
 using std::pair;
 using std::shared_ptr;
 using std::vector;
@@ -1993,7 +1994,8 @@ inline ostream& operator<<(ostream& a, const DiGraphCsr<K, V, E, O>& x) {
 }
 #pragma endregion
 #pragma endregion
-} // namespace gve::detail
+} // namespace detail
+} // namespace gve
 
 
 
@@ -2004,17 +2006,17 @@ EXPORT namespace gve {
   using detail::ArenaDiGraph;
   using detail::DiGraph;
   using detail::DiGraphCsr;
-
   // Methods (set operations)
   using detail::subtractGraphEdgesU;
-  using detail::subtractGraphOmpU;
   using detail::subtractGraphW;
-  using detail::subtractGraphOmpW;
   using detail::addGraphU;
-  using detail::addGraphOmpU;
   using detail::addGraphW;
+#ifdef _OPENMP
+  using detail::subtractGraphOmpU;
+  using detail::subtractGraphOmpW;
+  using detail::addGraphOmpU;
   using detail::addGraphOmpW;
-
+#endif
   // Methods (write)
   using detail::writeGraphSizes;
   using detail::writeGraphDetailed;

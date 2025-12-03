@@ -1,10 +1,19 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
+#include "_main.hxx"
 #include "Graph.hxx"
 #include "update.hxx"
 
 
 
 
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 #pragma region METHODS
 #pragma region TRANSPOSE
 /**
@@ -34,7 +43,7 @@ inline auto transpose(const G& x) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Transpose a graph in parallel.
  * @param a transposed graph (output)
@@ -100,7 +109,7 @@ inline auto transposeWithDegree(const G& x) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Transpose a graph with degree in parallel.
  * @param a transposed graph with degree (output)
@@ -258,3 +267,24 @@ inline void transposeArenaOmpW(H &a, const G& x) {
 }
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::transposeW;
+  using detail::transpose;
+  using detail::transposeWithDegreeW;
+  using detail::transposeWithDegree;
+  using detail::transposeArenaOmpW;
+#ifdef _OPENMP
+  using detail::transposeOmpW;
+  using detail::transposeOmp;
+  using detail::transposeWithDegreeOmpW;
+  using detail::transposeWithDegreeOmp;
+#endif
+} // namespace gve

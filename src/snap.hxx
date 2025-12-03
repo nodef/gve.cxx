@@ -1,4 +1,8 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <utility>
 #include <string>
 #include <istream>
@@ -9,10 +13,17 @@
 #include "_main.hxx"
 #include "Graph.hxx"
 #include "update.hxx"
-#ifdef OPENMP
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::tuple;
 using std::string;
 using std::istream;
@@ -58,7 +69,7 @@ inline void readTemporalDo(const char *pth, bool weighted, bool symmetric, size_
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Read contents of SNAP Temporal file.
  * @param s input stream
@@ -142,7 +153,7 @@ inline void readTemporalIfW(G &a, const char *pth, bool weighted, bool symmetric
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Read SNAP Temporal file as graph if test passes.
  * @param a output graph (updated)
@@ -198,7 +209,7 @@ inline void readTemporalW(G& a, const char *pth, bool weighted, bool symmetric, 
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Read SNAP Temporal file as graph.
  * @param a output graph (updated)
@@ -222,3 +233,21 @@ inline void readTemporalOmpW(G& a, const char *pth, bool weighted, bool symmetri
 #endif
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::readTemporalDo;
+  using detail::readTemporalIfW;
+  using detail::readTemporalW;
+#ifdef _OPENMP
+  using detail::readTemporalDoOmp;
+  using detail::readTemporalIfOmpW;
+  using detail::readTemporalOmpW;
+#endif
+} // namespace gve

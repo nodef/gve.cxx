@@ -1,9 +1,18 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
+#include "_main.hxx"
 #include "update.hxx"
 
 
 
 
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 #pragma region METHODS
 #pragma region COUNT SELF-LOOPS
 /**
@@ -49,7 +58,7 @@ inline G addSelfLoops(const G& x, E w, FT ft) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Add self-loops to a graph in parallel.
  * @param a graph to add self-loops to (updated)
@@ -80,3 +89,20 @@ inline G addSelfLoopsOmp(const G& x, E w, FT ft) {
 #endif
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::countSelfLoops;
+  using detail::addSelfLoopsU;
+  using detail::addSelfLoops;
+#ifdef _OPENMP
+  using detail::addSelfLoopsOmpU;
+  using detail::addSelfLoopsOmp;
+#endif
+} // namespace gve

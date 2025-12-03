@@ -1,3 +1,8 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
+#pragma once
+
 #include <tuple>
 #include <vector>
 #include <random>
@@ -5,6 +10,13 @@
 #include "_main.hxx"
 #include "update.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::tuple;
 using std::vector;
 using std::uniform_real_distribution;
@@ -230,7 +242,7 @@ inline void applyBatchUpdateU(G& a, const vector<tuple<K, K, V>>& deletions, con
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Apply a batch update to a graph.
  * @param a input graph (updated)
@@ -249,3 +261,26 @@ inline void applyBatchUpdateOmpU(G& a, const vector<tuple<K, K, V>>& deletions, 
 #endif
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::removeRandomEdgeFrom;
+  using detail::removeRandomEdge;
+  using detail::addRandomEdge;
+  using detail::generateEdgeDeletions;
+  using detail::generateEdgeInsertions;
+  using detail::filterEdgesByExistenceU;
+  using detail::sortEdgesByIdU;
+  using detail::uniqueEdgesU;
+  using detail::tidyBatchUpdateU;
+  using detail::applyBatchUpdateU;
+#ifdef _OPENMP
+  using detail::applyBatchUpdateOmpU;
+#endif
+} // namespace gve

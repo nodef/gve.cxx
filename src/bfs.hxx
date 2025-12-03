@@ -1,7 +1,19 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <utility>
 #include <vector>
+#include "_main.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::vector;
 using std::swap;
 
@@ -71,3 +83,15 @@ inline vector<FLAG> bfsVisitedForEach(const G& x, K u, FT ft, FP fp) {
   return vis;
 }
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::bfsVisitedForEachU;
+  using detail::bfsVisitedForEach;
+} // namespace gve

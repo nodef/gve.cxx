@@ -1,4 +1,8 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <vector>
 #include <algorithm>
 // #include <cstdint>
@@ -12,6 +16,8 @@
 
 
 
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
 using std::vector;

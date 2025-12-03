@@ -1,8 +1,19 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <vector>
 #include <unordered_map>
 #include "_main.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::vector;
 using std::unordered_map;
 
@@ -301,7 +312,7 @@ inline void csrClearW(vector<O>& offsets) {
   fillValueU(offsets, O());
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Clear the graph.
  * @param offsets offsets of the outgoing edges of vertices
@@ -324,7 +335,7 @@ inline void csrClearW(vector<O>& offsets, vector<K>& degrees) {
   fillValueU(degrees, K());
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Clear the graph.
  * @param offsets offsets of the outgoing edges of vertices
@@ -354,7 +365,7 @@ inline void csrAddEdgeU(vector<K>& degrees, vector<K>& edgeKeys, const vector<O>
   edgeKeys[i] = v;
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Add an edge to the graph.
  * @param degrees degree of each vertex
@@ -394,7 +405,7 @@ inline void csrAddEdgeU(vector<K>& degrees, vector<K>& edgeKeys, vector<E>& edge
   edgeValues[i] = w;
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Add a weighted edge to the graph.
  * @param degrees degree of each vertex
@@ -417,3 +428,27 @@ inline void csrAddEdgeOmpU(vector<K>& degrees, vector<K>& edgeKeys, vector<E>& e
 }
 #endif
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::csrDegree;
+  using detail::csrForEachEdgeKey;
+  using detail::csrForEachEdge;
+  using detail::csrCreateOffsetsW;
+  using detail::csrCreateDegreesW;
+  using detail::csrCreateVertexValuesW;
+  using detail::csrCreateEdgeKeysW;
+  using detail::csrCreateEdgeValuesW;
+  using detail::csrClearW;
+  using detail::csrAddEdgeU;
+#ifdef _OPENMP
+  using detail::csrClearOmpW;
+  using detail::csrAddEdgeOmpU;
+#endif
+} // namespace gve

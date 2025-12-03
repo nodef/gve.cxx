@@ -15,6 +15,8 @@
 
 
 
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
 #pragma region CONSTANTS

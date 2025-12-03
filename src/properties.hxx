@@ -1,14 +1,25 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <vector>
 #include <cstdint>
 #include <cmath>
 #include "_main.hxx"
 #include "bfs.hxx"
 #include "dfs.hxx"
-#ifdef OPENMP
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::vector;
 using std::pow;
 
@@ -86,7 +97,7 @@ inline double edgeWeight(const G& x) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Find the total edge weight of a graph.
  * @param x given graph
@@ -144,7 +155,7 @@ inline double modularityCommunities(const vector<V>& cin, const vector<V>& ctot,
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Find the modularity of a set of communities.
  * @param cin total weight of edges within each community
@@ -192,7 +203,7 @@ inline double modularityBy(const G& x, FC fc, double M, double R=1) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Find the modularity of a graph, based on community membership function.
  * @param x given graph
@@ -278,7 +289,7 @@ inline vector<K> communitySize(const G& x, const vector<K>& vcom) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Obtain the size of each community.
  * @param x given graph
@@ -319,7 +330,7 @@ inline vector2d<K> communityVertices(const G& x, const vector<K>& vcom) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Obtain the vertices belonging to each community.
  * @param x given graph
@@ -368,7 +379,7 @@ inline vector<K> communities(const G& x, const vector<K>& vcom) {
 
 
 #pragma region DISCONNECTED COMMUNITIES
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Examine if each community in a graph is disconnected (using single flag vector, BFS).
  * @param x given graph
@@ -402,3 +413,32 @@ inline vector<char> communitiesDisconnectedOmp(const G& x, const vector<K>& vcom
 #endif
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::vertexKeys;
+  using detail::vertexValuesW;
+  using detail::degreesW;
+  using detail::edgeWeight;
+  using detail::modularityCommunity;
+  using detail::modularityCommunities;
+  using detail::modularityBy;
+  using detail::deltaModularity;
+  using detail::communitySize;
+  using detail::communityVertices;
+  using detail::communities;
+#ifdef _OPENMP
+  using detail::edgeWeightOmp;
+  using detail::modularityCommunitiesOmp;
+  using detail::modularityByOmp;
+  using detail::communitySizeOmp;
+  using detail::communityVerticesOmp;
+  using detail::communitiesDisconnectedOmp;
+#endif
+} // namespace gve

@@ -1,8 +1,19 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <vector>
 #include "_main.hxx"
 #include "bfs.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::vector;
 
 
@@ -96,3 +107,17 @@ inline vector<int> partitionByBfs(const G& x, int p, int P, FC fc, FT ft) {
 }
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::partitionByIdW;
+  using detail::partitionById;
+  using detail::partitionByBfsW;
+  using detail::partitionByBfs;
+} // namespace gve

@@ -1,11 +1,23 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <utility>
 #include <vector>
-#include <cstdint>
-#ifdef OPENMP
+// #include <cstdint>
+#ifdef _OPENMP
 #include <omp.h>
 #endif
+#include "_main.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::pair;
 using std::vector;
 
@@ -61,7 +73,7 @@ inline void addEdgeU(G& a, K u, K v, E w=E()) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Add an edge to a graph in parallel.
  * @param a graph to add edge to
@@ -92,7 +104,7 @@ inline void removeEdgeU(G& a, K u, K v) {
   a.removeEdge(u, v);
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Remove an edge from a graph in parallel.
  * @param a graph to remove edge from
@@ -121,7 +133,7 @@ inline void updateU(G& a) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Update changes made to a graph in parallel.
  * @param a graph to update
@@ -151,3 +163,23 @@ inline void updateOmpU(G& a) {
 #endif
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::addVerticesIfU;
+  using detail::addVerticesU;
+  using detail::addEdgeU;
+  using detail::removeEdgeU;
+  using detail::updateU;
+#ifdef _OPENMP
+  using detail::addEdgeOmpU;
+  using detail::removeEdgeOmpU;
+  using detail::updateOmpU;
+#endif
+} // namespace gve

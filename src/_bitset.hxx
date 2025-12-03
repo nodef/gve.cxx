@@ -1,4 +1,8 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <utility>
 #include <vector>
 #include <algorithm>
@@ -9,6 +13,10 @@
 #include "_ctypes.hxx"
 
 
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
 using std::pair;
@@ -373,4 +381,11 @@ inline std::ostream& operator<<(std::ostream& a, const LazyBitset<K, V>& x) {
 
 // Now, we export the public API.
 EXPORT namespace gve {
+  // Classes
+  // using detail::LazyBitset;
+
+  // Methods
+  // using detail::writeBitset;
+  using detail::write;
+  using detail::operator<<;
 } // namespace gve

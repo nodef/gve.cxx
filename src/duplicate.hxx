@@ -1,9 +1,18 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
+#include "_main.hxx"
 #include "update.hxx"
 
 
 
 
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 #pragma region METHODS
 #pragma region DUPLICATE IF
 /**
@@ -47,7 +56,7 @@ inline G duplicateIf(const G& x, FV fv, FE fe) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Duplicate vertices/edges of a graph if test passes.
  * @param a output graph (output)
@@ -138,7 +147,7 @@ inline G duplicate(const G& x) {
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Duplicate vertices/edges of a graph.
  * @param a output graph (updated)
@@ -206,3 +215,24 @@ inline void duplicateArenaOmpW(H& a, const G& x) {
   // printf("duplicateArenaOmpW: Update        = %.3f ms\n", duration(t4, t5));
 }
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::duplicateIfW;
+  using detail::duplicateIf;
+  using detail::duplicateW;
+  using detail::duplicate;
+#ifdef _OPENMP
+  using detail::duplicateIfOmpW;
+  using detail::duplicateIfOmp;
+  using detail::duplicateOmpW;
+  using detail::duplicateOmp;
+  using detail::duplicateArenaOmpW;
+#endif
+} // namespace gve

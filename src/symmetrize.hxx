@@ -1,10 +1,22 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <memory>
 #include <tuple>
 #include <vector>
 #include <omp.h>
+#include "_main.hxx"
 #include "update.hxx"
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::unique_ptr;
 using std::tuple;
 using std::vector;
@@ -35,7 +47,7 @@ inline void symmetrizeU(G& a) {
   a.update();
 }
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Ensure that the graph is symmetric.
  * @param a graph (updated)
@@ -69,3 +81,17 @@ inline void symmetrizeOmpU(G& a) {
 }
 #endif
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::symmetrizeU;
+#ifdef _OPENMP
+  using detail::symmetrizeOmpU;
+#endif
+} // namespace gve

@@ -1,4 +1,8 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #include <cstdint>
 #include <memory>
 #include <string>
@@ -8,10 +12,17 @@
 #include "_main.hxx"
 #include "Graph.hxx"
 #include "update.hxx"
-#ifdef OPENMP
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 
+
+
+
+// An internal namespace helps to hide implementation details.
+// This is particularly useful for pre-C++20 modules.
+namespace gve {
+namespace detail {
 using std::unique_ptr;
 using std::remove_reference_t;
 using std::string;
@@ -199,7 +210,7 @@ inline void readEdgelistFormatToListsU(IK degrees, IK sources, IK targets, IE we
 }
 
 
-#ifdef OPENMP
+#ifdef _OPENMP
 /**
  * Get characters to process for an EdgeList format block, skip first partial line [helper function].
  * @param data input file data
@@ -742,3 +753,30 @@ inline void readMtxFormatToGraphOmpW(G& a, string_view data) {
 }
 #pragma endregion
 #pragma endregion
+} // namespace detail
+} // namespace gve
+
+
+
+
+// Now, we export the public API.
+EXPORT namespace gve {
+  // Methods
+  using detail::readCooFormatHeaderW;
+  using detail::readMtxFormatHeaderW;
+  using detail::readEdgelistFormatDoChecked;
+  using detail::readEdgelistFormatDoUnchecked;
+  using detail::readEdgelistFormatDo;
+  using detail::readEdgelistFormatToListsU;
+  using detail::convertEdgelistToCsrListsW;
+  using detail::readMtxFormatToCsrW;
+  using detail::convertEdgelistToGraphW;
+  using detail::readMtxFormatToGraphW;
+#ifdef _OPENMP
+  using detail::readEdgelistFormatToListsOmpU;
+  using detail::convertEdgelistToCsrListsOmpW;
+  using detail::readMtxFormatToCsrOmpW;
+  using detail::convertEdgelistToGraphOmpW;
+  using detail::readMtxFormatToGraphOmpW;
+#endif
+} // namespace gve

@@ -1,6 +1,10 @@
+// Copyright (C) 2025 Subhajit Sahu
+// SPDX-License-Identifier: AGPL-3.0-or-later
+// See LICENSE for full terms
 #pragma once
+
 #define BUILD  0  // 5 == BUILD_TRACE
-#define OPENMP 1
+#define _OPENMP 1
 #include "_main.hxx"
 #include "Graph.hxx"
 #include "update.hxx"
