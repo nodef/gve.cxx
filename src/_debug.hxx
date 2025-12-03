@@ -307,6 +307,6 @@ inline void install_sigsegv() {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Methods
-  using detail::on_sigsegv;
-  using detail::install_sigsegv;
+  // using detail::on_sigsegv;
+  // using detail::install_sigsegv;
 }

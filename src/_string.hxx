@@ -311,16 +311,16 @@ inline I readNumberW(T& a, I ib, I ie, FU fu, FW fw) {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Methods
-  using detail::countLines;
-  using detail::findNextBlank;
-  using detail::findNextNonBlank;
-  using detail::findNextDigit;
-  using detail::findNextNonDigit;
-  using detail::findNextToken;
-  using detail::parseWholeNumberW;
-  using detail::parseIntegerW;
-  using detail::parseFloatW;
-  using detail::parseNumberW;
-  using detail::readTokenW;
-  using detail::readNumberW;
+  // using detail::countLines;
+  // using detail::findNextBlank;
+  // using detail::findNextNonBlank;
+  // using detail::findNextDigit;
+  // using detail::findNextNonDigit;
+  // using detail::findNextToken;
+  // using detail::parseWholeNumberW;
+  // using detail::parseIntegerW;
+  // using detail::parseFloatW;
+  // using detail::parseNumberW;
+  // using detail::readTokenW;
+  // using detail::readNumberW;
 } // namespace gve

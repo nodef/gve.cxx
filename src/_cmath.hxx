@@ -183,13 +183,13 @@ inline T randomPrime(T begin, T end, R& rnd) {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Methods
-  using detail::ceilDiv;
-  using detail::sgn;
-  using detail::countLeadingZeros;
-  using detail::isPow2;
-  using detail::prevPow2;
-  using detail::nextPow2;
-  using detail::isPrime;
-  using detail::nextPrime;
-  using detail::randomPrime;
+  // using detail::ceilDiv;
+  // using detail::sgn;
+  // using detail::countLeadingZeros;
+  // using detail::isPow2;
+  // using detail::prevPow2;
+  // using detail::nextPow2;
+  // using detail::isPrime;
+  // using detail::nextPrime;
+  // using detail::randomPrime;
 }

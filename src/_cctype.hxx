@@ -177,19 +177,19 @@ inline char toLowercaseAlphabet(char c) {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Methods
-  using detail::isBlank;
-  using detail::isNewline;
-  using detail::isWhitespace;
-  using detail::isDigit;
-  using detail::isHexDigit;
-  using detail::isUppercaseAlphabet;
-  using detail::isLowercaseAlphabet;
-  using detail::isAlphabet;
-  using detail::isAlphabetOrDigit;
-  using detail::isControlCharacter;
-  using detail::isPrintableCharacter;
-  using detail::isGraphicalCharacter;
-  using detail::isPunctuationCharacter;
-  using detail::toUppercaseAlphabet;
-  using detail::toLowercaseAlphabet;
+  // using detail::isBlank;
+  // using detail::isNewline;
+  // using detail::isWhitespace;
+  // using detail::isDigit;
+  // using detail::isHexDigit;
+  // using detail::isUppercaseAlphabet;
+  // using detail::isLowercaseAlphabet;
+  // using detail::isAlphabet;
+  // using detail::isAlphabetOrDigit;
+  // using detail::isControlCharacter;
+  // using detail::isPrintableCharacter;
+  // using detail::isGraphicalCharacter;
+  // using detail::isPunctuationCharacter;
+  // using detail::toUppercaseAlphabet;
+  // using detail::toLowercaseAlphabet;
 } // namespace gve

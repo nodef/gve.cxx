@@ -247,9 +247,9 @@ inline auto set_union_last_inplace(IX xb, IX xe, IY yb, IY ye, IB bb, IB be) {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Methods
-  using detail::non_adjacent_find;
-  using detail::value_index;
-  using detail::unique_last_copy;
-  using detail::set_difference_inplace;
-  using detail::set_union_last_inplace;
+  // using detail::non_adjacent_find;
+  // using detail::value_index;
+  // using detail::unique_last_copy;
+  // using detail::set_difference_inplace;
+  // using detail::set_union_last_inplace;
 } // namespace gve

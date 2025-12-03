@@ -297,10 +297,10 @@ inline auto unsized_deque_view(I xb, I xe) {
 // Now, we export the public API.
 EXPORT namespace gve {
   // Classes
-  using detail::DequeView;
-  using detail::UnsizedDequeView;
+  // using detail::DequeView;
+  // using detail::UnsizedDequeView;
 
   // Methods
-  using detail::deque_view;
-  using detail::unsized_deque_view;
+  // using detail::deque_view;
+  // using detail::unsized_deque_view;
 } // namespace gve

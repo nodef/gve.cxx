@@ -783,34 +783,34 @@ EXPORT namespace gve {
   using detail::readValueCu;
   using detail::readValuesCu;
   // Swap
-  using detail::swapCudU;
+  // using detail::swapCudU;
   // Ceil div
-  using detail::ceilDivCud;
+  // using detail::ceilDivCud;
   // Pow2
-  using detail::nextPow2Cud;
+  // using detail::nextPow2Cud;
   // Copy
-  using detail::copyValuesCudW;
-  using detail::copyValuesCukW;
+  // using detail::copyValuesCudW;
+  // using detail::copyValuesCukW;
   using detail::copyValuesCuW;
   // Fill
-  using detail::fillValueCudW;
-  using detail::fillValueCukW;
+  // using detail::fillValueCudW;
+  // using detail::fillValueCukW;
   using detail::fillValueCuW;
   // Sum
-  using detail::sumValuesThreadCud;
-  using detail::sumValuesBlockReduceCudU;
-  using detail::sumValuesCukW;
+  // using detail::sumValuesThreadCud;
+  // using detail::sumValuesBlockReduceCudU;
+  // using detail::sumValuesCukW;
   using detail::sumValuesMemcpyCuW;
   using detail::sumValuesInplaceCuW;
   // Li-norm
-  using detail::liNormThreadCud;
-  using detail::liNormBlockReduceCudU;
-  using detail::liNormCukW;
+  // using detail::liNormThreadCud;
+  // using detail::liNormBlockReduceCudU;
+  // using detail::liNormCukW;
   using detail::liNormMemcpyCuW;
   using detail::liNormInplaceCuW;
   // Li-norm delta
-  using detail::liNormDeltaThreadCud;
-  using detail::liNormDeltaCukW;
+  // using detail::liNormDeltaThreadCud;
+  // using detail::liNormDeltaCukW;
   using detail::liNormDeltaMemcpyCuW;
   using detail::liNormDeltaInplaceCuW;
 } // namespace gve
