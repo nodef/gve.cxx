@@ -26,13 +26,6 @@ namespace gve {
 namespace detail {
 using std::tuple;
 using std::string;
-using std::istream;
-using std::istringstream;
-using std::ifstream;
-using std::ofstream;
-using std::move;
-using std::max;
-using std::getline;
 
 
 
@@ -49,13 +42,13 @@ using std::getline;
  * @param fb on body line (u, v, w)
  */
 template <class FB>
-inline void readTemporalDo(istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FB fb) {
+inline void readTemporalDo(std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FB fb) {
   if (rows==0 || size==0) return;
   // Process body lines sequentially.
   string line;
-  for (; size>0 && getline(s, line); --size) {
+  for (; size>0 && std::getline(s, line); --size) {
     size_t u, v; double w = 1;
-    istringstream sline(line);
+    std::istringstream sline(line);
     if (!(sline >> u >> v)) break;
     if (weighted) sline >> w;
     fb(u, v, w);
@@ -64,7 +57,7 @@ inline void readTemporalDo(istream& s, bool weighted, bool symmetric, size_t row
 }
 template <class FB>
 inline void readTemporalDo(const char *pth, bool weighted, bool symmetric, size_t rows, size_t size, FB fb) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalDo(s, weighted, symmetric, rows, size, fb);
 }
 
@@ -80,7 +73,7 @@ inline void readTemporalDo(const char *pth, bool weighted, bool symmetric, size_
  * @param fb on body line (u, v, w)
  */
 template <class FB>
-inline void readTemporalDoOmp(istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FB fb) {
+inline void readTemporalDoOmp(std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FB fb) {
   if (rows==0 || size==0) return;
   // Process body lines in parallel.
   const int THREADS = omp_get_max_threads();
@@ -91,7 +84,7 @@ inline void readTemporalDoOmp(istream& s, bool weighted, bool symmetric, size_t 
     // Read several lines from the stream.
     int READ = 0;
     for (int i=0; size>0 && i<LINES; ++i, ++READ, --size)
-      if (!getline(s, lines[i])) break;
+      if (!std::getline(s, lines[i])) break;
     if (READ==0) break;
     // Parse lines using multiple threads.
     #pragma omp parallel for schedule(dynamic, 1024)
@@ -115,7 +108,7 @@ inline void readTemporalDoOmp(istream& s, bool weighted, bool symmetric, size_t 
 }
 template <class FB>
 inline void readTemporalDoOmp(const char *pth, bool weighted, FB fb) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalDoOmp(s, weighted, fb);
 }
 #endif
@@ -137,7 +130,7 @@ inline void readTemporalDoOmp(const char *pth, bool weighted, FB fb) {
  * @param fe include edge? (u, v, w)
  */
 template <class G, class FV, class FE>
-inline void readTemporalIfW(G &a, istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
+inline void readTemporalIfW(G &a, std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
   using K = typename G::key_type;
   using V = typename G::vertex_value_type;
   using E = typename G::edge_value_type;
@@ -148,7 +141,7 @@ inline void readTemporalIfW(G &a, istream& s, bool weighted, bool symmetric, siz
 }
 template <class G, class FV, class FE>
 inline void readTemporalIfW(G &a, const char *pth, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalIfW(a, s, weighted, symmetric, rows, size, fv, fe);
 }
 
@@ -166,7 +159,7 @@ inline void readTemporalIfW(G &a, const char *pth, bool weighted, bool symmetric
  * @param fe include edge? (u, v, w)
  */
 template <class G, class FV, class FE>
-inline void readTemporalIfOmpW(G &a, istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
+inline void readTemporalIfOmpW(G &a, std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
   using K = typename G::key_type;
   using V = typename G::vertex_value_type;
   using E = typename G::edge_value_type;
@@ -177,7 +170,7 @@ inline void readTemporalIfOmpW(G &a, istream& s, bool weighted, bool symmetric, 
 }
 template <class G, class FV, class FE>
 inline void readTemporalIfOmpW(G &a, const char *pth, bool weighted, bool symmetric, size_t rows, size_t size, FV fv, FE fe) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalIfOmpW(a, s, weighted, symmetric, rows, size, fv, fe);
 }
 #endif
@@ -197,14 +190,14 @@ inline void readTemporalIfOmpW(G &a, const char *pth, bool weighted, bool symmet
  * @param size number of lines/edges to read
  */
 template <class G>
-inline void readTemporalW(G& a, istream& s, bool weighted, bool symmetric, size_t rows, size_t size) {
+inline void readTemporalW(G& a, std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size) {
   auto fv = [](auto u, auto d)         { return true; };
   auto fe = [](auto u, auto v, auto w) { return true; };
   readTemporalIfW(a, s, weighted, symmetric, rows, size, fv, fe);
 }
 template <class G>
 inline void readTemporalW(G& a, const char *pth, bool weighted, bool symmetric, size_t rows, size_t size) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalW(a, s, weighted, symmetric, rows, size);
 }
 
@@ -220,14 +213,14 @@ inline void readTemporalW(G& a, const char *pth, bool weighted, bool symmetric, 
  * @param size number of lines/edges to read
  */
 template <class G>
-inline void readTemporalOmpW(G& a, istream& s, bool weighted, bool symmetric, size_t rows, size_t size) {
+inline void readTemporalOmpW(G& a, std::istream& s, bool weighted, bool symmetric, size_t rows, size_t size) {
   auto fv = [](auto u, auto d)         { return true; };
   auto fe = [](auto u, auto v, auto w) { return true; };
   readTemporalIfOmpW(a, s, weighted, symmetric, rows, size, fv, fe);
 }
 template <class G>
 inline void readTemporalOmpW(G& a, const char *pth, bool weighted, bool symmetric, size_t rows, size_t size) {
-  ifstream s(pth);
+  std::ifstream s(pth);
   readTemporalOmpW(a, s, weighted, symmetric, rows, size);
 }
 #endif

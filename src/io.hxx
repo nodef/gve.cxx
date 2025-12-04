@@ -23,12 +23,9 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
-using std::unique_ptr;
-using std::remove_reference_t;
 using std::string;
 using std::string_view;
 using std::vector;
-using std::min;
 
 
 
@@ -220,7 +217,7 @@ inline void readEdgelistFormatToListsU(IK degrees, IK sources, IK targets, IE we
  */
 inline string_view readEdgelistFormatBlock(string_view data, size_t b, size_t B) {
   auto db = data.begin(), de = data.end();
-  auto bb = db+b, be = min(bb+B, de);
+  auto bb = db+b, be = std::min(bb+B, de);
   if (bb!=db && !isNewline(*bb-1)) bb = findNextLine(bb, de);
   if (be!=db && !isNewline(*be-1)) be = findNextLine(be, de);
   return data.substr(bb-db, be-bb);
@@ -302,7 +299,7 @@ inline vector<size_t> readEdgelistFormatToListsOmpU(IIK degrees, IIK sources, II
  */
 template <bool WEIGHTED=false, class IO, class IK, class IE>
 inline size_t convertEdgelistToCsrListsW(IO offsets, IK edgeKeys, IE edgeValues, IK degrees, IK sources, IK targets, IE weights, size_t rows) {
-  using O = remove_reference_t<decltype(offsets[0])>;
+  using O = std::remove_reference_t<decltype(offsets[0])>;
   // Compute shifted offsets.
   offsets[0] = O();
   size_t   M = exclusiveScanW(offsets+1, degrees, rows);
@@ -337,7 +334,7 @@ inline size_t convertEdgelistToCsrListsW(IO offsets, IK edgeKeys, IE edgeValues,
  */
 template <bool WEIGHTED=false, int PARTITIONS=4, class IIO, class IIK, class IIE>
 inline size_t convertEdgelistToCsrListsOmpW(IIO offsets, IIK edgeKeys, IIE edgeValues, IIK degrees, IIK sources, IIK targets, IIE weights, const vector<size_t>& counts, size_t rows) {
-  using  O = remove_reference_t<decltype(offsets[0][0])>;
+  using  O = std::remove_reference_t<decltype(offsets[0][0])>;
   int    T = omp_get_max_threads();
   size_t M = 0;
   vector<size_t> buf(T);
@@ -586,7 +583,7 @@ inline size_t convertEdgelistToGraphW(G& a, IK degrees, IK sources, IK targets, 
  */
 template <bool WEIGHTED=false, int PARTITIONS=4, class G, class IIO, class IIK, class IIE>
 inline size_t convertEdgelistToGraphOmpW(G &a, IIO offsets, IIK edgeKeys, IIE edgeValues, IIK degrees, IIK sources, IIK targets, IIE weights, const vector<size_t>& counts, size_t rows) {
-  using  O = remove_reference_t<decltype(offsets[0][0])>;
+  using  O = std::remove_reference_t<decltype(offsets[0][0])>;
   using  K = typename G::key_type;
   using  E = typename G::edge_value_type;
   int    T = omp_get_max_threads();

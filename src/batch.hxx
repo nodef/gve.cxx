@@ -19,11 +19,6 @@ namespace gve {
 namespace detail {
 using std::tuple;
 using std::vector;
-using std::uniform_real_distribution;
-using std::make_tuple;
-using std::sort;
-using std::unique;
-using std::remove_if;
 
 
 
@@ -40,7 +35,7 @@ using std::remove_if;
  */
 template <class R, class G, class K, class FE>
 inline bool removeRandomEdgeFrom(R& rnd, const G& x, K u, FE fe) {
-  uniform_real_distribution<> dis(0.0, 1.0);
+  std::uniform_real_distribution<> dis(0.0, 1.0);
   if (x.degree(u) == 0) return false;
   K vi = K(dis(rnd) * x.degree(u)), i = 0;
   bool removed = false, skip = false;
@@ -64,7 +59,7 @@ inline bool removeRandomEdgeFrom(R& rnd, const G& x, K u, FE fe) {
 template <class R, class G, class FE>
 inline bool removeRandomEdge(R& rnd, const G& x, size_t i, size_t n, FE fe) {
   using K = typename G::key_type;
-  uniform_real_distribution<> dis(0.0, 1.0);
+  std::uniform_real_distribution<> dis(0.0, 1.0);
   K u = K(i + n*dis(rnd));
   return removeRandomEdgeFrom(rnd, x, u, fe);
 }
@@ -87,7 +82,7 @@ inline bool removeRandomEdge(R& rnd, const G& x, size_t i, size_t n, FE fe) {
 template <class R, class G, class V, class FE>
 inline bool addRandomEdge(R& rnd, const G& x, size_t i, size_t n, V w, FE fe) {
   using K = typename G::key_type;
-  uniform_real_distribution<> dis(0.0, 1.0);
+  std::uniform_real_distribution<> dis(0.0, 1.0);
   K u = K(i + n*dis(rnd));
   K v = K(i + n*dis(rnd));
   return fe(u, v, w);
@@ -115,8 +110,8 @@ inline auto generateEdgeDeletions(R& rnd, const G& x, size_t batchSize, size_t i
   int retries = 5;
   vector<tuple<K, K, V>> deletions;
   auto fe = [&](auto u, auto v, auto w) {
-    deletions.push_back(make_tuple(u, v, w));
-    if (undirected) deletions.push_back(make_tuple(v, u, w));
+    deletions.push_back(std::make_tuple(u, v, w));
+    if (undirected) deletions.push_back(std::make_tuple(v, u, w));
     return true;
   };
   for (size_t l=0; l<batchSize; ++l)
@@ -142,8 +137,8 @@ inline auto generateEdgeInsertions(R& rnd, const G& x, size_t batchSize, size_t 
   int retries = 5;
   vector<tuple<K, K, V>> insertions;
   auto fe = [&](auto u, auto v, auto w) {
-    insertions.push_back(make_tuple(u, v, w));
-    if (undirected) insertions.push_back(make_tuple(v, u, w));
+    insertions.push_back(std::make_tuple(u, v, w));
+    if (undirected) insertions.push_back(std::make_tuple(v, u, w));
     return true;
   };
   for (size_t l=0; l<batchSize; ++l)
@@ -168,7 +163,7 @@ inline void filterEdgesByExistenceU(vector<tuple<K, K, V>>& edges, const G& x, b
     auto [u, v, w] = e;
     return x.hasEdge(u, v) != exists;
   };
-  auto it = remove_if(edges.begin(), edges.end(), ft);
+  auto it = std::remove_if(edges.begin(), edges.end(), ft);
   edges.erase(it, edges.end());
 }
 
@@ -184,7 +179,7 @@ inline void sortEdgesByIdU(vector<tuple<K, K, V>>& edges) {
     auto [u2, v2, w2] = b;
     return u1 < u2 || (u1 == u2 && v1 < v2);
   };
-  sort(edges.begin(), edges.end(), fl);
+  std::sort(edges.begin(), edges.end(), fl);
 }
 
 
@@ -199,7 +194,7 @@ inline void uniqueEdgesU(vector<tuple<K, K, V>>& edges) {
     auto [u2, v2, w2] = b;
     return u1 == u2 && v1 == v2;
   };
-  auto it = unique(edges.begin(), edges.end(), fe);
+  auto it = std::unique(edges.begin(), edges.end(), fe);
   edges.erase(it, edges.end());
 }
 

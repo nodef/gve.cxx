@@ -149,7 +149,7 @@ struct ShowType;
 EXPORT namespace gve {
   // Types
   using detail::ssize_t;
-  using detail::ShowType;
+  // using detail::ShowType;
   // Classes
   using detail::None;
 } // namespace gve

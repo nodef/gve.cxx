@@ -26,17 +26,7 @@ using std::pair;
 using std::shared_ptr;
 using std::vector;
 using std::ostream;
-using std::make_shared;
-using std::memcpy;
-using std::distance;
 using std::max;
-using std::find_if;
-using std::lower_bound;
-using std::copy;
-using std::sort;
-using std::unique;
-using std::set_union;
-using std::set_difference;
 
 
 
@@ -273,9 +263,9 @@ class ArenaDiGraph {
     auto fe = [&](const auto& p)      { return p.first == k; };
     auto fl = [ ](const auto& p, K k) { return p.first  < k; };
     // Use linear search if the range is small.
-    if (distance(ib, ie) < BSEARCH) return find_if(ib, ie, fe);
+    if (std::distance(ib, ie) < BSEARCH) return std::find_if(ib, ie, fe);
     // Else, use binary search.
-    auto it = lower_bound(ib, ie, k, fl);
+    auto it = std::lower_bound(ib, ie, k, fl);
     return it==ie || (*it).first!=k? ie : it;
   }
 
@@ -396,7 +386,7 @@ class ArenaDiGraph {
    * Setup the memory allocator, if not already set.
    */
   inline void setupAllocator() {
-    if (!mx) mx = make_shared<allocator_type>();
+    if (!mx) mx = std::make_shared<allocator_type>();
   }
 
 
@@ -472,7 +462,7 @@ class ArenaDiGraph {
     if (u >= span()) return;
     auto fl = [](const auto& a, const auto& b) { return a.first < b.first; };
     auto ib = edges[u], ie = edges[u] + degrees[u];
-    sort(ib, ie, fl);
+    std::sort(ib, ie, fl);
   }
 
 
@@ -484,7 +474,7 @@ class ArenaDiGraph {
     if (u >= span()) return;
     auto fe = [](const auto& a, const auto& b) { return a.first == b.first; };
     auto ib = edges[u], ie = edges[u] + degrees[u];
-    auto it = unique(ib, ie, fe);
+    auto it = std::unique(ib, ie, fe);
     degrees[u] = it - ib;
   }
 
@@ -572,7 +562,7 @@ class ArenaDiGraph {
     if (cap == capacities[u]) return;
     // Allocate new memory and copy old data.
     pair<K, E> *ptr = allocate(cap);
-    memcpy(ptr, edges[u], degrees[u] * EDGE);
+    std::memcpy(ptr, edges[u], degrees[u] * EDGE);
     deallocate(edges[u], capacities[u]);
     // Update pointer and capacities.
     edges[u] = ptr;
@@ -805,7 +795,7 @@ class ArenaDiGraph {
     if (i >= capacities[u]) {
       K cap = allocationCapacity(degrees[u]);
       pair<K, E> *tmp = allocate(cap);
-      if (i>0) memcpy(tmp, edges[u], i*EDGE);
+      if (i>0) std::memcpy(tmp, edges[u], i*EDGE);
       if (i>0) deallocate(edges[u], capacities[u]);
       edges[u] = tmp;
       capacities[u] = cap;
@@ -828,7 +818,7 @@ class ArenaDiGraph {
   inline size_t removeEdges(K u, I ib, I ie, FL fl) {
     if (!hasVertex(u)) return 0;
     auto *eb = edges[u], *ee = edges[u] + degrees[u];
-    auto  it = set_difference(eb, ee, ib, ie, eb, fl);
+    auto  it = std::set_difference(eb, ee, ib, ie, eb, fl);
     degrees[u] = it - eb;
     return ee - it;
   }
@@ -861,11 +851,11 @@ class ArenaDiGraph {
   inline size_t addEdges(K u, I ib, I ie) {
     if (!hasVertex(u) || ib==ie) return 0;
     auto *eb = edges[u], *ee = edges[u] + degrees[u];
-    size_t deg = degrees[u] + distance(ib, ie);
+    size_t deg = degrees[u] + std::distance(ib, ie);
     size_t cap = allocationCapacity(deg);
     pair<K, E> *ptr = allocate(cap);
     auto fl = [](const auto& a, const auto& b) { return a.first <  b.first; };
-    auto it = set_union(eb, ee, ib, ie, ptr, fl);
+    auto it = std::set_union(eb, ee, ib, ie, ptr, fl);
     deallocate(eb, capacities[u]);
     edges[u]   = ptr;
     degrees[u] = it - ptr;
@@ -1658,7 +1648,7 @@ inline size_t subtractGraphW(H& a, const GX& x, const GY& y) {
     if (y.hasVertex(u)) return;
     auto xb = x.beginEdges(u), xe = x.endEdges(u);
     auto ab = a.beginEdges(u);
-    auto it = copy(xb, xe, ab);
+    auto it = std::copy(xb, xe, ab);
     a.setDegreeUnsafe(u, it - ab);
   });
   // Now add edges of vertices that are touched.
@@ -1668,7 +1658,7 @@ inline size_t subtractGraphW(H& a, const GX& x, const GY& y) {
     auto yb = y.beginEdges(u), ye = y.endEdges(u);
     auto ab = a.beginEdges(u);
     auto fl = [](const auto& a, const auto& b) { return a.first < b.first; };
-    auto it = set_difference(xb, xe, yb, ye, ab, fl);
+    auto it = std::set_difference(xb, xe, yb, ye, ab, fl);
     a.setDegreeUnsafe(u, it - ab);
     dM += (xe - xb) - (it - ab);
   });
@@ -1710,7 +1700,7 @@ inline size_t subtractGraphOmpW(H& a, const GX& x, const GY& y) {
     if (!x.hasVertex(u) || y.hasVertex(u)) continue;
     auto xb = x.beginEdges(u), xe = x.endEdges(u);
     auto ab = a.beginEdges(u);
-    auto it = copy(xb, xe, ab);
+    auto it = std::copy(xb, xe, ab);
     a.setDegreeUnsafe(u, it - ab);
   }
   // Now add edges of vertices that are touched.
@@ -1721,7 +1711,7 @@ inline size_t subtractGraphOmpW(H& a, const GX& x, const GY& y) {
     auto yb = y.beginEdges(u), ye = y.endEdges(u);
     auto ab = a.beginEdges(u);
     auto fl = [](const auto& a, const auto& b) { return a.first < b.first; };
-    auto it = set_difference(xb, xe, yb, ye, ab, fl);
+    auto it = std::set_difference(xb, xe, yb, ye, ab, fl);
     a.setDegreeUnsafe(u, it - ab);
     dM += (xe - xb) - (it - ab);
   }
@@ -1820,7 +1810,7 @@ inline size_t addGraphW(H& a, const GX& x, const GY& y) {
     auto yb = y.beginEdges(u), ye = y.endEdges(u);
     auto ab = a.beginEdges(u);
     auto fl = [](const auto& a, const auto& b) { return a.first < b.first; };
-    auto it = set_union(xb, xe, yb, ye, ab, fl);
+    auto it = std::set_union(xb, xe, yb, ye, ab, fl);
     a.setDegreeUnsafe(u, it - ab);
     dM += (it - ab) - (xe - xb);
   }
@@ -1864,7 +1854,7 @@ inline size_t addGraphOmpW(H& a, const GX& x, const GY& y) {
     auto yb = y.beginEdges(u), ye = y.endEdges(u);
     auto ab = a.beginEdges(u);
     auto fl = [](const auto& a, const auto& b) { return a.first < b.first; };
-    auto it = set_union(xb, xe, yb, ye, ab, fl);
+    auto it = std::set_union(xb, xe, yb, ye, ab, fl);
     a.setDegreeUnsafe(u, it - ab);
     dM += (it - ab) - (xe - xb);
   }

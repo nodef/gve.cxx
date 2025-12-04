@@ -27,10 +27,6 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
-using std::fprintf;
-using std::printf;
-
-
 #pragma region GVE_BUILD MODES
 #ifndef GVE_BUILD_RELEASE
 /** Build has no debug information. */
@@ -201,7 +197,7 @@ inline void logPrefix() {
     std::chrono::system_clock::now()
   );
   localtime_safe(&s, &t);
-  printf("%04d-%02d-%02d %02d:%02d:%02d"
+  std::printf("%04d-%02d-%02d %02d:%02d:%02d"
     , t.tm_year + 1900
     , t.tm_mon  + 1
     , t.tm_mday
@@ -218,10 +214,10 @@ inline void logPrefix() {
 void logPrefixMpi();
 
 /** Log using format. */
-#define GVE_LOG(...)  do { logPrefixMpi(); printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
 #else
 /** Log using format. */
-#define GVE_LOG(...)  do { logPrefix(); printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { logPrefix(); std::printf(" " __VA_ARGS__); } while (0)
 #endif
 #endif
 

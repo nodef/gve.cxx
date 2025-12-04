@@ -17,7 +17,6 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
-using std::unique_ptr;
 using std::tuple;
 using std::vector;
 
@@ -59,7 +58,7 @@ inline void symmetrizeOmpU(G& a) {
   // Obtain the list of missing edges.
   size_t S = a.span();
   int    T = omp_get_max_threads();
-  vector<unique_ptr<vector<tuple<K, K, V>>>> insertions(T);
+  vector<std::unique_ptr<vector<tuple<K, K, V>>>> insertions(T);
   for (int t=0; t<T; ++t)
     insertions[t] = std::make_unique<vector<tuple<K, K, V>>>();
   #pragma omp parallel for schedule(dynamic, 2048)
