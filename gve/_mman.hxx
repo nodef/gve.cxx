@@ -3,21 +3,20 @@
 // See LICENSE for full terms
 #pragma once
 
-#include <basetsd.h>
-#include <fileapi.h>
-#include <handleapi.h>
-#include <minwindef.h>
 #include <tuple>
 // #include <cstdint>
 #include <cstdlib>
-#include <fcntl.h>
 #include <sys/types.h>
-#include <winbase.h>
-#include <winnt.h>
 #include "_compile.hxx"
 
 #if defined(_WIN32) || defined(_WIN64)
   #include <windows.h>
+  #include <winbase.h>
+  #include <winnt.h>
+  #include <basetsd.h>
+  #include <fileapi.h>
+  #include <handleapi.h>
+  #include <minwindef.h>
   #include <io.h>
   #include <fcntl.h>
 #else
@@ -36,6 +35,13 @@
 namespace gve {
 namespace detail {
 using std::tuple;
+#if defined(_WIN32) || defined(_WIN64)
+typedef HANDLE mmap_fd_t;
+#define GVE_BAD_FD INVALID_HANDLE_VALUE
+#else
+typedef int mmap_fd_t;
+#define GVE_BAD_FD -1
+#endif
 
 
 
@@ -46,30 +52,30 @@ using std::tuple;
  * @param pth file path
  * @returns file descriptor, mapped data, and file size
  */
-inline tuple<int, void*, size_t> mmapOpenFile(const char *pth) {
+inline tuple<mmap_fd_t, void*, size_t> mmapOpenFile(const char *pth) {
   #if defined (_WIN32) || defined (_WIN64)
   HANDLE fd = CreateFileA(pth, GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-  if (fd == INVALID_HANDLE_VALUE) return {-1, nullptr, 0};
+  if (fd == INVALID_HANDLE_VALUE) return {INVALID_HANDLE_VALUE, nullptr, 0};
   // Get file size.
   LARGE_INTEGER sizes;
   if (!GetFileSizeEx(fd, &sizes)) {
     CloseHandle(fd);
-    return {-1, nullptr, 0};
+    return {INVALID_HANDLE_VALUE, nullptr, 0};
   }
   SIZE_T size = (SIZE_T) sizes.QuadPart;
   // Map file to memory.
   HANDLE map = CreateFileMappingA(fd, NULL, PAGE_READONLY, 0, 0, NULL);
   if (map == NULL) {
     CloseHandle(fd);
-    return {-1, nullptr, 0};
+    return {INVALID_HANDLE_VALUE, nullptr, 0};
   }
   LPVOID view = MapViewOfFile(map, FILE_MAP_READ, 0, 0, 0);
   CloseHandle(map);
   if (view == NULL) {
     CloseHandle(fd);
-    return {-1, nullptr, 0};
+    return {INVALID_HANDLE_VALUE, nullptr, 0};
   }
-  return {(int) fd, (void*) view, size};
+  return {fd, (void*) view, size};
   #else
   // Open file as read-only.
   int fd = open(pth, O_RDONLY);
@@ -93,7 +99,7 @@ inline tuple<int, void*, size_t> mmapOpenFile(const char *pth) {
  * @param data mapped data
  * @param size file size
  */
-inline void mmapCloseFile(int fd, void *data, size_t size) {
+inline void mmapCloseFile(mmap_fd_t fd, void *data, size_t size) {
   #if defined (_WIN32) || defined (_WIN64)
   UnmapViewOfFile(data);
   CloseHandle((HANDLE) fd);
@@ -115,7 +121,7 @@ struct MappedFile {
   /** File size. */
   size_t _size;
   /** File descriptor. */
-  int    _fd;
+  mmap_fd_t _fd;
   #pragma endregion
 
 
@@ -136,7 +142,7 @@ struct MappedFile {
    * Get file descriptor.
    * @returns file descriptor
    */
-  inline int fd() const { return _fd; }
+  inline mmap_fd_t fd() const { return _fd; }
 
   /**
    * Get file size.
@@ -148,9 +154,9 @@ struct MappedFile {
    * Unmap file from memory.
    */
   inline void close() {
-    if (_fd<=0) return;
+    if (_fd == GVE_BAD_FD) return;
     mmapCloseFile(_fd, _data, _size);
-    _fd   = -1;
+    _fd   = GVE_BAD_FD;
     _data = nullptr;
     _size = 0;
   }

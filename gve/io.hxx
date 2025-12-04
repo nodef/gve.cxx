@@ -449,9 +449,9 @@ inline void readMtxFormatToCsrW(G& a, string_view data) {
   size_t MA = convertEdgelistToCsrListsW<WEIGHTED>(offsets, edgeKeys, edgeValues, degrees, sources, targets, weights, N);
   if (symmetric) a.resize(N, MA);
   // Free space for sources, targets, and weights.
-  delete sources;
-  delete targets;
-  if (WEIGHTED) delete weights;
+  delete[] sources;
+  delete[] targets;
+  if (WEIGHTED) delete[] weights;
 }
 
 
@@ -680,10 +680,10 @@ inline void readMtxFormatToGraphW(G& a, string_view data) {
   readEdgelistFormatToListsU<WEIGHTED, BASE, CHECK>(degrees, sources, targets, weights, data, symmetric);
   size_t MA = convertEdgelistToGraphW<WEIGHTED>(a, degrees, sources, targets, weights, N);
   // Free space for sources, targets, and weights.
-  delete sources;
-  delete targets;
-  if (WEIGHTED) delete weights;
-  delete degrees;
+  delete[] sources;
+  delete[] targets;
+  if (WEIGHTED) delete[] weights;
+  delete[] degrees;
 }
 
 

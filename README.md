@@ -44,8 +44,7 @@ int main() { /* ... */ }
 And then compile with `clang` or `gcc` as usual.
 
 ```bash
-$ clang main.c  # or, use gcc
-$ gcc   main.c
+$ clang -std=c++17 -target x86_64-pc-windows-msvc main.cxx  # or, use gcc
 ```
 
 You may also use a simpler approach:
@@ -60,8 +59,41 @@ int main() { /* ... */ }
 If you add the path to `node_modules/gve.cxx` to your compiler's include paths.
 
 ```bash
-$ clang -I./node_modules/gve.cxx main.c  # or, use gcc
-$ gcc   -I./node_modules/gve.cxx main.c
+$ clang -I./node_modules/gve.cxx -std=c++17 -target x86_64-pc-windows-msvc main.cxx
+```
+
+<br>
+
+
+## Example
+
+```cxx
+#include <iostream>
+#include <gve.hxx>
+
+using namespace std;
+
+
+int main() {
+  // Create a directed graph with 5 vertices
+  gve::DiGraph<int> graph;
+
+  // Add edges to the graph
+  graph.addEdge(0, 1);
+  graph.addEdge(1, 2);
+  graph.addEdge(2, 3);
+  graph.addEdge(3, 4);
+  graph.addEdge(4, 0);
+
+  // Update the graph.
+  gve::updateU(graph);
+
+  // Print the number of vertices and edges
+  cout << "Number of vertices: " << graph.order() << endl;
+  cout << "Number of edges: " << graph.size() << endl;
+
+  return 0;
+}
 ```
 
 <br>

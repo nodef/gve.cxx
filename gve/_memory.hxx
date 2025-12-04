@@ -19,6 +19,12 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::min;
+using std::max;
+
+
+
+
 #pragma region CONSTANTS
 /** Expected page size. */
 #define GVE_PAGE_SIZE 4096
@@ -113,7 +119,7 @@ class FixedArenaAllocator {
    */
   FixedArenaAllocator(void *pool)
   : pool(pool) {
-    freed.reserve(std::min(CAPACITY, size_t(GVE_MIN_FREED)));
+    freed.reserve(min(CAPACITY, size_t(GVE_MIN_FREED)));
   }
   #pragma endregion
 };
@@ -207,7 +213,7 @@ class ArenaAllocator {
    */
   ArenaAllocator() {
     pools.reserve(GVE_MIN_POOLS);
-    freed.reserve(std::min(CAPACITY, size_t(GVE_MIN_FREED)));
+    freed.reserve(min(CAPACITY, size_t(GVE_MIN_FREED)));
   }
 
 
@@ -475,7 +481,7 @@ inline constexpr size_t bytesof(size_t N) {
  */
 template <class T>
 inline T* allocateValues(size_t NUM, size_t RES=0, const T& def=T()) {
-  size_t L = std::max(NUM, RES);
+  size_t L = max(NUM, RES);
   T   *ptr = new T[L];
   for (size_t i=0; i<NUM; ++i)
     ptr[i] = def;
@@ -521,7 +527,7 @@ inline T* reallocateValues(T *ptr, size_t NUM0, size_t RES0, size_t NUM1, size_t
     return ptr;
   }
   T   *tmp = new T[RES1];
-  size_t M = std::min(NUM0, NUM1);
+  size_t M = min(NUM0, NUM1);
   for (size_t i=0; i<M; ++i)
     tmp[i] = ptr[i];
   for (size_t i=M; i<NUM1; ++i)

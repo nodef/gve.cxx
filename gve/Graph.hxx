@@ -1411,10 +1411,10 @@ class DiGraphCsr {
     if (!hasVertex(u) || !hasVertex(v)) return size_t(-1);
     size_t  i = offsets[u];
     size_t  d = degrees[u];
-    auto   ib = edgeKeys.begin() + i;
-    auto   ie = edgeKeys.begin() + i + d;
+    auto   ib = edgeKeys + i;
+    auto   ie = edgeKeys + i + d;
     auto   it = find(ib, ie, v);
-    return it!=ie? it - edgeKeys.begin() : size_t(-1);
+    return it!=ie? it - edgeKeys : size_t(-1);
   }
   #pragma endregion
 
