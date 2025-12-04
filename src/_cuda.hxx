@@ -93,23 +93,23 @@ dim3 gridDim;
 
 
 #pragma region LAUNCH CONFIG
-#ifndef BLOCK_LIMIT_CUDA
+#ifndef GVE_BLOCK_LIMIT_CUDA
 /** Maximum number of threads per block. */
-#define BLOCK_LIMIT_CUDA         1024
+#define GVE_BLOCK_LIMIT_CUDA         1024
 /** Maximum number of threads per block, when using a map-like kernel. */
-#define BLOCK_LIMIT_MAP_CUDA     256
+#define GVE_BLOCK_LIMIT_MAP_CUDA     256
 /** Maximum number of threads per block, when using a reduce-like kernel. */
-#define BLOCK_LIMIT_REDUCE_CUDA  256
+#define GVE_BLOCK_LIMIT_REDUCE_CUDA  256
 #endif
 
 
-#ifndef GRID_LIMIT_CUDA
+#ifndef GVE_GRID_LIMIT_CUDA
 /** Maximum number of blocks per grid. */
-#define GRID_LIMIT_CUDA          2147483647  // 2^31 - 1
+#define GVE_GRID_LIMIT_CUDA          2147483647  // 2^31 - 1
 /** Maximum number of blocks per grid, when using a map-like kernel. */
-#define GRID_LIMIT_MAP_CUDA      65535
+#define GVE_GRID_LIMIT_MAP_CUDA      65535
 /** Maximum number of blocks per grid, when using a reduce-like kernel. */
-#define GRID_LIMIT_REDUCE_CUDA   1024
+#define GVE_GRID_LIMIT_REDUCE_CUDA   1024
 #endif
 
 
@@ -121,7 +121,7 @@ dim3 gridDim;
  * @returns block size
  */
 template <bool COARSE=false>
-inline int blockSizeCu(size_t N, int BLIM=BLOCK_LIMIT_CUDA) noexcept {
+inline int blockSizeCu(size_t N, int BLIM=GVE_BLOCK_LIMIT_CUDA) noexcept {
   return COARSE? BLIM : int(std::min(N, size_t(BLIM)));
 }
 
@@ -135,7 +135,7 @@ inline int blockSizeCu(size_t N, int BLIM=BLOCK_LIMIT_CUDA) noexcept {
  * @returns grid size
  */
 template <bool COARSE=false>
-inline int gridSizeCu(size_t N, int B, int GLIM=GRID_LIMIT_CUDA) noexcept {
+inline int gridSizeCu(size_t N, int B, int GLIM=GVE_GRID_LIMIT_CUDA) noexcept {
   return COARSE? int(std::min(N, size_t(GLIM))) : int(std::min(ceilDiv(N, size_t(B)), size_t(GLIM)));
 }
 
@@ -148,8 +148,8 @@ inline int gridSizeCu(size_t N, int B, int GLIM=GRID_LIMIT_CUDA) noexcept {
  */
 template <bool COARSE=false>
 inline int reduceSizeCu(size_t N) noexcept {
-  const int B = blockSizeCu<COARSE>(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu <COARSE>(N, B, GRID_LIMIT_REDUCE_CUDA);
+  const int B = blockSizeCu<COARSE>(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu <COARSE>(N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   return G;
 }
 #pragma endregion
@@ -158,7 +158,7 @@ inline int reduceSizeCu(size_t N) noexcept {
 
 
 #pragma region TRY
-#ifndef TRY_CUDA
+#ifndef GVE_TRY_CUDA
 /**
  * Log error on CUDA function call failure.
  * @param err error code
@@ -181,37 +181,37 @@ void tryFailedCuda(cudaError err, const char* exp, const char* func, int line, c
  * Try to execute a CUDA function call.
  * @param exp expression to execute
  */
-#define TRY_CUDA(exp)  do { cudaError err = exp; if (err != cudaSuccess) tryFailedCuda(err, #exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_TRY_CUDA(exp)  do { cudaError err = exp; if (err != cudaSuccess) tryFailedCuda(err, #exp, __func__, __LINE__, __FILE__); } while (0)
 
 /**
  * Try to execute a CUDA function call only if build mode is error or higher.
  * @param exp expression to execute
  **/
-#define TRY_CUDAE(exp)  PERFORME(TRY_CUDA(exp))
+#define GVE_TRY_CUDAE(exp)  GVE_PERFORME(GVE_TRY_CUDA(exp))
 
 /**
  * Try to execute a CUDA function call only if build mode is warning or higher.
  * @param exp expression to execute
  **/
-#define TRY_CUDAW(exp)  PERFORMW(TRY_CUDA(exp))
+#define GVE_TRY_CUDAW(exp)  GVE_PERFORMW(GVE_TRY_CUDA(exp))
 
 /**
  * Try to execute a CUDA function call only if build mode is info or higher.
  * @param exp expression to execute
  **/
-#define TRY_CUDAI(exp)  PERFORMI(TRY_CUDA(exp))
+#define GVE_TRY_CUDAI(exp)  GVE_PERFORMI(GVE_TRY_CUDA(exp))
 
 /**
  * Try to execute a CUDA function call only if build mode is debug or higher.
  * @param exp expression to execute
  **/
-#define TRY_CUDAD(exp)  PERFORMD(TRY_CUDA(exp))
+#define GVE_TRY_CUDAD(exp)  GVE_PERFORMD(GVE_TRY_CUDA(exp))
 
 /**
  * Try to execute a CUDA function call only if build mode is trace.
  * @param exp expression to execute
  **/
-#define TRY_CUDAT(exp)  PERFORMT(TRY_CUDA(exp))
+#define GVE_TRY_CUDAT(exp)  GVE_PERFORMT(GVE_TRY_CUDA(exp))
 #endif
 #pragma endregion
 
@@ -226,12 +226,12 @@ template <class T>
 inline void __device__ unusedCuda(T&&) {}
 
 
-#ifndef UNUSED_CUDA
+#ifndef GVE_UNUSED_CUDA
 /**
  * Mark CUDA variable as unused.
  * @param x variable to mark as unused
  */
-#define UNUSED_CUDA(x)  unusedCuda(x)
+#define GVE_UNUSED_CUDA(x)  unusedCuda(x)
 #endif
 #pragma endregion
 
@@ -239,7 +239,7 @@ inline void __device__ unusedCuda(T&&) {}
 
 
 #pragma region DEFINE
-#ifndef DEFINE_CUDA
+#ifndef GVE_DEFINE_CUDA
 /**
  * Define thread, block variables for CUDA.
  * @param t thread index
@@ -247,15 +247,15 @@ inline void __device__ unusedCuda(T&&) {}
  * @param B block size
  * @param G grid size
  */
-#define DEFINE_CUDA(t, b, B, G) \
+#define GVE_DEFINE_CUDA(t, b, B, G) \
   const int t = threadIdx.x; \
   const int b = blockIdx.x; \
   const int B = blockDim.x; \
   const int G = gridDim.x; \
-  UNUSED_CUDA(t); \
-  UNUSED_CUDA(b); \
-  UNUSED_CUDA(B); \
-  UNUSED_CUDA(G)
+  GVE_UNUSED_CUDA(t); \
+  GVE_UNUSED_CUDA(b); \
+  GVE_UNUSED_CUDA(B); \
+  GVE_UNUSED_CUDA(G)
 
 
 /**
@@ -269,7 +269,7 @@ inline void __device__ unusedCuda(T&&) {}
  * @param GX grid x size
  * @param GY grid y size
  */
-#define DEFINE2D_CUDA(tx, ty, bx, by, BX, BY, GX, GY) \
+#define GVE_DEFINE2D_CUDA(tx, ty, bx, by, BX, BY, GX, GY) \
   const int tx = threadIdx.x; \
   const int ty = threadIdx.y; \
   const int bx = blockIdx.x; \
@@ -278,14 +278,14 @@ inline void __device__ unusedCuda(T&&) {}
   const int BY = blockDim.y; \
   const int GX = gridDim.x;  \
   const int GY = gridDim.y; \
-  UNUSED_CUDA(tx); \
-  UNUSED_CUDA(ty); \
-  UNUSED_CUDA(bx); \
-  UNUSED_CUDA(by); \
-  UNUSED_CUDA(BX); \
-  UNUSED_CUDA(BY); \
-  UNUSED_CUDA(GX); \
-  UNUSED_CUDA(GY)
+  GVE_UNUSED_CUDA(tx); \
+  GVE_UNUSED_CUDA(ty); \
+  GVE_UNUSED_CUDA(bx); \
+  GVE_UNUSED_CUDA(by); \
+  GVE_UNUSED_CUDA(BX); \
+  GVE_UNUSED_CUDA(BY); \
+  GVE_UNUSED_CUDA(GX); \
+  GVE_UNUSED_CUDA(GY)
 #endif
 #pragma endregion
 
@@ -301,9 +301,9 @@ inline void __device__ unusedCuda(T&&) {}
  */
 template <class T>
 inline T readValueCu(const T *v) {
-  ASSERT(v);
+  GVE_ASSERT(v);
   T vH;
-  TRY_CUDA( cudaMemcpy(&vH, v, sizeof(T), cudaMemcpyDeviceToHost) );
+  GVE_TRY_CUDA( cudaMemcpy(&vH, v, sizeof(T), cudaMemcpyDeviceToHost) );
   return vH;
 }
 
@@ -316,9 +316,9 @@ inline T readValueCu(const T *v) {
  */
 template <class T>
 inline std::vector<T> readValuesCu(const T *v, size_t N) {
-  ASSERT(v);
+  GVE_ASSERT(v);
   std::vector<T> vH(N);
-  TRY_CUDA( cudaMemcpy(vH.data(), v, N * sizeof(T), cudaMemcpyDeviceToHost) );
+  GVE_TRY_CUDA( cudaMemcpy(vH.data(), v, N * sizeof(T), cudaMemcpyDeviceToHost) );
   return vH;
 }
 #pragma endregion
@@ -352,7 +352,7 @@ inline void __device__ swapCudU(T& a, T& b) {
  */
 template <class T>
 inline T __device__ ceilDivCud(T x, T y) {
-  ASSERT(y);
+  GVE_ASSERT(y);
   return (x + y-1) / y;
 }
 
@@ -408,7 +408,7 @@ inline T __device__ nextPow2Cud(T x) {
  */
 template <class T>
 inline void __device__ copyValuesCudW(T *a, const T *x, size_t N, size_t i, size_t DI) {
-  ASSERT(a && x && DI);
+  GVE_ASSERT(a && x && DI);
   for (; i<N; i+=DI)
     a[i] = x[i];
 }
@@ -422,8 +422,8 @@ inline void __device__ copyValuesCudW(T *a, const T *x, size_t N, size_t i, size
  */
 template <class T>
 void __global__ copyValuesCukW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  DEFINE_CUDA(t, b, B, G);
+  GVE_ASSERT(a && x);
+  GVE_DEFINE_CUDA(t, b, B, G);
   copyValuesCudW(a, x, N, B*b+t, G*B);
 }
 
@@ -436,9 +436,9 @@ void __global__ copyValuesCukW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void copyValuesCuW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_MAP_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_MAP_CUDA);
+  GVE_ASSERT(a && x);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_MAP_CUDA);
   copyValuesCukW<<<G, B>>>(a, x, N);
 }
 #pragma endregion
@@ -457,7 +457,7 @@ inline void copyValuesCuW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void __device__ fillValueCudW(T *a, size_t N, T v, size_t i, size_t DI) {
-  ASSERT(a && DI);
+  GVE_ASSERT(a && DI);
   for (; i<N; i+=DI)
     a[i] = v;
 }
@@ -471,8 +471,8 @@ inline void __device__ fillValueCudW(T *a, size_t N, T v, size_t i, size_t DI) {
  */
 template <class T>
 void __global__ fillValueCukW(T *a, size_t N, T v) {
-  ASSERT(a);
-  DEFINE_CUDA(t, b, B, G);
+  GVE_ASSERT(a);
+  GVE_DEFINE_CUDA(t, b, B, G);
   fillValueCudW(a, N, v, B*b+t, G*B);
 }
 
@@ -485,9 +485,9 @@ void __global__ fillValueCukW(T *a, size_t N, T v) {
  */
 template <class T>
 inline void fillValueCuW(T *a, size_t N, T v) {
-  ASSERT(a);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_MAP_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_MAP_CUDA);
+  GVE_ASSERT(a);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_MAP_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_MAP_CUDA);
   fillValueCukW<<<G, B>>>(a, N, v);
 }
 #pragma endregion
@@ -506,7 +506,7 @@ inline void fillValueCuW(T *a, size_t N, T v) {
  */
 template <class T>
 inline T __device__ sumValuesThreadCud(const T *x, size_t N, size_t i, size_t DI) {
-  ASSERT(x && DI);
+  GVE_ASSERT(x && DI);
   T a = T();
   for (; i<N; i+=DI)
     a += x[i];
@@ -522,7 +522,7 @@ inline T __device__ sumValuesThreadCud(const T *x, size_t N, size_t i, size_t DI
  */
 template <class T>
 inline void __device__ sumValuesBlockReduceCudU(T *a, size_t N, size_t i) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   // Reduce values in a to a[0] in reverse binary tree fashion.
   for (; N>1;) {
     size_t DN = (N+1)/2;
@@ -540,10 +540,10 @@ inline void __device__ sumValuesBlockReduceCudU(T *a, size_t N, size_t i) {
  * @param x array to sum
  * @param N size of array to sum
  */
-template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
+template <int CACHE=GVE_BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ sumValuesCukW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  DEFINE_CUDA(t, b, B, G);
+  GVE_ASSERT(a && x);
+  GVE_DEFINE_CUDA(t, b, B, G);
   __shared__ T cache[CACHE];
   // Store per-thread sum in shared cache (for further reduction).
   cache[t] = sumValuesThreadCud(x, N, B*b+t, G*B);
@@ -564,9 +564,9 @@ void __global__ sumValuesCukW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void sumValuesMemcpyCuW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
 }
 
@@ -579,12 +579,12 @@ inline void sumValuesMemcpyCuW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  const int B = blockSizeCu(N ,  BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x);
+  const int B = blockSizeCu(N ,  GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   sumValuesCukW<<<G, B>>>(a, x, N);
-  TRY_CUDA( cudaDeviceSynchronize() );
-  sumValuesCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  GVE_TRY_CUDA( cudaDeviceSynchronize() );
+  sumValuesCukW<GVE_GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -602,7 +602,7 @@ inline void sumValuesInplaceCuW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline T __device__ liNormThreadCud(const T *x, size_t N, size_t i, size_t DI) {
-  ASSERT(x && DI);
+  GVE_ASSERT(x && DI);
   T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
     a = std::max(a, x[i]);
@@ -618,7 +618,7 @@ inline T __device__ liNormThreadCud(const T *x, size_t N, size_t i, size_t DI) {
  */
 template <class T>
 inline void __device__ liNormBlockReduceCudU(T *a, size_t N, size_t i) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   // Reduce values in a to a[0] in reverse binary tree fashion.
   for (; N>1;) {
     size_t DN = (N+1)/2;
@@ -636,10 +636,10 @@ inline void __device__ liNormBlockReduceCudU(T *a, size_t N, size_t i) {
  * @param x array to compute on
  * @param N size of array to compute on
  */
-template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
+template <int CACHE=GVE_BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ liNormCukW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  DEFINE_CUDA(t, b, B, G);
+  GVE_ASSERT(a && x);
+  GVE_DEFINE_CUDA(t, b, B, G);
   __shared__ T cache[CACHE];
   // Store per-thread L∞-norm in shared cache (for further reduction).
   cache[t] = liNormThreadCud(x, N, B*b+t, G*B);
@@ -660,9 +660,9 @@ void __global__ liNormCukW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void liNormMemcpyCuW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
 }
 
@@ -675,12 +675,12 @@ inline void liNormMemcpyCuW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
-  ASSERT(a && x);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   liNormCukW<<<G, B>>>(a, x, N);
-  TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  GVE_TRY_CUDA( cudaDeviceSynchronize() );
+  liNormCukW<GVE_GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 
@@ -699,7 +699,7 @@ inline void liNormInplaceCuW(T *a, const T *x, size_t N) {
  */
 template <class T>
 inline T __device__ liNormDeltaThreadCud(const T *x, const T *y, size_t N, size_t i, size_t DI) {
-  ASSERT(x && y && DI);
+  GVE_ASSERT(x && y && DI);
   T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
     a = std::max(a, std::abs(x[i] - y[i]));
@@ -715,10 +715,10 @@ inline T __device__ liNormDeltaThreadCud(const T *x, const T *y, size_t N, size_
  * @param y second array
  * @param N size of each array
  */
-template <int CACHE=BLOCK_LIMIT_REDUCE_CUDA, class T>
+template <int CACHE=GVE_BLOCK_LIMIT_REDUCE_CUDA, class T>
 void __global__ liNormDeltaCukW(T *a, const T *x, const T *y, size_t N) {
-  ASSERT(a && x);
-  DEFINE_CUDA(t, b, B, G);
+  GVE_ASSERT(a && x);
+  GVE_DEFINE_CUDA(t, b, B, G);
   __shared__ T cache[CACHE];
   // Store per-thread delta L∞-norm in shared cache (for further reduction).
   cache[t] = liNormDeltaThreadCud(x, y, N, B*b+t, G*B);
@@ -740,9 +740,9 @@ void __global__ liNormDeltaCukW(T *a, const T *x, const T *y, size_t N) {
  */
 template <class T>
 inline void liNormDeltaMemcpyCuW(T *a, const T *x, const T *y, size_t N) {
-  ASSERT(a && x && y);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x && y);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
 }
 
@@ -756,12 +756,12 @@ inline void liNormDeltaMemcpyCuW(T *a, const T *x, const T *y, size_t N) {
  */
 template <class T>
 inline void liNormDeltaInplaceCuW(T *a, const T *x, const T *y, size_t N) {
-  ASSERT(a && x && y);
-  const int B = blockSizeCu(N,   BLOCK_LIMIT_REDUCE_CUDA);
-  const int G = gridSizeCu (N, B, GRID_LIMIT_REDUCE_CUDA);
+  GVE_ASSERT(a && x && y);
+  const int B = blockSizeCu(N,   GVE_BLOCK_LIMIT_REDUCE_CUDA);
+  const int G = gridSizeCu (N, B, GVE_GRID_LIMIT_REDUCE_CUDA);
   liNormDeltaCukW<<<G, B>>>(a, x, y, N);
-  TRY_CUDA( cudaDeviceSynchronize() );
-  liNormCukW<GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
+  GVE_TRY_CUDA( cudaDeviceSynchronize() );
+  liNormCukW<GVE_GRID_LIMIT_REDUCE_CUDA><<<1, G>>>(a, a, G);
 }
 #pragma endregion
 #pragma endregion

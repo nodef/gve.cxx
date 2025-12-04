@@ -89,7 +89,7 @@ inline void clearBit(T *x, size_t i) {
  */
 template <class TA, class TX, class IS, class FM>
 inline void gatherValuesW(TA *a, const TX *x, const IS& is, FM fm) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t j = 0;
   for (auto i : is)
     a[j++] = TA(fm(x[i]));
@@ -154,7 +154,7 @@ inline void gatherValuesW(vector<bool>& a, const vector<bool>& x, const IS& is) 
  */
 template <class TA, class TX, class IS, class FM>
 inline void gatherValuesOmpW(TA *a, const TX *x, const IS& is, FM fm) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t N = is.size();
   #pragma omp parallel for schedule(auto)
   for (size_t j=0; j<N; ++j)
@@ -211,7 +211,7 @@ inline void gatherValuesOmpW(vector<TA>& a, const vector<TX>& x, const IS& is) {
  */
 template <class TA, class TX, class IS, class FM>
 inline void scatterValuesW(TA *a, const TX *x, const IS& is, FM fm) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t j = 0;
   for (auto i : is)
     a[i] = TA(fm(x[j++]));
@@ -276,7 +276,7 @@ inline void scatterValuesW(vector<bool>& a, const vector<bool>& x, const IS& is)
  */
 template <class TA, class TX, class IS, class FM>
 inline void scatterValuesOmpW(TA *a, const TX *x, const IS& is, FM fm) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t N = is.size();
   #pragma omp parallel for schedule(auto)
   for (size_t j=0; j<N; ++j)
@@ -332,7 +332,7 @@ inline void scatterValuesOmpW(vector<TA>& a, const vector<TX>& x, const IS& is) 
  */
 template <class TA, class TX, class IS>
 inline void scatterOrW(TA *a, const TX *x, const IS& is) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t j = 0;
   for (auto i : is)
     a[i] |= TA(x[j++]);
@@ -359,7 +359,7 @@ inline void scatterOrW(vector<TA>& a, const vector<TX>& x, const IS& is) {
  */
 template <class TA, class TX, class IS>
 inline void scatterOrOmpW(TA *a, const TX *x, const IS& is) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   size_t N = is.size();
   #pragma omp parallel for schedule(auto)
   for (size_t j=0; j<N; ++j)
@@ -413,7 +413,7 @@ inline void valueIndicesW(vector2d<TA>& a, const vector<TX>& x, FM fm) {
  */
 template <class T>
 inline void fillValueU(T *a, size_t N, const T& v) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   std::fill(a, a+N, v);
 }
 
@@ -437,7 +437,7 @@ inline void fillValueU(vector<T>& a, const T& v) {
  */
 template <class T>
 inline void fillValueOmpU(T *a, size_t N, const T& v) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<N; ++i)
     a[i] = v;
@@ -470,7 +470,7 @@ inline void fillValueOmpU(vector<bool>& a, const bool& v) {
  */
 template <class T>
 inline void addValueU(T *a, size_t N, const T& v) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   for (size_t i=0; i<N; ++i)
     a[i] += v;
 }
@@ -495,7 +495,7 @@ inline void addValueU(vector<T>& a, const T& v) {
  */
 template <class T>
 inline void addValueOmpU(T *a, size_t N, const T& v) {
-  ASSERT(a);
+  GVE_ASSERT(a);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<N; ++i)
     a[i] += v;
@@ -525,7 +525,7 @@ inline void addValueOmpU(vector<T>& a, const T& v) {
  */
 template <class TA, class TX>
 inline void copyValuesW(TA *a, const TX *x, size_t N) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   for (size_t i=0; i<N; ++i)
     a[i] = x[i];
 }
@@ -550,7 +550,7 @@ inline void copyValuesW(vector<TA>& a, const vector<TX>& x) {
  */
 template <class TA, class TX>
 inline void copyValuesOmpW(TA *a, const TX *x, size_t N) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<N; ++i)
     a[i] = x[i];
@@ -581,7 +581,7 @@ inline void copyValuesOmpW(vector<TA>& a, const vector<TX>& x) {
  */
 template <class TA, class TX, class TV>
 inline void multiplyValueW(TA *a, const TX *x, TV v, size_t N) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   for (size_t i=0; i<N; ++i)
     a[i] = TA(x[i] * v);
 }
@@ -608,7 +608,7 @@ inline void multiplyValueW(vector<TA>& a, const vector<TX>& x, TV v) {
  */
 template <class TA, class TX, class TV>
 inline void multiplyValueOmpW(TA *a, const TX *x, TV v, size_t N) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<N; ++i)
     a[i] = TA(x[i] * v);
@@ -640,7 +640,7 @@ inline void multiplyValueOmpW(vector<TA>& a, const vector<TX>& x, TV v) {
  */
 template <class TA, class TX, class TY>
 inline void multiplyValuesW(TA *a, const TX *x, const TY *y, size_t N) {
-  ASSERT(a && x && y);
+  GVE_ASSERT(a && x && y);
   for (size_t i=0; i<N; ++i)
     a[i] = TA(x[i] * y[i]);
 }
@@ -667,7 +667,7 @@ inline void multiplyValuesW(vector<TA>& a, const vector<TX>& x, const vector<TY>
  */
 template <class TA, class TX, class TY>
 inline void multiplyValuesOmpW(TA *a, const TX *x, const TY *y, size_t N) {
-  ASSERT(a && x && y);
+  GVE_ASSERT(a && x && y);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<N; ++i)
     a[i] = TA(x[i] * y[i]);
@@ -699,7 +699,7 @@ inline void multiplyValuesOmpW(vector<TA>& a, const vector<TX>& x, const vector<
  */
 template <class TX, class TA=TX>
 inline TA sumValues(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
     a += TA(x[i]);
   return a;
@@ -727,7 +727,7 @@ inline TA sumValues(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TA=TX>
 inline TA sumValuesOmp(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += TA(x[i]);
@@ -760,7 +760,7 @@ inline TA sumValuesOmp(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX>
 inline size_t countValue(const TX *x, size_t N, const TX& v) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   size_t a = 0;
   for (size_t i=0; i<N; ++i)
     if (x[i]==v) ++a;
@@ -789,7 +789,7 @@ inline size_t countValue(const vector<TX>& x, const TX& v) {
  */
 template <class TX>
 inline size_t countValueOmp(const TX *x, size_t N, const TX& v) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   size_t a = 0;
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
@@ -823,7 +823,7 @@ inline size_t countValueOmp(const vector<TX>& x, const TX& v) {
  */
 template <class TX, class TA=TX>
 inline TA l1Norm(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
     a += TA(std::abs(x[i]));
   return a;
@@ -851,7 +851,7 @@ inline TA l1Norm(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TA=TX>
 inline TA l1NormOmp(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += TA(std::abs(x[i]));
@@ -885,7 +885,7 @@ inline TA l1NormOmp(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA l1NormDelta(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   for (size_t i=0; i<N; ++i)
     a += TA(std::abs(x[i] - y[i]));
   return a;
@@ -915,7 +915,7 @@ inline TA l1NormDelta(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA l1NormDeltaOmp(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += TA(std::abs(x[i] - y[i]));
@@ -951,7 +951,7 @@ inline TA l1NormDeltaOmp(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA l1NormDeltaAt(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
     a += TA(std::abs(x[i] - y[i]));
@@ -985,7 +985,7 @@ inline TA l1NormDeltaAt(const vector<TX>& x, const vector<TY>& y, const vector<T
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA l1NormDeltaAtOmp(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
@@ -1022,7 +1022,7 @@ inline TA l1NormDeltaAtOmp(const vector<TX>& x, const vector<TY>& y, const vecto
  */
 template <class TX, class TA=TX>
 inline TA l2Norm(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
     a += TA(x[i]) * TA(x[i]);
   return a;
@@ -1050,7 +1050,7 @@ inline TA l2Norm(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TA=TX>
 inline TA l2NormOmp(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += TA(x[i]) * TA(x[i]);
@@ -1084,7 +1084,7 @@ inline TA l2NormOmp(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA l2NormDelta(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   for (size_t i=0; i<N; ++i)
     a += TA(x[i] - y[i]) * TA(x[i] - y[i]);
   return a;
@@ -1114,7 +1114,7 @@ inline TA l2NormDelta(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA l2NormDeltaOmp(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
     a += TA(x[i] - y[i]) * TA(x[i] - y[i]);
@@ -1150,7 +1150,7 @@ inline TA l2NormDeltaOmp(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA l2NormDeltaAt(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
     a += TA(x[i] - y[i]) * TA(x[i] - y[i]);
@@ -1184,7 +1184,7 @@ inline TA l2NormDeltaAt(const vector<TX>& x, const vector<TY>& y, const vector<T
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA l2NormDeltaAtOmp(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
@@ -1221,7 +1221,7 @@ inline TA l2NormDeltaAtOmp(const vector<TX>& x, const vector<TY>& y, const vecto
  */
 template <class TX, class TA=TX>
 inline TA liNorm(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
     a = std::max(a, TA(std::abs(x[i])));
   return a;
@@ -1249,7 +1249,7 @@ inline TA liNorm(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TA=TX>
 inline TA liNormOmp(const TX *x, size_t N, TA a=TA()) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t i=0; i<N; ++i)
     a = std::max(a, TA(std::abs(x[i])));
@@ -1283,7 +1283,7 @@ inline TA liNormOmp(const vector<TX>& x, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA liNormDelta(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   for (size_t i=0; i<N; ++i)
     a = std::max(a, TA(std::abs(x[i] - y[i])));
   return a;
@@ -1313,7 +1313,7 @@ inline TA liNormDelta(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TA=TX>
 inline TA liNormDeltaOmp(const TX *x, const TY *y, size_t N, TA a=TA()) {
-  ASSERT(x && y);
+  GVE_ASSERT(x && y);
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t i=0; i<N; ++i)
     a = std::max(a, TA(std::abs(x[i] - y[i])));
@@ -1349,7 +1349,7 @@ inline TA liNormDeltaOmp(const vector<TX>& x, const vector<TY>& y, TA a=TA()) {
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA liNormDeltaAt(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
     a = std::max(a, TA(std::abs(x[i] - y[i])));
@@ -1383,7 +1383,7 @@ inline TA liNormDeltaAt(const vector<TX>& x, const vector<TY>& y, const vector<T
  */
 template <class TX, class TY, class TI, class TA=TX>
 inline TA liNormDeltaAtOmp(const TX *x, const TY *y, const TI *is, size_t IS, TA a=TA()) {
-  ASSERT(x && y && is);
+  GVE_ASSERT(x && y && is);
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
@@ -1421,7 +1421,7 @@ inline TA liNormDeltaAtOmp(const vector<TX>& x, const vector<TY>& y, const vecto
  */
 template <class TA, class TX>
 inline TA inclusiveScanW(TA *a, const TX *x, size_t N, TA acc=TA()) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   for (size_t i=0; i<N; ++i) {
     acc += x[i];
     a[i] = acc;
@@ -1453,7 +1453,7 @@ inline TA inclusiveScanW(vector<TA>& a, const vector<TX>& x, TA acc=TA()) {
  */
 template <class TA, class TX>
 inline TA inclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   // Each thread computes a local scan of its chunk of the input array,
   // and then the local scans are combined into a global scan.
   int H = omp_get_max_threads();
@@ -1510,7 +1510,7 @@ inline TA inclusiveScanOmpW(vector<TA>& a, vector<TA>& buf, const vector<TX>& x,
  */
 template <class TA, class TX>
 inline TA exclusiveScanW(TA *a, const TX *x, size_t N, TA acc=TA()) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   for (size_t i=0; i<N; ++i) {
     TA t = x[i];
     a[i] = acc;
@@ -1543,7 +1543,7 @@ inline TA exclusiveScanW(vector<TA>& a, const vector<TX>& x, TA acc=TA()) {
  */
 template <class TA, class TX>
 inline TA exclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) {
-  ASSERT(a && x);
+  GVE_ASSERT(a && x);
   // Each thread computes a local scan of its chunk of the input array,
   // and then the local scans are combined into a global scan.
   int H = omp_get_max_threads();

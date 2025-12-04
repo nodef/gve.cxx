@@ -21,15 +21,15 @@ namespace gve {
 namespace detail {
 #pragma region CONSTANTS
 /** Expected page size. */
-#define PAGE_SIZE 4096
+#define GVE_PAGE_SIZE 4096
 /** Expected cache line size. */
-#define CACHE_LINE_SIZE 128
+#define GVE_CACHE_LINE_SIZE 128
 /** Minimum number of freed allocations expected. */
-#define MIN_FREED 128
+#define GVE_MIN_FREED 128
 /** Minimum number of memory pools expected. */
-#define MIN_POOLS 16
+#define GVE_MIN_POOLS 16
 /** Capacity of the power-of-two memory pool, in bytes. */
-#define POW2_POOL_SIZE (512*1024)
+#define GVE_POW2_POOL_SIZE (512*1024)
 #pragma endregion
 
 
@@ -113,7 +113,7 @@ class FixedArenaAllocator {
    */
   FixedArenaAllocator(void *pool)
   : pool(pool) {
-    freed.reserve(std::min(CAPACITY, size_t(MIN_FREED)));
+    freed.reserve(std::min(CAPACITY, size_t(GVE_MIN_FREED)));
   }
   #pragma endregion
 };
@@ -206,8 +206,8 @@ class ArenaAllocator {
    * Create a variable-capacity Arena Allocator.
    */
   ArenaAllocator() {
-    pools.reserve(MIN_POOLS);
-    freed.reserve(std::min(CAPACITY, size_t(MIN_FREED)));
+    pools.reserve(GVE_MIN_POOLS);
+    freed.reserve(std::min(CAPACITY, size_t(GVE_MIN_FREED)));
   }
 
 
@@ -227,7 +227,7 @@ class ArenaAllocator {
  * A fast power-of-two size allocator, based on variable-capacity Arena Allocator.
  * @tparam CAPACITY capacity of each memory pool, in bytes
  */
-template <size_t CAPACITY=POW2_POOL_SIZE>
+template <size_t CAPACITY=GVE_POW2_POOL_SIZE>
 class Pow2Allocator {
   #pragma region CONSTANTS
   public:
@@ -273,7 +273,7 @@ class Pow2Allocator {
   static inline size_t allocationCapacity(size_t n) noexcept {
     if (n <= 16) return 16;
     if (n <  8192) return nextPow2(n);
-    return ceilDiv(n, size_t(PAGE_SIZE)) * PAGE_SIZE;
+    return ceilDiv(n, size_t(GVE_PAGE_SIZE)) * GVE_PAGE_SIZE;
   }
 
 
@@ -363,7 +363,7 @@ class Pow2Allocator {
  * A fast thread-safe power-of-two size allocator, which supports multiple threads.
  * @tparam CAPACITY capacity of each memory pool, in bytes
  */
-template <size_t CAPACITY=POW2_POOL_SIZE>
+template <size_t CAPACITY=GVE_POW2_POOL_SIZE>
 class ConcurrentPow2Allocator {
   #pragma region CONSTANTS
   public:
@@ -460,7 +460,7 @@ class ConcurrentPow2Allocator {
  * @param N number of elements to store
  * @returns number of bytes required
  */
-template <class T, size_t ALIGN=PAGE_SIZE>
+template <class T, size_t ALIGN=GVE_PAGE_SIZE>
 inline constexpr size_t bytesof(size_t N) {
   return ((N * sizeof(T) + ALIGN-1) / ALIGN) * ALIGN;
 }

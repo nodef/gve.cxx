@@ -132,7 +132,7 @@ inline double edgeWeightOmp(const G& x) {
  * @see https://www.youtube.com/watch?v=0zuiLBOIcsw
  */
 inline double modularityCommunity(double cin, double ctot, double M, double R=1) {
-  ASSERT(cin>=0 && ctot>=0 && M>0 && R>0);
+  GVE_ASSERT(cin>=0 && ctot>=0 && M>0 && R>0);
   return cin/(2*M) - R*pow(ctot/(2*M), 2);
 }
 
@@ -147,7 +147,7 @@ inline double modularityCommunity(double cin, double ctot, double M, double R=1)
  */
 template <class V>
 inline double modularityCommunities(const vector<V>& cin, const vector<V>& ctot, double M, double R=1) {
-  ASSERT(M>0 && R>0);
+  GVE_ASSERT(M>0 && R>0);
   double a = 0;
   for (size_t i=0, I=cin.size(); i<I; ++i)
     a += modularityCommunity(cin[i], ctot[i], M, R);
@@ -166,7 +166,7 @@ inline double modularityCommunities(const vector<V>& cin, const vector<V>& ctot,
  */
 template <class V>
 inline double modularityCommunitiesOmp(const vector<V>& cin, const vector<V>& ctot, double M, double R=1) {
-  ASSERT(M>0 && R>0);
+  GVE_ASSERT(M>0 && R>0);
   double a = 0;
   size_t C = cin.size();
   #pragma omp parallel for schedule(static) reduction(+:a)
@@ -188,7 +188,7 @@ inline double modularityCommunitiesOmp(const vector<V>& cin, const vector<V>& ct
 template <class G, class FC>
 inline double modularityBy(const G& x, FC fc, double M, double R=1) {
   using  K = typename G::key_type;
-  ASSERT(M>0 && R>0);
+  GVE_ASSERT(M>0 && R>0);
   size_t S = x.span();
   vector<double> cin(S), ctot(S);
   x.forEachVertexKey([&](auto u) {
@@ -215,7 +215,7 @@ inline double modularityBy(const G& x, FC fc, double M, double R=1) {
 template <class G, class FC>
 inline double modularityByOmp(const G& x, FC fc, double M, double R=1) {
   using  K = typename G::key_type;
-  ASSERT(M>0 && R>0);
+  GVE_ASSERT(M>0 && R>0);
   size_t S = x.span();
   vector<double> vin(S), vtot(S);
   vector<double> cin(S), ctot(S);
@@ -262,7 +262,7 @@ inline double modularityByOmp(const G& x, FC fc, double M, double R=1) {
  * @see https://gist.github.com/wolfram77/a3c95cd94a38a100f9b075594a823928
  */
 inline double deltaModularity(double vcout, double vdout, double vtot, double ctot, double dtot, double M, double R=1) {
-  ASSERT(vcout>=0 && vdout>=0 && vtot>=0 && ctot>=0 && dtot>=0 && M>0 && R>0);
+  GVE_ASSERT(vcout>=0 && vdout>=0 && vtot>=0 && ctot>=0 && dtot>=0 && M>0 && R>0);
   return (vcout-vdout)/M - R*vtot*(vtot+ctot-dtot)/(2*M*M);
 }
 #pragma endregion

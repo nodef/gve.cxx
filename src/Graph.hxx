@@ -428,7 +428,7 @@ class ArenaDiGraph {
   inline void resizeArrays(size_t n) {
     constexpr size_t B = 8 * sizeof(bool_type);
     // Compute new reserved size (round up to page size).
-    size_t resv = ceilDiv(n, size_t(PAGE_SIZE)) * PAGE_SIZE;
+    size_t resv = ceilDiv(n, size_t(GVE_PAGE_SIZE)) * GVE_PAGE_SIZE;
     if (n <= SPAN && resv == RESV) return;
     // Allocate new memory.
     edges      = reallocateValues(edges, SPAN, RESV, n, resv);
@@ -450,7 +450,7 @@ class ArenaDiGraph {
   inline void resizeArraysOmp(size_t n) {
     constexpr size_t B = 8 * sizeof(bool_type);
     // Compute new reserved size (round up to page size).
-    size_t resv = ceilDiv(n, size_t(PAGE_SIZE)) * PAGE_SIZE;
+    size_t resv = ceilDiv(n, size_t(GVE_PAGE_SIZE)) * GVE_PAGE_SIZE;
     if (n <= SPAN && resv == RESV) return;
     // Allocate new memory.
     edges      = reallocateValuesOmp(edges, SPAN, RESV, n, resv);

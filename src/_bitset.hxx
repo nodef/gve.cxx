@@ -32,7 +32,7 @@ using std::vector;
  * @tparam K key type
  * @tparam V value type
  */
-template <class K=uint32_t, class V=NONE>
+template <class K=uint32_t, class V=GVE_NONE>
 class LazyBitset {
   #pragma region TYPES
   public:

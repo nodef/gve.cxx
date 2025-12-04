@@ -29,7 +29,7 @@ namespace detail {
  * @returns number of lines
  */
 inline size_t countLines(const char* x) {
-  ASSERT(x);
+  GVE_ASSERT(x);
   size_t a = 1;
   for (; *x; x++) {
     if (*x == '\r' || *x == '\n') ++a;

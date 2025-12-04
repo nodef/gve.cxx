@@ -19,7 +19,7 @@
 namespace gve {
 namespace detail {
 #pragma region ERROR
-#ifndef TRY_MPI
+#ifndef GVE_TRY_MPI
 /**
  * Log error on MPI function call failure.
  * @param err error code
@@ -43,43 +43,43 @@ void tryFailedMpi(int err, const char* exp, const char* func, int line, const ch
  * Try to execute an MPI function call.
  * @param exp expression to execute
  */
-#define TRY_MPI(exp)  do { int err = exp; if (err != MPI_SUCCESS) tryFailedMpi(err, #exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_TRY_MPI(exp)  do { int err = exp; if (err != MPI_SUCCESS) tryFailedMpi(err, #exp, __func__, __LINE__, __FILE__); } while (0)
 
 /**
  * Try to execute an MPI function call only if build mode is error or higher.
  * @param exp expression to execute
  **/
-#define TRY_MPIE(exp)  PERFORME(TRY_MPI(exp))
+#define GVE_TRY_MPIE(exp)  GVE_PERFORME(GVE_TRY_MPI(exp))
 
 /**
  * Try to execute an MPI function call only if build mode is warning or higher.
  * @param exp expression to execute
  **/
-#define TRY_MPIW(exp)  PERFORMW(TRY_MPI(exp))
+#define GVE_TRY_MPIW(exp)  GVE_PERFORMW(GVE_TRY_MPI(exp))
 
 /**
  * Try to execute an MPI function call only if build mode is info or higher.
  * @param exp expression to execute
  **/
-#define TRY_MPII(exp)  PERFORMI(TRY_MPI(exp))
+#define GVE_TRY_MPII(exp)  GVE_PERFORMI(GVE_TRY_MPI(exp))
 
 /**
  * Try to execute an MPI function call only if build mode is debug or higher.
  * @param exp expression to execute
  **/
-#define TRY_MPID(exp)  PERFORMD(TRY_MPI(exp))
+#define GVE_TRY_MPID(exp)  GVE_PERFORMD(GVE_TRY_MPI(exp))
 
 /**
  * Try to execute an MPI function call only if build mode is trace.
  * @param exp expression to execute
  **/
-#define TRY_MPIT(exp)  PERFORMT(TRY_MPI(exp))
+#define GVE_TRY_MPIT(exp)  GVE_PERFORMT(GVE_TRY_MPI(exp))
 #endif
 
 
 
 
-#ifndef ASSERT_MPI
+#ifndef GVE_ASSERT_MPI
 /**
  * Log error on assertion failure.
  * @param exp expression string
@@ -100,7 +100,7 @@ void assertFailedMpi(const char* exp, const char* func, int line, const char* fi
  * Assert that expression is true.
  * @param exp expression that should be true
  */
-#define ASSERT_MPI(exp)  do { if (!(exp)) assertFailedMpi(#exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_ASSERT_MPI(exp)  do { if (!(exp)) assertFailedMpi(#exp, __func__, __LINE__, __FILE__); } while (0)
 #endif
 #pragma endregion
 
@@ -132,8 +132,8 @@ inline int mpi_comm_rank(MPI_Comm comm=MPI_COMM_WORLD) {
 
 
 
-#pragma region LOG
-#ifndef LOG_MPI
+#pragma region GVE_LOG
+#ifndef GVE_LOG_MPI
 /**
  * Print log prefix.
  */
@@ -152,7 +152,7 @@ void logPrefixMpi() {
 }
 
 /** Log using format. */
-#define LOG_MPI(...) do { logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG_MPI(...) do { logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
 #endif
 #pragma endregion
 } // namespace detail

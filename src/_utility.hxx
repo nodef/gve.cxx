@@ -211,7 +211,7 @@ inline bool retry(F fn, int N=2) {
 
 
 #pragma region SUBSCRIPT
-#ifndef SUBSCRIPT2D
+#ifndef GVE_SUBSCRIPT2D
 /**
  * Access value at given x, i index of 2D array.
  * @param a 2D array
@@ -219,11 +219,11 @@ inline bool retry(F fn, int N=2) {
  * @param y y index
  * @param X size of x dimension
  */
-#define SUBSCRIPT2D(a, x, y, X)  (a)[x + (X)*(y)]
+#define GVE_SUBSCRIPT2D(a, x, y, X)  (a)[x + (X)*(y)]
 #endif
 
 
-#ifndef SUBSCRIPT3D
+#ifndef GVE_SUBSCRIPT3D
 /**
  * Access value at given x, y, z index of 3D array.
  * @param a 3D array
@@ -233,11 +233,11 @@ inline bool retry(F fn, int N=2) {
  * @param X size of x dimension
  * @param Y size of y dimension
  */
-#define SUBSCRIPT3D(a, x, y, z, X, Y)  (a)[x + (X)*(y + (Y)*(z))]
+#define GVE_SUBSCRIPT3D(a, x, y, z, X, Y)  (a)[x + (X)*(y + (Y)*(z))]
 #endif
 
 
-#ifndef SUBSCRIPTRC
+#ifndef GVE_SUBSCRIPTRC
 /**
  * Access value at given row, column of 2D array.
  * @param a 2D array
@@ -245,7 +245,7 @@ inline bool retry(F fn, int N=2) {
  * @param c column index
  * @param C number of columns in 2D array
  */
-#define SUBSCRIPTRC(a, r, c, C)  (a)[(C)*(r) + (c)]
+#define GVE_SUBSCRIPTRC(a, r, c, C)  (a)[(C)*(r) + (c)]
 #endif
 #pragma endregion
 
@@ -260,7 +260,7 @@ inline bool retry(F fn, int N=2) {
  * @param f false value
  * @returns move(t) if c, otherwise f
  */
-#define CMOVE(c, t, f) \
+#define GVE_CMOVE(c, t, f) \
   ((c)? move(t) : (f))
 
 
@@ -270,8 +270,8 @@ inline bool retry(F fn, int N=2) {
  * @param f false vector
  * @returns move(t) if t is not empty, otherwise f
  */
-#define CMOVE_VECTOR(t, f) \
-  CMOVE(!(t).empty(), t, f)
+#define GVE_CMOVE_VECTOR(t, f) \
+  GVE_CMOVE(!(t).empty(), t, f)
 
 
 /**
@@ -280,8 +280,8 @@ inline bool retry(F fn, int N=2) {
  * @param f false graph
  * @returns move(t) if t is not empty, otherwise f
  */
-#define CMOVE_GRAPH(t, f) \
-  CMOVE((t).order()>0, t, f)
+#define GVE_CMOVE_GRAPH(t, f) \
+  GVE_CMOVE((t).order()>0, t, f)
 #pragma endregion
 } // namespace detail
 } // namespace gve

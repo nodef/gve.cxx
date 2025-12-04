@@ -26,7 +26,7 @@ using ssize_t = std::make_signed_t<size_t>;
 
 
 #pragma region CLASSES
-#ifndef NONE
+#ifndef GVE_NONE
 /**
  * Zero size type.
  */
@@ -62,13 +62,13 @@ struct None {
   explicit None(T _) {}
   #pragma endregion
 };
-#define NONE None
+#define GVE_NONE None
 #endif
 
 
 
 
-#ifndef SHOW_TYPE
+#ifndef GVE_SHOW_TYPE
 /**
  * Show type of template parameter at compile time.
  * @tparam T type to show
@@ -80,37 +80,37 @@ struct ShowType;
  * Show type of template parameter at compile time.
  * @param T type to show
  */
-#define SHOW_TYPE(T) ShowType<T>{}
+#define GVE_SHOW_TYPE(T) ShowType<T>{}
 
 /**
  * Show type of template parameter at compile time, only if build mode is error or higher.
  * @param T type to show
  */
-#define SHOW_TYPEE(T)  PERFORME(SHOW_TYPE(T))
+#define GVE_SHOW_TYPEE(T)  GVE_PERFORME(GVE_SHOW_TYPE(T))
 
 /**
  * Show type of template parameter at compile time, only if build mode is warning or higher.
  * @param T type to show
  */
-#define SHOW_TYPEW(T)  PERFORMW(SHOW_TYPE(T))
+#define GVE_SHOW_TYPEW(T)  GVE_PERFORMW(GVE_SHOW_TYPE(T))
 
 /**
  * Show type of template parameter at compile time, only if build mode is info or higher.
  * @param T type to show
  */
-#define SHOW_TYPEI(T)  PERFORMI(SHOW_TYPE(T))
+#define GVE_SHOW_TYPEI(T)  GVE_PERFORMI(GVE_SHOW_TYPE(T))
 
 /**
  * Show type of template parameter at compile time, only if build mode is debug or higher.
  * @param T type to show
  */
-#define SHOW_TYPED(T)  PERFORMD(SHOW_TYPE(T))
+#define GVE_SHOW_TYPED(T)  GVE_PERFORMD(GVE_SHOW_TYPE(T))
 
 /**
  * Show type of template parameter at compile time, only if build mode is trace or higher.
  * @param T type to show
  */
-#define SHOW_TYPET(T)  PERFORMT(SHOW_TYPE(T))
+#define GVE_SHOW_TYPET(T)  GVE_PERFORMT(GVE_SHOW_TYPE(T))
 #endif
 #pragma endregion
 // - https://stackoverflow.com/a/39637476/1413259

@@ -10,7 +10,7 @@
 // #include <cstdlib>
 #include <chrono>
 
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=1
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=1
 #include <signal.h>
 #if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
 #include <unistd.h>
@@ -31,20 +31,20 @@ using std::fprintf;
 using std::printf;
 
 
-#pragma region BUILD MODES
-#ifndef BUILD_RELEASE
+#pragma region GVE_BUILD MODES
+#ifndef GVE_BUILD_RELEASE
 /** Build has no debug information. */
-#define BUILD_RELEASE  0
+#define GVE_BUILD_RELEASE  0
 /** Build has only error information. */
-#define BUILD_ERROR    1
+#define GVE_BUILD_ERROR    1
 /** Build has error and warning information. */
-#define BUILD_WARNING  2
+#define GVE_BUILD_WARNING  2
 /** Build has error, warning and info information. */
-#define BUILD_INFO     3
+#define GVE_BUILD_INFO     3
 /** Build has error, warning, info and debug information. */
-#define BUILD_DEBUG    4
+#define GVE_BUILD_DEBUG    4
 /** Build has error, warning, info, debug and trace information. */
-#define BUILD_TRACE    5
+#define GVE_BUILD_TRACE    5
 #endif
 #pragma endregion
 
@@ -52,45 +52,45 @@ using std::printf;
 
 
 #pragma region PERFORM
-#ifndef PEFORME
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_ERROR
+#ifndef GVE_PEFORME
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_ERROR
 /** Perform only if build mode is error or higher. */
-#define PERFORME(...)  __VA_ARGS__
+#define GVE_PERFORME(...)  __VA_ARGS__
 #else
 /** Perform only if build mode is error or higher. */
-#define PERFORME(...)
+#define GVE_PERFORME(...)
 #endif
 
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_WARNING
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_WARNING
 /** Perform only if build mode is warning or higher. */
-#define PERFORMW(...)  __VA_ARGS__
+#define GVE_PERFORMW(...)  __VA_ARGS__
 #else
 /** Perform only if build mode is warning or higher. */
-#define PERFORMW(...)
+#define GVE_PERFORMW(...)
 #endif
 
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_INFO
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_INFO
 /** Perform only if build mode is info or higher. */
-#define PERFORMI(...)  __VA_ARGS__
+#define GVE_PERFORMI(...)  __VA_ARGS__
 #else
 /** Perform only if build mode is info or higher. */
-#define PERFORMI(...)
+#define GVE_PERFORMI(...)
 #endif
 
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_DEBUG
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_DEBUG
 /** Perform only if build mode is debug or higher. */
-#define PERFORMD(...)  __VA_ARGS__
+#define GVE_PERFORMD(...)  __VA_ARGS__
 #else
 /** Perform only if build mode is debug or higher. */
-#define PERFORMD(...)
+#define GVE_PERFORMD(...)
 #endif
 
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_TRACE
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_TRACE
 /** Perform only if build mode is trace. */
-#define PERFORMT(...)  __VA_ARGS__
+#define GVE_PERFORMT(...)  __VA_ARGS__
 #else
 /** Perform only if build mode is trace. */
-#define PERFORMT(...)
+#define GVE_PERFORMT(...)
 #endif
 #endif
 #pragma endregion
@@ -99,82 +99,84 @@ using std::printf;
 
 
 #pragma region PRINT
-#ifndef FPRINTFE
+#ifndef GVE_FPRINTFE
 /** File print using format only if build mode is error or higher. */
-#define FPRINTFE(...)  PERFORME(std::fprintf(__VA_ARGS__))
+#define GVE_FPRINTFE(...)  GVE_PERFORME(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is warning or higher. */
-#define FPRINTFW(...)  PERFORMW(std::fprintf(__VA_ARGS__))
+#define GVE_FPRINTFW(...)  GVE_PERFORMW(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is info or higher. */
-#define FPRINTFI(...)  PERFORMI(std::fprintf(__VA_ARGS__))
+#define GVE_FPRINTFI(...)  GVE_PERFORMI(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is debug or higher. */
-#define FPRINTFD(...)  PERFORMD(std::fprintf(__VA_ARGS__))
+#define GVE_FPRINTFD(...)  GVE_PERFORMD(std::fprintf(__VA_ARGS__))
 /** File print using format only if build mode is trace. */
-#define FPRINTFT(...)  PERFORMT(std::fprintf(__VA_ARGS__))
+#define GVE_FPRINTFT(...)  GVE_PERFORMT(std::fprintf(__VA_ARGS__))
 #endif
 
 
-#ifndef PRINTFE
+#ifndef GVE_PRINTFE
 /** Print using format only if build mode is error or higher. */
-#define PRINTFE(...)  PERFORME(std::printf(__VA_ARGS__))
+#define GVE_PRINTFE(...)  GVE_PERFORME(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is warning or higher. */
-#define PRINTFW(...)  PERFORMW(std::printf(__VA_ARGS__))
+#define GVE_PRINTFW(...)  GVE_PERFORMW(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is info or higher. */
-#define PRINTFI(...)  PERFORMI(std::printf(__VA_ARGS__))
+#define GVE_PRINTFI(...)  GVE_PERFORMI(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is debug or higher. */
-#define PRINTFD(...)  PERFORMD(std::printf(__VA_ARGS__))
+#define GVE_PRINTFD(...)  GVE_PERFORMD(std::printf(__VA_ARGS__))
 /** Print using format only if build mode is trace. */
-#define PRINTFT(...)  PERFORMT(std::printf(__VA_ARGS__))
+#define GVE_PRINTFT(...)  GVE_PERFORMT(std::printf(__VA_ARGS__))
 #endif
 
 
-#ifndef WRITEE
+#ifndef GVE_WRITEE
 /** Write only if build mode is error or higher. */
-#define WRITEE(...)  PERFORME(write(__VA_ARGS__))
+#define GVE_WRITEE(...)  GVE_PERFORME(write(__VA_ARGS__))
 /** Write only if build mode is warning or higher. */
-#define WRITEW(...)  PERFORMW(write(__VA_ARGS__))
+#define GVE_WRITEW(...)  GVE_PERFORMW(write(__VA_ARGS__))
 /** Write only if build mode is info or higher. */
-#define WRITEI(...)  PERFORMI(write(__VA_ARGS__))
+#define GVE_WRITEI(...)  GVE_PERFORMI(write(__VA_ARGS__))
 /** Write only if build mode is debug or higher. */
-#define WRITED(...)  PERFORMD(write(__VA_ARGS__))
+#define GVE_WRITED(...)  GVE_PERFORMD(write(__VA_ARGS__))
 /** Write only if build mode is trace. */
-#define WRITET(...)  PERFORMT(write(__VA_ARGS__))
+#define GVE_WRITET(...)  GVE_PERFORMT(write(__VA_ARGS__))
 #endif
 
 
-#ifndef PRINTE
+#ifndef GVE_PRINTE
 /** Print only if build mode is error or higher. */
-#define PRINTE(...)  PERFORME(print(__VA_ARGS__))
+#define GVE_PRINTE(...)  GVE_PERFORME(print(__VA_ARGS__))
 /** Print only if build mode is warning or higher. */
-#define PRINTW(...)  PERFORMW(print(__VA_ARGS__))
+#define GVE_PRINTW(...)  GVE_PERFORMW(print(__VA_ARGS__))
 /** Print only if build mode is info or higher. */
-#define PRINTI(...)  PERFORMI(print(__VA_ARGS__))
+#define GVE_PRINTI(...)  GVE_PERFORMI(print(__VA_ARGS__))
 /** Print only if build mode is debug or higher. */
-#define PRINTD(...)  PERFORMD(print(__VA_ARGS__))
+#define GVE_PRINTD(...)  GVE_PERFORMD(print(__VA_ARGS__))
 /** Print only if build mode is trace. */
-#define PRINTT(...)  PERFORMT(print(__VA_ARGS__))
+#define GVE_PRINTT(...)  GVE_PERFORMT(print(__VA_ARGS__))
 #endif
 
 
-#ifndef PRINTLNE
+#ifndef GVE_PRINTLNE
+#ifndef println
 #define println(...) do { std::printf(__VA_ARGS__); std::printf("\n"); } while(0)
+#endif
 /** Print line only if build mode is error or higher. */
-#define PRINTLNE(...)  PERFORME(println(__VA_ARGS__))
+#define GVE_PRINTLNE(...)  GVE_PERFORME(println(__VA_ARGS__))
 /** Print line only if build mode is warning or higher. */
-#define PRINTLNW(...)  PERFORMW(println(__VA_ARGS__))
+#define GVE_PRINTLNW(...)  GVE_PERFORMW(println(__VA_ARGS__))
 /** Print line only if build mode is info or higher. */
-#define PRINTLNI(...)  PERFORMI(println(__VA_ARGS__))
+#define GVE_PRINTLNI(...)  GVE_PERFORMI(println(__VA_ARGS__))
 /** Print line only if build mode is debug or higher. */
-#define PRINTLND(...)  PERFORMD(println(__VA_ARGS__))
+#define GVE_PRINTLND(...)  GVE_PERFORMD(println(__VA_ARGS__))
 /** Print line only if build mode is trace. */
-#define PRINTLNT(...)  PERFORMT(println(__VA_ARGS__))
+#define GVE_PRINTLNT(...)  GVE_PERFORMT(println(__VA_ARGS__))
 #endif
 #pragma endregion
 
 
 
 
-#pragma region LOG
-#ifndef LOG
+#pragma region GVE_LOG
+#ifndef GVE_LOG
 /**
  * Get current time safely.
  * @param time time
@@ -216,42 +218,42 @@ inline void logPrefix() {
 void logPrefixMpi();
 
 /** Log using format. */
-#define LOG(...)  do { logPrefixMpi(); printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { logPrefixMpi(); printf(" " __VA_ARGS__); } while (0)
 #else
 /** Log using format. */
-#define LOG(...)  do { logPrefix(); printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { logPrefix(); printf(" " __VA_ARGS__); } while (0)
 #endif
 #endif
 
-#ifndef LOGE
+#ifndef GVE_LOGE
 /** Log using format only if build mode is error or higher. */
-#define LOGE(...)  PERFORME(LOG(__VA_ARGS__))
+#define GVE_LOGE(...)  GVE_PERFORME(GVE_LOG(__VA_ARGS__))
 /** Log using format only if build mode is warning or higher. */
-#define LOGW(...)  PERFORMW(LOG(__VA_ARGS__))
+#define GVE_LOGW(...)  GVE_PERFORMW(GVE_LOG(__VA_ARGS__))
 /** Log using format only if build mode is info or higher. */
-#define LOGI(...)  PERFORMI(LOG(__VA_ARGS__))
+#define GVE_LOGI(...)  GVE_PERFORMI(GVE_LOG(__VA_ARGS__))
 /** Log using format only if build mode is debug or higher. */
-#define LOGD(...)  PERFORMD(LOG(__VA_ARGS__))
+#define GVE_LOGD(...)  GVE_PERFORMD(GVE_LOG(__VA_ARGS__))
 /** Log using format only if build mode is trace. */
-#define LOGT(...)  PERFORMT(LOG(__VA_ARGS__))
+#define GVE_LOGT(...)  GVE_PERFORMT(GVE_LOG(__VA_ARGS__))
 #endif
 #pragma endregion
 
 
 
 
-#pragma region ASSERT
-#ifndef ASSERT
-#if !defined(NDEBUG) && defined(BUILD) && BUILD>=BUILD_ERROR
+#pragma region GVE_ASSERT
+#ifndef GVE_ASSERT
+#if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=GVE_BUILD_ERROR
   /** Assert expression. */
-  #define ASSERT(exp)            assert(exp)
+  #define GVE_ASSERT(exp)            assert(exp)
   /** Assert expression with custom message. */
-  #define ASSERT_THAT(exp, msg)  assert((exp) && (msg))
+  #define GVE_ASSERT_THAT(exp, msg)  assert((exp) && (msg))
 #else
   /** Assert expression. */
-  #define ASSERT(exp)
+  #define GVE_ASSERT(exp)
   /** Assert expression with custom message. */
-  #define ASSERT_THAT(exp, msg)
+  #define GVE_ASSERT_THAT(exp, msg)
 #endif
 #endif
 #pragma endregion
@@ -262,8 +264,8 @@ void logPrefixMpi();
 #pragma region METHODS
 #pragma region ON SIGNAL
 /** Stack trace size for SIGSEGV signal handler. */
-#ifndef STACK_TRACE_SIZE
-#define STACK_TRACE_SIZE  32
+#ifndef GVE_STACK_TRACE_SIZE
+#define GVE_STACK_TRACE_SIZE  32
 #endif
 
 
@@ -272,10 +274,10 @@ void logPrefixMpi();
  * @param sig signal number
  */
 inline void on_sigsegv(int sig) {
-  #if !defined(NDEBUG) && defined(BUILD) && BUILD>=1
+  #if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=1
   #if defined(__unix__) || defined(__APPLE__) || defined(__linux__)
-  void *entries[STACK_TRACE_SIZE];
-  size_t n = backtrace(entries, STACK_TRACE_SIZE);
+  void *entries[GVE_STACK_TRACE_SIZE];
+  size_t n = backtrace(entries, GVE_STACK_TRACE_SIZE);
   std::fprintf(stderr, "ERROR: SIGNAL %d:\n", sig);
   backtrace_symbols_fd(entries, n, STDERR_FILENO);
   #else
@@ -291,7 +293,7 @@ inline void on_sigsegv(int sig) {
  * Install SIGSEGV signal handler, if build mode is error or higher.
  */
 inline void install_sigsegv() {
-  #if !defined(NDEBUG) && defined(BUILD) && BUILD>=1
+  #if !defined(NDEBUG) && defined(GVE_BUILD) && GVE_BUILD>=1
   signal(SIGSEGV, on_sigsegv);
   #endif
 }

@@ -32,9 +32,9 @@ using std::max;
 // ----------------------
 // Helps create iterators.
 
-#ifndef PAREN_OPEN
-#define PAREN_OPEN  (
-#define PAREN_CLOSE )
+#ifndef GVE_PAREN_OPEN
+#define GVE_PAREN_OPEN  (
+#define GVE_PAREN_CLOSE )
 #endif
 
 
@@ -97,43 +97,43 @@ using std::max;
 
 
 
-#ifndef ITERATOR_USING
-#define ITERATOR_USING(cat, dif, val, ref, ptr) \
+#ifndef GVE_ITERATOR_USING
+#define GVE_ITERATOR_USING(cat, dif, val, ref, ptr) \
   using iterator_category = cat; \
   using difference_type   = dif; \
   using value_type        = val; \
   using reference         = ref; \
   using pointer           = ptr;
 
-#define ITERATOR_USING_X(X) \
+#define GVE_ITERATOR_USING_X(X) \
   using iterator_category = X::iterator_category; \
   using difference_type   = typename X::difference_type; \
   using value_type        = typename X::value_type; \
   using reference         = typename X::reference; \
   using pointer           = typename X::pointer;
 
-#define ITERATOR_USING_XC(X, cat) \
+#define GVE_ITERATOR_USING_XC(X, cat) \
   using iterator_category = cat; \
   using difference_type   = typename X::difference_type; \
   using value_type        = typename X::value_type; \
   using reference         = typename X::reference; \
   using pointer           = typename X::pointer;
 
-#define ITERATOR_USING_XCD(X, cat, dif) \
+#define GVE_ITERATOR_USING_XCD(X, cat, dif) \
   using iterator_category = cat; \
   using difference_type   = dif; \
   using value_type        = typename X::value_type; \
   using reference         = typename X::reference; \
   using pointer           = typename X::pointer;
 
-#define ITERATOR_USING_XCVRP(X, cat, val, ref, ptr) \
+#define GVE_ITERATOR_USING_XCVRP(X, cat, val, ref, ptr) \
   using iterator_category = cat; \
   using difference_type   = typename X::difference_type; \
   using value_type        = val; \
   using reference         = ref; \
   using pointer           = ptr;
 
-#define ITERATOR_USING_XCRP(X, cat, ref, ptr) \
+#define GVE_ITERATOR_USING_XCRP(X, cat, ref, ptr) \
   using iterator_category = cat; \
   using difference_type   = typename X::difference_type; \
   using value_type        = remove_reference_t<ref>; \
@@ -142,205 +142,205 @@ using std::max;
 #endif
 
 
-#ifndef ITERATOR_COPY
-#define ITERATOR_COPY(f0, f1, cv, ce) \
+#ifndef GVE_ITERATOR_COPY
+#define GVE_ITERATOR_COPY(f0, f1, cv, ce) \
   f0 iterator(const iterator& cv) f1 { ce; }
 #endif
 
-#ifndef ITERATOR_ASSIGN
-#define ITERATOR_ASSIGN(f0, f1, av, ae) \
+#ifndef GVE_ITERATOR_ASSIGN
+#define GVE_ITERATOR_ASSIGN(f0, f1, av, ae) \
   f0 iterator& operator=(const iterator& av) f1 { ae; }
 #endif
 
-#ifndef ITERATOR_DESTROY
-#define ITERATOR_DESTROY(f0, f1, de) \
+#ifndef GVE_ITERATOR_DESTROY
+#define GVE_ITERATOR_DESTROY(f0, f1, de) \
   f0 ~iterator() f1 { de; }
 #endif
 
 
-#ifndef ITERATOR_DEREF
-#define ITERATOR_DEREF_VALUE_DO(f0, f1, de) \
+#ifndef GVE_ITERATOR_DEREF
+#define GVE_ITERATOR_DEREF_VALUE_DO(f0, f1, de) \
   f0 value_type operator*() f1 { de; }
-#define ITERATOR_DEREF_VALUE(f0, f1, de) \
-  ITERATOR_DEREF_VALUE_DO(f0, f1, return de)
-#define ITERATOR_DEREF_DO(f0, f1, de) \
+#define GVE_ITERATOR_DEREF_VALUE(f0, f1, de) \
+  GVE_ITERATOR_DEREF_VALUE_DO(f0, f1, return de)
+#define GVE_ITERATOR_DEREF_DO(f0, f1, de) \
   f0 reference operator*() f1 { de; }
-#define ITERATOR_DEREF(f0, f1, de) \
-  ITERATOR_DEREF_DO(f0, f1, return de)
+#define GVE_ITERATOR_DEREF(f0, f1, de) \
+  GVE_ITERATOR_DEREF_DO(f0, f1, return de)
 #endif
 
-#ifndef ITERATOR_LOOKUP
-#define ITERATOR_LOOKUP_DO(f0, f1, nv, le) \
+#ifndef GVE_ITERATOR_LOOKUP
+#define GVE_ITERATOR_LOOKUP_DO(f0, f1, nv, le) \
   f0 reference operator[](difference_type nv) f1 { le; }
-#define ITERATOR_LOOKUP(f0, f1, nv, le) \
-  ITERATOR_LOOKUP_DO(f0, f1, nv, return le)
+#define GVE_ITERATOR_LOOKUP(f0, f1, nv, le) \
+  GVE_ITERATOR_LOOKUP_DO(f0, f1, nv, return le)
 #endif
 
-#ifndef ITERATOR_POINTER
-#define ITERATOR_POINTER_DO(f0, f1, pe) \
+#ifndef GVE_ITERATOR_POINTER
+#define GVE_ITERATOR_POINTER_DO(f0, f1, pe) \
   f0 pointer operator->() f1 { pe; }
-#define ITERATOR_POINTER(f0, f1, pe) \
-  ITERATOR_POINTER_DO(f0, f1, return pe)
+#define GVE_ITERATOR_POINTER(f0, f1, pe) \
+  GVE_ITERATOR_POINTER_DO(f0, f1, return pe)
 #endif
 
 
-#ifndef ITERATOR_INCREMENT
-#define ITERATOR_INCREMENT_PRE(f0, f1, ie) \
+#ifndef GVE_ITERATOR_INCREMENT
+#define GVE_ITERATOR_INCREMENT_PRE(f0, f1, ie) \
   f0 iterator& operator++() f1 { ie; return *this; }
-#define ITERATOR_INCREMENT_POST(f0, f1) \
+#define GVE_ITERATOR_INCREMENT_POST(f0, f1) \
   f0 iterator operator++(int) f1 { auto it = *this; ++(*this); return it; }
-#define ITERATOR_INCREMENT(f0, f1, ie) \
-  ITERATOR_INCREMENT_PRE(f0, f1, ie) \
-  ITERATOR_INCREMENT_POST(f0, f1)
+#define GVE_ITERATOR_INCREMENT(f0, f1, ie) \
+  GVE_ITERATOR_INCREMENT_PRE(f0, f1, ie) \
+  GVE_ITERATOR_INCREMENT_POST(f0, f1)
 #endif
 
-#ifndef ITERATOR_DECREMENT
-#define ITERATOR_DECREMENT_PRE(f0, f1, de) \
+#ifndef GVE_ITERATOR_DECREMENT
+#define GVE_ITERATOR_DECREMENT_PRE(f0, f1, de) \
   f0 iterator& operator--() f1 { de; return *this; }
-#define ITERATOR_DECREMENT_POST(f0, f1)  \
+#define GVE_ITERATOR_DECREMENT_POST(f0, f1)  \
   f0 iterator operator--(int) f1 { auto it = *this; --(*this); return it; }
-#define ITERATOR_DECREMENT(f0, f1, de) \
-  ITERATOR_DECREMENT_PRE(f0, f1, de) \
-  ITERATOR_DECREMENT_POST(f0, f1)
+#define GVE_ITERATOR_DECREMENT(f0, f1, de) \
+  GVE_ITERATOR_DECREMENT_PRE(f0, f1, de) \
+  GVE_ITERATOR_DECREMENT_POST(f0, f1)
 #endif
 
-#ifndef ITERATOR_NEXT
-#define ITERATOR_NEXT_PRE(f0, f1, ie, de) \
-  ITERATOR_INCREMENT_PRE(f0, f1, ie) \
-  ITERATOR_DECREMENT_PRE(f0, f1, de)
-#define ITERATOR_NEXT_POST(f0, f1) \
-  ITERATOR_INCREMENT_POST(f0, f1) \
-  ITERATOR_DECREMENT_POST(f0, f1)
-#define ITERATOR_NEXT(f0, f1, ie, de) \
-  ITERATOR_NEXT_PRE(f0, f1, ie, de) \
-  ITERATOR_NEXT_POST(f0, f1)
+#ifndef GVE_ITERATOR_NEXT
+#define GVE_ITERATOR_NEXT_PRE(f0, f1, ie, de) \
+  GVE_ITERATOR_INCREMENT_PRE(f0, f1, ie) \
+  GVE_ITERATOR_DECREMENT_PRE(f0, f1, de)
+#define GVE_ITERATOR_NEXT_POST(f0, f1) \
+  GVE_ITERATOR_INCREMENT_POST(f0, f1) \
+  GVE_ITERATOR_DECREMENT_POST(f0, f1)
+#define GVE_ITERATOR_NEXT(f0, f1, ie, de) \
+  GVE_ITERATOR_NEXT_PRE(f0, f1, ie, de) \
+  GVE_ITERATOR_NEXT_POST(f0, f1)
 #endif
 
 
-#ifndef ITERATOR_ADVANCE
-#define ITERATOR_ADVANCE_PLUS(f0, f1, nv, pe) \
+#ifndef GVE_ITERATOR_ADVANCE
+#define GVE_ITERATOR_ADVANCE_PLUS(f0, f1, nv, pe) \
   f0 iterator& operator+=(difference_type nv) f1 { pe; return *this; }
-#define ITERATOR_ADVANCE_MINUS(f0, f1, nv, me) \
+#define GVE_ITERATOR_ADVANCE_MINUS(f0, f1, nv, me) \
   f0 iterator& operator-=(difference_type nv) f1 { me; return *this; }
-#define ITERATOR_ADVANCE(f0, f1, nv, pe, me) \
-  ITERATOR_ADVANCE_PLUS(f0, f1, nv, pe) \
-  ITERATOR_ADVANCE_MINUS(f0, f1, nv, me)
+#define GVE_ITERATOR_ADVANCE(f0, f1, nv, pe, me) \
+  GVE_ITERATOR_ADVANCE_PLUS(f0, f1, nv, pe) \
+  GVE_ITERATOR_ADVANCE_MINUS(f0, f1, nv, me)
 #endif
 
 
-#ifndef ITERATOR_ARITHMETIC
-#define ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, pe) \
+#ifndef GVE_ITERATOR_ARITHMETIC
+#define GVE_ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, pe) \
   f0 friend iterator operator+(const iterator& iv, difference_type nv) f1 { pe; } \
   f0 friend iterator operator+(difference_type nv, const iterator& iv) f1 { return iv+nv; }
-#define ITERATOR_ARITHMETIC_PLUS(f0, f1, iv, nv, pe) \
-  ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, return pe)
+#define GVE_ITERATOR_ARITHMETIC_PLUS(f0, f1, iv, nv, pe) \
+  GVE_ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, return pe)
 
-#define ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, me) \
+#define GVE_ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, me) \
   f0 friend iterator operator-(const iterator& iv, difference_type nv) f1 { me; }
-#define ITERATOR_ARITHMETIC_MINUS(f0, f1, iv, nv, me) \
-  ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, return me)
+#define GVE_ITERATOR_ARITHMETIC_MINUS(f0, f1, iv, nv, me) \
+  GVE_ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, return me)
 
-#define ITERATOR_ARITHMETIC_DO(f0, f1, iv, nv, pe, me)  \
-  ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, pe) \
-  ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, me)
-#define ITERATOR_ARITHMETIC(f0, f1, iv, nv, pe, me)  \
-  ITERATOR_ARITHMETIC_PLUS(f0, f1, iv, nv, pe) \
-  ITERATOR_ARITHMETIC_MINUS(f0, f1, iv, nv, me)
+#define GVE_ITERATOR_ARITHMETIC_DO(f0, f1, iv, nv, pe, me)  \
+  GVE_ITERATOR_ARITHMETIC_PLUS_DO(f0, f1, iv, nv, pe) \
+  GVE_ITERATOR_ARITHMETIC_MINUS_DO(f0, f1, iv, nv, me)
+#define GVE_ITERATOR_ARITHMETIC(f0, f1, iv, nv, pe, me)  \
+  GVE_ITERATOR_ARITHMETIC_PLUS(f0, f1, iv, nv, pe) \
+  GVE_ITERATOR_ARITHMETIC_MINUS(f0, f1, iv, nv, me)
 #endif
 
 
-#ifndef ITERATOR_DIFFERENCE
-#define ITERATOR_DIFFERENCE_DO(f0, f1, lv, rv, de) \
+#ifndef GVE_ITERATOR_DIFFERENCE
+#define GVE_ITERATOR_DIFFERENCE_DO(f0, f1, lv, rv, de) \
   f0 friend difference_type operator-(iterator lv, iterator rv) f1 { de; }
-#define ITERATOR_DIFFERENCE(f0, f1, lv, rv, de) \
-  ITERATOR_DIFFERENCE_DO(f0, f1, lv, rv, return de)
+#define GVE_ITERATOR_DIFFERENCE(f0, f1, lv, rv, de) \
+  GVE_ITERATOR_DIFFERENCE_DO(f0, f1, lv, rv, return de)
 #endif
 
 
-#ifndef ITERATOR_SWAP
-#define ITERATOR_SWAP(f0, f1, lv, rv, se) \
+#ifndef GVE_ITERATOR_SWAP
+#define GVE_ITERATOR_SWAP(f0, f1, lv, rv, se) \
   f0 friend void swap(iterator& lv, iterator& rv) f1 { se; }
 #endif
 
 
-#ifndef ITERATOR_COMPARE
-#define ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, ce) \
+#ifndef GVE_ITERATOR_COMPARE
+#define GVE_ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator==(const iterator& lv, const iterator& rv) f1 { ce; }
-#define ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ce) \
+#define GVE_ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator!=(const iterator& lv, const iterator& rv) f1 { ce; }
-#define ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, ce) \
+#define GVE_ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator>(const iterator& lv, const iterator& rv) f1 { ce; }
-#define ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, ce) \
+#define GVE_ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator<(const iterator& lv, const iterator& rv) f1 { ce; }
-#define ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ce) \
+#define GVE_ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator>=(const iterator& lv, const iterator& rv) f1 { ce; }
-#define ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, ce) \
+#define GVE_ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, ce) \
   f0 friend bool operator<=(const iterator& lv, const iterator& rv) f1 { ce; }
 
-#define ITERATOR_COMPARE_EQ(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, return ce)
-#define ITERATOR_COMPARE_NE(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, return ce)
-#define ITERATOR_COMPARE_GT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, return ce)
-#define ITERATOR_COMPARE_LT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, return ce)
-#define ITERATOR_COMPARE_GE(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, return ce)
-#define ITERATOR_COMPARE_LE(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_EQ(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_NE(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_GT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_LT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_GE(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, return ce)
+#define GVE_ITERATOR_COMPARE_LE(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, return ce)
 
-#define ITERATOR_COMPARE_EQNE_DO(f0, f1, lv, rv, eq, ne) \
-  ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, eq) \
-  ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ne)
-#define ITERATOR_COMPARE_EQNE(f0, f1, lv, rv, eq, ne) \
-  ITERATOR_COMPARE_EQ(f0, f1, lv, rv, eq) \
-  ITERATOR_COMPARE_NE(f0, f1, lv, rv, ne)
-#define ITERATOR_COMPARE_EQNE_INT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_EQ(f0, f1, lv, rv, (ce)==0) \
-  ITERATOR_COMPARE_NE(f0, f1, lv, rv, (ce)!=0)
+#define GVE_ITERATOR_COMPARE_EQNE_DO(f0, f1, lv, rv, eq, ne) \
+  GVE_ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, eq) \
+  GVE_ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ne)
+#define GVE_ITERATOR_COMPARE_EQNE(f0, f1, lv, rv, eq, ne) \
+  GVE_ITERATOR_COMPARE_EQ(f0, f1, lv, rv, eq) \
+  GVE_ITERATOR_COMPARE_NE(f0, f1, lv, rv, ne)
+#define GVE_ITERATOR_COMPARE_EQNE_INT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_EQ(f0, f1, lv, rv, (ce)==0) \
+  GVE_ITERATOR_COMPARE_NE(f0, f1, lv, rv, (ce)!=0)
 
-#define ITERATOR_COMPARE_GTLT_DO(f0, f1, lv, rv, gt, lt) \
-  ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, gt) \
-  ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, lt)
-#define ITERATOR_COMPARE_GTLT(f0, f1, lv, rv, gt, lt) \
-  ITERATOR_COMPARE_GT(f0, f1, lv, rv, gt) \
-  ITERATOR_COMPARE_LT(f0, f1, lv, rv, lt)
-#define ITERATOR_COMPARE_GTLT_INT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_GT(f0, f1, lv, rv, (ce)>0) \
-  ITERATOR_COMPARE_LT(f0, f1, lv, rv, (ce)<0)
+#define GVE_ITERATOR_COMPARE_GTLT_DO(f0, f1, lv, rv, gt, lt) \
+  GVE_ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, gt) \
+  GVE_ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, lt)
+#define GVE_ITERATOR_COMPARE_GTLT(f0, f1, lv, rv, gt, lt) \
+  GVE_ITERATOR_COMPARE_GT(f0, f1, lv, rv, gt) \
+  GVE_ITERATOR_COMPARE_LT(f0, f1, lv, rv, lt)
+#define GVE_ITERATOR_COMPARE_GTLT_INT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_GT(f0, f1, lv, rv, (ce)>0) \
+  GVE_ITERATOR_COMPARE_LT(f0, f1, lv, rv, (ce)<0)
 
-#define ITERATOR_COMPARE_GELE_DO(f0, f1, lv, rv, ge, le) \
-  ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ge) \
-  ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, le)
-#define ITERATOR_COMPARE_GELE(f0, f1, lv, rv, ge, le) \
-  ITERATOR_COMPARE_GE(f0, f1, lv, rv, ge) \
-  ITERATOR_COMPARE_LE(f0, f1, lv, rv, le)
-#define ITERATOR_COMPARE_GELE_INT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_GE(f0, f1, lv, rv, (ce)>0) \
-  ITERATOR_COMPARE_LE(f0, f1, lv, rv, (ce)<0)
+#define GVE_ITERATOR_COMPARE_GELE_DO(f0, f1, lv, rv, ge, le) \
+  GVE_ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ge) \
+  GVE_ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, le)
+#define GVE_ITERATOR_COMPARE_GELE(f0, f1, lv, rv, ge, le) \
+  GVE_ITERATOR_COMPARE_GE(f0, f1, lv, rv, ge) \
+  GVE_ITERATOR_COMPARE_LE(f0, f1, lv, rv, le)
+#define GVE_ITERATOR_COMPARE_GELE_INT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_GE(f0, f1, lv, rv, (ce)>0) \
+  GVE_ITERATOR_COMPARE_LE(f0, f1, lv, rv, (ce)<0)
 
-#define ITERATOR_COMPARE_DO(f0, f1, lv, rv, eq, ne, gt, lt, ge, le) \
-  ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, eq) \
-  ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ne) \
-  ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, gt) \
-  ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, lt) \
-  ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ge) \
-  ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, le)
-#define ITERATOR_COMPARE(f0, f1, lv, rv, eq, ne, gt, lt, ge, le) \
-  ITERATOR_COMPARE_EQ(f0, f1, lv, rv, eq) \
-  ITERATOR_COMPARE_NE(f0, f1, lv, rv, ne) \
-  ITERATOR_COMPARE_GT(f0, f1, lv, rv, gt) \
-  ITERATOR_COMPARE_LT(f0, f1, lv, rv, lt) \
-  ITERATOR_COMPARE_GE(f0, f1, lv, rv, ge) \
-  ITERATOR_COMPARE_LE(f0, f1, lv, rv, le)
-#define ITERATOR_COMPARE_INT(f0, f1, lv, rv, ce) \
-  ITERATOR_COMPARE_EQ(f0, f1, lv, rv, (ce)==0) \
-  ITERATOR_COMPARE_NE(f0, f1, lv, rv, (ce)!=0) \
-  ITERATOR_COMPARE_GT(f0, f1, lv, rv, (ce)>0) \
-  ITERATOR_COMPARE_LT(f0, f1, lv, rv, (ce)<0) \
-  ITERATOR_COMPARE_GE(f0, f1, lv, rv, (ce)>=0) \
-  ITERATOR_COMPARE_LE(f0, f1, lv, rv, (ce)<=0)
+#define GVE_ITERATOR_COMPARE_DO(f0, f1, lv, rv, eq, ne, gt, lt, ge, le) \
+  GVE_ITERATOR_COMPARE_EQ_DO(f0, f1, lv, rv, eq) \
+  GVE_ITERATOR_COMPARE_NE_DO(f0, f1, lv, rv, ne) \
+  GVE_ITERATOR_COMPARE_GT_DO(f0, f1, lv, rv, gt) \
+  GVE_ITERATOR_COMPARE_LT_DO(f0, f1, lv, rv, lt) \
+  GVE_ITERATOR_COMPARE_GE_DO(f0, f1, lv, rv, ge) \
+  GVE_ITERATOR_COMPARE_LE_DO(f0, f1, lv, rv, le)
+#define GVE_ITERATOR_COMPARE(f0, f1, lv, rv, eq, ne, gt, lt, ge, le) \
+  GVE_ITERATOR_COMPARE_EQ(f0, f1, lv, rv, eq) \
+  GVE_ITERATOR_COMPARE_NE(f0, f1, lv, rv, ne) \
+  GVE_ITERATOR_COMPARE_GT(f0, f1, lv, rv, gt) \
+  GVE_ITERATOR_COMPARE_LT(f0, f1, lv, rv, lt) \
+  GVE_ITERATOR_COMPARE_GE(f0, f1, lv, rv, ge) \
+  GVE_ITERATOR_COMPARE_LE(f0, f1, lv, rv, le)
+#define GVE_ITERATOR_COMPARE_INT(f0, f1, lv, rv, ce) \
+  GVE_ITERATOR_COMPARE_EQ(f0, f1, lv, rv, (ce)==0) \
+  GVE_ITERATOR_COMPARE_NE(f0, f1, lv, rv, (ce)!=0) \
+  GVE_ITERATOR_COMPARE_GT(f0, f1, lv, rv, (ce)>0) \
+  GVE_ITERATOR_COMPARE_LT(f0, f1, lv, rv, (ce)<0) \
+  GVE_ITERATOR_COMPARE_GE(f0, f1, lv, rv, (ce)>=0) \
+  GVE_ITERATOR_COMPARE_LE(f0, f1, lv, rv, (ce)<=0)
 #endif
 
 
@@ -350,104 +350,104 @@ using std::max;
 // ----------------------
 // Helps create iterables.
 
-#ifndef ITERABLE_ITERATOR
-#define ITERABLE_NAME_DO(f0, f1, fn, fe) \
+#ifndef GVE_ITERABLE_ITERATOR
+#define GVE_ITERABLE_NAME_DO(f0, f1, fn, fe) \
   f0 auto fn() f1 { fe; }
-#define ITERABLE_BEGIN_DO(f0, f1, be) \
+#define GVE_ITERABLE_BEGIN_DO(f0, f1, be) \
   f0 auto begin() f1 { be; }
-#define ITERABLE_END_DO(f0, f1, ee) \
+#define GVE_ITERABLE_END_DO(f0, f1, ee) \
   f0 auto end()   f1 { ee; }
 
-#define ITERABLE_CNAME_DO(f0, f1, fn, fe) \
+#define GVE_ITERABLE_CNAME_DO(f0, f1, fn, fe) \
   f0 auto fn()    const f1 { fe; } \
   f0 auto c##fn() const f1 { fe; }
-#define ITERABLE_CBEGIN_DO(f0, f1, be) \
+#define GVE_ITERABLE_CBEGIN_DO(f0, f1, be) \
   f0 auto begin()  const f1 { be; } \
   f0 auto cbegin() const f1 { be; }
-#define ITERABLE_CEND_DO(f0, f1, ee) \
+#define GVE_ITERABLE_CEND_DO(f0, f1, ee) \
   f0 auto end()  const f1 { ee; } \
   f0 auto cend() const f1 { ee; }
 
-#define ITERABLE_NAMES_DO(f0, f1, fn, fe) \
-  ITERABLE_NAME_DO(f0, f1, fn, fe) \
-  ITERABLE_CNAME_DO(f0, f1, fn, fe)
-#define ITERABLE_BEGINS_DO(f0, f1, be) \
-  ITERABLE_BEGIN_DO(f0, f1, be) \
-  ITERABLE_CBEGIN_DO(f0, f1, be)
-#define ITERABLE_ENDS_DO(f0, f1, ee) \
-  ITERABLE_END_DO(f0, f1, ee) \
-  ITERABLE_CEND_DO(f0, f1, ee)
+#define GVE_ITERABLE_NAMES_DO(f0, f1, fn, fe) \
+  GVE_ITERABLE_NAME_DO(f0, f1, fn, fe) \
+  GVE_ITERABLE_CNAME_DO(f0, f1, fn, fe)
+#define GVE_ITERABLE_BEGINS_DO(f0, f1, be) \
+  GVE_ITERABLE_BEGIN_DO(f0, f1, be) \
+  GVE_ITERABLE_CBEGIN_DO(f0, f1, be)
+#define GVE_ITERABLE_ENDS_DO(f0, f1, ee) \
+  GVE_ITERABLE_END_DO(f0, f1, ee) \
+  GVE_ITERABLE_CEND_DO(f0, f1, ee)
 
-#define ITERABLE_NAME(f0, f1, fn, fe) \
-  ITERABLE_NAME_DO(f0, f1, fn, return fe)
-#define ITERABLE_BEGIN(f0, f1, be) \
-  ITERABLE_BEGIN_DO(f0, f1, return be)
-#define ITERABLE_END(f0, f1, ee) \
-  ITERABLE_END_DO(f0, f1, return ee)
+#define GVE_ITERABLE_NAME(f0, f1, fn, fe) \
+  GVE_ITERABLE_NAME_DO(f0, f1, fn, return fe)
+#define GVE_ITERABLE_BEGIN(f0, f1, be) \
+  GVE_ITERABLE_BEGIN_DO(f0, f1, return be)
+#define GVE_ITERABLE_END(f0, f1, ee) \
+  GVE_ITERABLE_END_DO(f0, f1, return ee)
 
-#define ITERABLE_CNAME(f0, f1, fn, fe) \
-  ITERABLE_CNAME_DO(f0, f1, fn, return fe)
-#define ITERABLE_CBEGIN(f0, f1, be) \
-  ITERABLE_CBEGIN_DO(f0, f1, return be)
-#define ITERABLE_CEND(f0, f1, ee) \
-  ITERABLE_CEND_DO(f0, f1, return ee)
+#define GVE_ITERABLE_CNAME(f0, f1, fn, fe) \
+  GVE_ITERABLE_CNAME_DO(f0, f1, fn, return fe)
+#define GVE_ITERABLE_CBEGIN(f0, f1, be) \
+  GVE_ITERABLE_CBEGIN_DO(f0, f1, return be)
+#define GVE_ITERABLE_CEND(f0, f1, ee) \
+  GVE_ITERABLE_CEND_DO(f0, f1, return ee)
 
-#define ITERABLE_NAMES(f0, f1, fn, fe) \
-  ITERABLE_NAMES_DO(f0, f1, fn, return fe)
-#define ITERABLE_BEGINS(f0, f1, be) \
-  ITERABLE_BEGINS_DO(f0, f1, return be)
-#define ITERABLE_ENDS(f0, f1, ee) \
-  ITERABLE_ENDS_DO(f0, f1, return ee)
+#define GVE_ITERABLE_NAMES(f0, f1, fn, fe) \
+  GVE_ITERABLE_NAMES_DO(f0, f1, fn, return fe)
+#define GVE_ITERABLE_BEGINS(f0, f1, be) \
+  GVE_ITERABLE_BEGINS_DO(f0, f1, return be)
+#define GVE_ITERABLE_ENDS(f0, f1, ee) \
+  GVE_ITERABLE_ENDS_DO(f0, f1, return ee)
 
-#define ITERABLE_ITERATOR_DO(f0, f1, be, ee) \
-  ITERABLE_BEGIN_DO(f0, f1, be) \
-  ITERABLE_END_DO(f0, f1, ee)
-#define ITERABLE_ITERATOR(f0, f1, be, ee) \
-  ITERABLE_BEGIN(f0, f1, be) \
-  ITERABLE_END(f0, f1, ee)
+#define GVE_ITERABLE_ITERATOR_DO(f0, f1, be, ee) \
+  GVE_ITERABLE_BEGIN_DO(f0, f1, be) \
+  GVE_ITERABLE_END_DO(f0, f1, ee)
+#define GVE_ITERABLE_ITERATOR(f0, f1, be, ee) \
+  GVE_ITERABLE_BEGIN(f0, f1, be) \
+  GVE_ITERABLE_END(f0, f1, ee)
 
-#define ITERABLE_CITERATOR_DO(f0, f1, be, ee) \
-  ITERABLE_CBEGIN_DO(f0, f1, be) \
-  ITERABLE_CEND_DO(f0, f1, ee)
-#define ITERABLE_CITERATOR(f0, f1, be, ee) \
-  ITERABLE_CBEGIN(f0, f1, be) \
-  ITERABLE_CEND(f0, f1, ee)
+#define GVE_ITERABLE_CITERATOR_DO(f0, f1, be, ee) \
+  GVE_ITERABLE_CBEGIN_DO(f0, f1, be) \
+  GVE_ITERABLE_CEND_DO(f0, f1, ee)
+#define GVE_ITERABLE_CITERATOR(f0, f1, be, ee) \
+  GVE_ITERABLE_CBEGIN(f0, f1, be) \
+  GVE_ITERABLE_CEND(f0, f1, ee)
 
-#define ITERABLE_ITERATORS_DO(f0, f1, be, ee) \
-  ITERABLE_BEGINS_DO(f0, f1, be) \
-  ITERABLE_ENDS_DO(f0, f1, ee)
-#define ITERABLE_ITERATORS(f0, f1, be, ee) \
-  ITERABLE_BEGINS(f0, f1, be) \
-  ITERABLE_ENDS(f0, f1, ee)
+#define GVE_ITERABLE_ITERATORS_DO(f0, f1, be, ee) \
+  GVE_ITERABLE_BEGINS_DO(f0, f1, be) \
+  GVE_ITERABLE_ENDS_DO(f0, f1, ee)
+#define GVE_ITERABLE_ITERATORS(f0, f1, be, ee) \
+  GVE_ITERABLE_BEGINS(f0, f1, be) \
+  GVE_ITERABLE_ENDS(f0, f1, ee)
 
-#define ITERABLE_ITERATOR_DEFAULT(ib, ie) \
-  ITERABLE_ITERATOR(inline, const, ib, ie)
-#define ITERABLE_CITERATOR_DEFAULT(ib, ie) \
-  ITERABLE_CITERATOR(inline, const, ib, ie)
-#define ITERABLE_ITERATORS_DEFAULT(ib, ie) \
-  ITERABLE_ITERATORS(inline, const, ib, ie)
+#define GVE_ITERABLE_ITERATOR_DEFAULT(ib, ie) \
+  GVE_ITERABLE_ITERATOR(inline, const, ib, ie)
+#define GVE_ITERABLE_CITERATOR_DEFAULT(ib, ie) \
+  GVE_ITERABLE_CITERATOR(inline, const, ib, ie)
+#define GVE_ITERABLE_ITERATORS_DEFAULT(ib, ie) \
+  GVE_ITERABLE_ITERATORS(inline, const, ib, ie)
 #endif
 
 
-#ifndef ITERABLE_SIZES
-#define ITERABLE_SIZE_DO(f0, f1, se) \
+#ifndef GVE_ITERABLE_SIZES
+#define GVE_ITERABLE_SIZE_DO(f0, f1, se) \
   f0 size_t size() f1 { se; }
-#define ITERABLE_SIZE(f0, f1, se) \
-  ITERABLE_SIZE_DO(f0, f1, return se)
+#define GVE_ITERABLE_SIZE(f0, f1, se) \
+  GVE_ITERABLE_SIZE_DO(f0, f1, return se)
 
-#define ITERABLE_EMPTY_DO(f0, f1, ee) \
+#define GVE_ITERABLE_EMPTY_DO(f0, f1, ee) \
   f0 bool empty() f1 { ee; }
-#define ITERABLE_EMPTY(f0, f1, ee) \
-  ITERABLE_EMPTY_DO(f0, f1, return ee)
+#define GVE_ITERABLE_EMPTY(f0, f1, ee) \
+  GVE_ITERABLE_EMPTY_DO(f0, f1, return ee)
 
-#define ITERABLE_SIZES_DO(f0, f1, se, ee) \
-  ITERABLE_SIZE_DO(f0, f1, se) \
-  ITERABLE_EMPTY_DO(f0, f1, ee)
-#define ITERABLE_SIZES(f0, f1, se, ee) \
-  ITERABLE_SIZE(f0, f1, se) \
-  ITERABLE_EMPTY(f0, f1, ee)
-#define ITERABLE_SIZES_DEFAULT(ib, ie) \
-  ITERABLE_SIZES(inline, const, distance(ib, ie), ib == ie)
+#define GVE_ITERABLE_SIZES_DO(f0, f1, se, ee) \
+  GVE_ITERABLE_SIZE_DO(f0, f1, se) \
+  GVE_ITERABLE_EMPTY_DO(f0, f1, ee)
+#define GVE_ITERABLE_SIZES(f0, f1, se, ee) \
+  GVE_ITERABLE_SIZE(f0, f1, se) \
+  GVE_ITERABLE_EMPTY(f0, f1, ee)
+#define GVE_ITERABLE_SIZES_DEFAULT(ib, ie) \
+  GVE_ITERABLE_SIZES(inline, const, distance(ib, ie), ib == ie)
 #endif
 
 
@@ -463,8 +463,8 @@ class Iterable {
   public:
   using iterator = I;
   Iterable(I ib, I ie) noexcept : ib(ib), ie(ie) {}
-  ITERABLE_ITERATOR_DEFAULT(ib, ie)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_ITERABLE_ITERATOR_DEFAULT(ib, ie)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I>
@@ -490,8 +490,8 @@ class SizedIterable {
   SizedIterable(I ib, I ie, size_t N) noexcept : ib(ib), ie(ie), N(N) {}
   SizedIterable(I ib, I ie) : ib(ib), ie(ie), N(distance(ib, ie)) {}
   public:
-  ITERABLE_ITERATOR_DEFAULT(ib, ie)
-  ITERABLE_SIZES(inline, const, N, N == 0)
+  GVE_ITERABLE_ITERATOR_DEFAULT(ib, ie)
+  GVE_ITERABLE_SIZES(inline, const, N, N == 0)
 };
 
 template <class I>
@@ -517,7 +517,7 @@ inline auto sizedIterable(const J& x) {
 // PAIRED ITERABLE
 // ---------------
 
-#define PAIRED_ITERABLE_SHORT_TYPES(I) \
+#define GVE_PAIRED_ITERABLE_SHORT_TYPES(I) \
   using K = decltype((*ib).first); \
   using V = decltype((*ib).second);
 
@@ -525,7 +525,7 @@ inline auto sizedIterable(const J& x) {
 template <class I>
 class PairedIterable {
   const I ib, ie;
-  PAIRED_ITERABLE_SHORT_TYPES(I)
+  GVE_PAIRED_ITERABLE_SHORT_TYPES(I)
   public:
   PairedIterable(I ib, I ie) noexcept : ib(ib), ie(ie) {}
   inline auto firsts()  noexcept { return staticTransformIterable(*this, PairFirst<K, V>()); }
@@ -538,7 +538,7 @@ class PairedIterable {
 template <class I>
 class ConstPairedIterable {
   const I ib, ie;
-  PAIRED_ITERABLE_SHORT_TYPES(I)
+  GVE_PAIRED_ITERABLE_SHORT_TYPES(I)
   public:
   ConstPairedIterable(I ib, I ie) noexcept : ib(ib), ie(ie) {}
   inline auto firsts()  noexcept { return staticTransformIterable(*this, ConstPairFirst<K, V>()); }
@@ -551,7 +551,7 @@ class ConstPairedIterable {
 template <class I>
 class PairedValueIterable {
   const I ib, ie;
-  PAIRED_ITERABLE_SHORT_TYPES(I)
+  GVE_PAIRED_ITERABLE_SHORT_TYPES(I)
   public:
   PairedValueIterable(I ib, I ie) noexcept : ib(ib), ie(ie) {}
   inline auto firsts()  noexcept { return staticTransformIterable(*this, PairFirstValue<K, V>()); }
@@ -648,31 +648,31 @@ class DefaultIterator {
   using iterator = DefaultIterator;
   const T x;
   public:
-  ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, const T&, const T*)
+  GVE_ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, const T&, const T*)
   DefaultIterator() noexcept : x() {}
-  ITERATOR_DEREF(inline, const noexcept, x)
-  ITERATOR_POINTER(inline, const noexcept, &x)
-  ITERATOR_LOOKUP(inline, const noexcept, i, x)
-  ITERATOR_NEXT(inline, noexcept,,)
-  ITERATOR_ADVANCE(inline, noexcept, i,,)
-  ITERATOR_ARITHMETIC(inline, noexcept, l, i, l, l)
-  ITERATOR_DIFFERENCE(inline, noexcept, l, r, 0)
-  ITERATOR_COMPARE_INT(inline, noexcept, l, r, 0)
+  GVE_ITERATOR_DEREF(inline, const noexcept, x)
+  GVE_ITERATOR_POINTER(inline, const noexcept, &x)
+  GVE_ITERATOR_LOOKUP(inline, const noexcept, i, x)
+  GVE_ITERATOR_NEXT(inline, noexcept,,)
+  GVE_ITERATOR_ADVANCE(inline, noexcept, i,,)
+  GVE_ITERATOR_ARITHMETIC(inline, noexcept, l, i, l, l)
+  GVE_ITERATOR_DIFFERENCE(inline, noexcept, l, r, 0)
+  GVE_ITERATOR_COMPARE_INT(inline, noexcept, l, r, 0)
 };
 
 template <class T>
 class DefaultValueIterator {
   using iterator = DefaultValueIterator;
   public:
-  ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, T, const T*)
+  GVE_ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, T, const T*)
   DefaultValueIterator() noexcept {}
-  ITERATOR_DEREF_VALUE(inline, const noexcept, T())
-  ITERATOR_LOOKUP(inline, const noexcept, i, T())
-  ITERATOR_NEXT(inline, noexcept,,)
-  ITERATOR_ADVANCE(inline, noexcept, i,,)
-  ITERATOR_ARITHMETIC(inline, noexcept, l, i, l, l)
-  ITERATOR_DIFFERENCE(inline, noexcept, l, r, 0)
-  ITERATOR_COMPARE_INT(inline, noexcept, l, r, 0)
+  GVE_ITERATOR_DEREF_VALUE(inline, const noexcept, T())
+  GVE_ITERATOR_LOOKUP(inline, const noexcept, i, T())
+  GVE_ITERATOR_NEXT(inline, noexcept,,)
+  GVE_ITERATOR_ADVANCE(inline, noexcept, i,,)
+  GVE_ITERATOR_ARITHMETIC(inline, noexcept, l, i, l, l)
+  GVE_ITERATOR_DIFFERENCE(inline, noexcept, l, r, 0)
+  GVE_ITERATOR_COMPARE_INT(inline, noexcept, l, r, 0)
 };
 
 template <class T>
@@ -695,16 +695,16 @@ class RangeIterator {
   using iterator = RangeIterator;
   T v;
   public:
-  ITERATOR_USING(random_access_iterator_tag, T, T, T, const T*)
+  GVE_ITERATOR_USING(random_access_iterator_tag, T, T, T, const T*)
   RangeIterator(T v) noexcept : v(v) {}
-  ITERATOR_DEREF(inline, const noexcept, v)
-  ITERATOR_POINTER(inline, const noexcept, &v)
-  ITERATOR_LOOKUP(inline, const noexcept, n, v+n)
-  ITERATOR_NEXT(inline, noexcept, ++v, --v)
-  ITERATOR_ADVANCE(inline, noexcept, n, v+=n, v-=n)
-  ITERATOR_ARITHMETIC(inline, noexcept, l, n, iterator(l.v+n), iterator(l.v-n))
-  ITERATOR_DIFFERENCE(inline, noexcept, l, r, l.v-r.v)
-  ITERATOR_COMPARE_INT(inline, noexcept, l, r, l.v-r.v)
+  GVE_ITERATOR_DEREF(inline, const noexcept, v)
+  GVE_ITERATOR_POINTER(inline, const noexcept, &v)
+  GVE_ITERATOR_LOOKUP(inline, const noexcept, n, v+n)
+  GVE_ITERATOR_NEXT(inline, noexcept, ++v, --v)
+  GVE_ITERATOR_ADVANCE(inline, noexcept, n, v+=n, v-=n)
+  GVE_ITERATOR_ARITHMETIC(inline, noexcept, l, n, iterator(l.v+n), iterator(l.v-n))
+  GVE_ITERATOR_DIFFERENCE(inline, noexcept, l, r, l.v-r.v)
+  GVE_ITERATOR_COMPARE_INT(inline, noexcept, l, r, l.v-r.v)
 };
 
 template <class T>
@@ -756,15 +756,15 @@ inline auto rangeVector(T v, T V, T DV=1) {
 // CIRCULAR ITERATOR
 // -----------------
 
-#ifndef CIRCULAR_ITERATOR_ACCESS
-#define CIRCULAR_ITERATOR_ACCESS(I, ib, ie, it) \
+#ifndef GVE_CIRCULAR_ITERATOR_ACCESS
+#define GVE_CIRCULAR_ITERATOR_ACCESS(I, ib, ie, it) \
   inline I valueBegin() const noexcept { return ib; } \
   inline I valueEnd()   const noexcept { return ie; } \
   inline I value()      const noexcept { return it; }
 #endif
 
-#ifndef CIRCULAR_ITERABLE_ACCESS
-#define CIRCULAR_ITERABLE_ACCESS(I, xb, xe) \
+#ifndef GVE_CIRCULAR_ITERABLE_ACCESS
+#define GVE_CIRCULAR_ITERABLE_ACCESS(I, xb, xe) \
   inline auto values() const noexcept { return Iterable<I>(xb, xe); }
 #endif
 
@@ -774,12 +774,12 @@ class InputCircularIterator {
   using iterator = InputCircularIterator;
   const I xb, xe; I it;
   public:
-  ITERATOR_USING_XC(I, input_iterator_tag)
+  GVE_ITERATOR_USING_XC(I, input_iterator_tag)
   InputCircularIterator(I xb, I xe, I it) noexcept : xb(xb), xe(xe), it(it) {}
-  ITERATOR_DEREF_VALUE(inline, const, *it)
-  ITERATOR_INCREMENT(inline,, ++it; if (it == xe) it = xb)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  CIRCULAR_ITERATOR_ACCESS(I, xb, xe, it)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
+  GVE_ITERATOR_INCREMENT(inline,, ++it; if (it == xe) it = xb)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_CIRCULAR_ITERATOR_ACCESS(I, xb, xe, it)
 };
 
 
@@ -791,8 +791,8 @@ class InputCircularIterable {
   InputCircularIterable(I xb, I xe, I ib, I ie) noexcept : xb(xb), xe(xe), ib(ib), ie(ie) {}
   inline auto begin() const { return InputCircularIterator<I>(xb, xe, ib); }
   inline auto end()   const { return InputCircularIterator<I>(xb, xe, ie); }
-  CIRCULAR_ITERABLE_ACCESS(I, xb, xe)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_CIRCULAR_ITERABLE_ACCESS(I, xb, xe)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I>
@@ -815,8 +815,8 @@ inline auto inputCircularIterable(const J& x, size_t i, size_t I) noexcept {
 // PAIR ITERATOR
 // -------------
 
-#ifndef PAIR_ITERATOR_ACCESS
-#define PAIR_ITERATOR_ACCESS(I0, I1, i0, i1) \
+#ifndef GVE_PAIR_ITERATOR_ACCESS
+#define GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1) \
   inline I0 first()  const noexcept { return i0; } \
   inline I1 second() const noexcept { return i1; } \
   inline I0 key()    const noexcept { return i0; } \
@@ -832,12 +832,12 @@ class InputPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  ITERATOR_USING_XCVRP(I0, input_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, input_iterator_tag, VP, VP, const VP*)
   InputPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  ITERATOR_DEREF_VALUE(inline, const, make_pair(*i0, *i1))
-  ITERATOR_INCREMENT(inline,, ++i0; ++i1)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
-  PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
+  GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
 
 template <class I0, class I1>
@@ -848,11 +848,11 @@ class OutputPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  ITERATOR_USING_XCVRP(I0, output_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, output_iterator_tag, VP, VP, const VP*)
   OutputPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
-  ITERATOR_INCREMENT(inline,, ++i0; ++i1)
-  PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
+  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
+  GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
 
 template <class I0, class I1>
@@ -863,12 +863,12 @@ class ForwardPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  ITERATOR_USING_XCVRP(I0, forward_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, forward_iterator_tag, VP, VP, const VP*)
   ForwardPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
-  ITERATOR_INCREMENT(inline,, ++i0; ++i1)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
-  PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
+  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
+  GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
 
 template <class I0, class I1>
@@ -879,12 +879,12 @@ class BidirectionalPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  ITERATOR_USING_XCVRP(I0, bidirectional_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, bidirectional_iterator_tag, VP, VP, const VP*)
   BidirectionalPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
-  ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
-  PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
+  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
+  GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
 
 template <class I0, class I1>
@@ -895,18 +895,18 @@ class RandomAccessPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  ITERATOR_USING_XCVRP(I0, random_access_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, random_access_iterator_tag, VP, VP, const VP*)
   RandomAccessPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
-  ITERATOR_LOOKUP(inline, const, i, make_pair(i0[i], i1[i]))
-  ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
-  ITERATOR_ADVANCE(inline,, n, i0+=n; i1+=n, i0-=n; i1-=n)
-  ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.i0+n, l.i1+n), iterator(l.i0-n, l.i1-n))
-  ITERATOR_DIFFERENCE(inline,, l, r, l.i0-r.i0)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
-  ITERATOR_COMPARE_GTLT(inline,, l, r, l.i0>r.i0, l.i0<r.i0)
-  ITERATOR_COMPARE_GELE(inline,, l, r, l.i0>=r.i0, l.i0<=r.i0)
-  PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
+  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_LOOKUP(inline, const, i, make_pair(i0[i], i1[i]))
+  GVE_ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
+  GVE_ITERATOR_ADVANCE(inline,, n, i0+=n; i1+=n, i0-=n; i1-=n)
+  GVE_ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.i0+n, l.i1+n), iterator(l.i0-n, l.i1-n))
+  GVE_ITERATOR_DIFFERENCE(inline,, l, r, l.i0-r.i0)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
+  GVE_ITERATOR_COMPARE_GTLT(inline,, l, r, l.i0>r.i0, l.i0<r.i0)
+  GVE_ITERATOR_COMPARE_GELE(inline,, l, r, l.i0>=r.i0, l.i0<=r.i0)
+  GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
 
 template <class I0, class I1>
@@ -997,15 +997,15 @@ inline auto pairIterable(const J0& x0, const J1& x1) {
 // FILTER ITERATOR
 // ---------------
 
-#ifndef FILTER_ITERATOR_ACCESS
-#define FILTER_ITERATOR_ACCESS(I, F, it, ie, fn) \
+#ifndef GVE_FILTER_ITERATOR_ACCESS
+#define GVE_FILTER_ITERATOR_ACCESS(I, F, it, ie, fn) \
   inline I value()     const noexcept { return it; } \
   inline I valueEnd()  const noexcept { return ie; } \
   inline F predicate() const noexcept { return fn; }
 #endif
 
-#ifndef FILTER_ITERABLE_ACCESS
-#define FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn) \
+#ifndef GVE_FILTER_ITERABLE_ACCESS
+#define GVE_FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn) \
   inline auto values() const noexcept { return Iterable<I>(ib, ie); } \
   inline F predicate() const noexcept { return fn; }
 #endif
@@ -1017,13 +1017,13 @@ class InputFilterIterator {
   I it; const I ie; const F fn;
   inline void next() { while (it!=ie && !fn(*it)) ++it; }
   public:
-  ITERATOR_USING_XC(I, input_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, input_iterator_tag);
   InputFilterIterator(I it, I ie, F fn) : it(it), ie(ie), fn(fn) { next(); }
-  ITERATOR_DEREF_VALUE(inline, const, *it)
-  ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
-  ITERATOR_INCREMENT(inline,, ++it; next())
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  FILTER_ITERATOR_ACCESS(I, F, it, ie, fn)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
+  GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, ++it; next())
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_FILTER_ITERATOR_ACCESS(I, F, it, ie, fn)
 };
 
 template <class I, class F>
@@ -1032,13 +1032,13 @@ class ForwardFilterIterator {
   I it; const I ie; const F fn;
   inline void next() { while (it!=ie && !fn(*it)) ++it; }
   public:
-  ITERATOR_USING_XC(I, forward_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, forward_iterator_tag);
   ForwardFilterIterator(I it, I ie, F fn) : it(it), ie(ie), fn(fn) { next(); }
-  ITERATOR_DEREF(inline, const, *it)
-  ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
-  ITERATOR_INCREMENT(inline,, ++it; next())
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  FILTER_ITERATOR_ACCESS(I, F, it, ie, fn)
+  GVE_ITERATOR_DEREF(inline, const, *it)
+  GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, ++it; next())
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_FILTER_ITERATOR_ACCESS(I, F, it, ie, fn)
 };
 
 template <class I, class F>
@@ -1049,8 +1049,8 @@ class InputFilterIterable {
   InputFilterIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return InputFilterIterator<I, F>(ib, ie, fn); }
   inline auto end()   const { return InputFilterIterator<I, F>(ie, ie, fn); }
-  FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1061,8 +1061,8 @@ class ForwardFilterIterable {
   ForwardFilterIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return ForwardFilterIterator<I, F>(ib, ie, fn); }
   inline auto end()   const { return ForwardFilterIterator<I, F>(ie, ie, fn); }
-  FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_FILTER_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1112,15 +1112,15 @@ inline auto filterIterable(const J& x, F fn) {
 // CONDITIONAL ITERATOR
 // --------------------
 
-#ifndef CONDITIONAL_ITERATOR_ACCESS
-#define CONDITIONAL_ITERATOR_ACCESS(I, IC, it, ie, ic) \
+#ifndef GVE_CONDITIONAL_ITERATOR_ACCESS
+#define GVE_CONDITIONAL_ITERATOR_ACCESS(I, IC, it, ie, ic) \
   inline I  value()     const noexcept { return it; } \
   inline I  valueEnd()  const noexcept { return ie; } \
   inline IC condition() const noexcept { return ic; }
 #endif
 
-#ifndef CONDITIONAL_ITERABLE_ACCESS
-#define CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic) \
+#ifndef GVE_CONDITIONAL_ITERABLE_ACCESS
+#define GVE_CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic) \
   inline auto values()     const noexcept { return Iterable<I>(ib, ie); } \
   inline auto conditions() const noexcept { return Iterable<I>(ic, ic+distance(ib, ie)); }
 #endif
@@ -1132,13 +1132,13 @@ class InputConditionalIterator {
   I it; const I ie; IC ic;
   inline void next() { while (it!=ie && !(*ic)) { ++it; ++ic; } }
   public:
-  ITERATOR_USING_XC(I, input_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, input_iterator_tag);
   InputConditionalIterator(I it, I ie, IC ic) : it(it), ie(ie), ic(ic) { next(); }
-  ITERATOR_DEREF_VALUE(inline, const, *it)
-  ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
-  ITERATOR_INCREMENT(inline,, ++it; ++ic; next())
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  CONDITIONAL_ITERATOR_ACCESS(I, IC, it, it, ic)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
+  GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, ++it; ++ic; next())
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_CONDITIONAL_ITERATOR_ACCESS(I, IC, it, it, ic)
 };
 
 template <class I, class IC>
@@ -1147,13 +1147,13 @@ class ForwardConditionalIterator {
   I it; const I ie; IC ic;
   inline void next() { while (it!=ie && !(*ic)) { ++it; ++ic; } }
   public:
-  ITERATOR_USING_XC(I, forward_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, forward_iterator_tag);
   ForwardConditionalIterator(I it, I ie, IC ic) : it(it), ie(ie), ic(ic) { next(); }
-  ITERATOR_DEREF(inline, const, *it)
-  ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
-  ITERATOR_INCREMENT(inline,, ++it; ++ic; next())
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  CONDITIONAL_ITERATOR_ACCESS(I, IC, it, it, ic)
+  GVE_ITERATOR_DEREF(inline, const, *it)
+  GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, ++it; ++ic; next())
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_CONDITIONAL_ITERATOR_ACCESS(I, IC, it, it, ic)
 };
 
 template <class I, class IC>
@@ -1164,8 +1164,8 @@ class InputConditionalIterable {
   InputConditionalIterable(I ib, I ie, IC ic) noexcept : ib(ib), ie(ie), ic(ic) {}
   inline auto begin() const { return InputConditionalIterator<I, IC>(ib, ie, ic); }
   inline auto end()   const { return InputConditionalIterator<I, IC>(ie, ie, ic); }
-  CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class IC>
@@ -1176,8 +1176,8 @@ class ForwardConditionalIterable {
   ForwardConditionalIterable(I ib, I ie, IC ic) noexcept : ib(ib), ie(ie), ic(ic) {}
   inline auto begin() const { return ForwardConditionalIterator<I, IC>(ib, ie, ic); }
   inline auto end()   const { return ForwardConditionalIterator<I, IC>(ie, ie, ic); }
-  CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class IC>
@@ -1227,14 +1227,14 @@ inline auto conditionalIterable(const J& x, const JC& c) {
 // TRANSFORM ITERATOR
 // ------------------
 
-#ifndef TRANSFORM_ITERATOR_ACCESS
-#define TRANSFORM_ITERATOR_ACCESS(I, F, it, fn) \
+#ifndef GVE_TRANSFORM_ITERATOR_ACCESS
+#define GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn) \
   inline I value()     const noexcept { return it; } \
   inline F operation() const noexcept { return fn; }
 #endif
 
-#ifndef TRANSFORM_ITERABLE_ACCESS
-#define TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn) \
+#ifndef GVE_TRANSFORM_ITERABLE_ACCESS
+#define GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn) \
   inline auto values() const noexcept { return Iterable<I>(ib, ie); } \
   inline F operation() const noexcept { return fn; }
 #endif
@@ -1245,12 +1245,12 @@ class InputTransformIterator {
   using iterator = InputTransformIterator;
   I it; const F fn;
   public:
-  ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(fn(*it)), const value_type*)
   InputTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
-  ITERATOR_DEREF_VALUE(inline, const, fn(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, fn(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
 };
 
 template <class I, class F>
@@ -1258,11 +1258,11 @@ class OutputTransformIterator {
   using iterator = OutputTransformIterator;
   I it; const F fn;
   public:
-  ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(fn(*it)), const value_type*)
   OutputTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
-  ITERATOR_DEREF(inline, const, fn(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
+  GVE_ITERATOR_DEREF(inline, const, fn(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
 };
 
 template <class I, class F>
@@ -1270,12 +1270,12 @@ class ForwardTransformIterator {
   using iterator = ForwardTransformIterator;
   I it; const F fn;
   public:
-  ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(fn(*it)), const value_type*)
   ForwardTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
-  ITERATOR_DEREF(inline, const, fn(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
+  GVE_ITERATOR_DEREF(inline, const, fn(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
 };
 
 template <class I, class F>
@@ -1283,12 +1283,12 @@ class BidirectionalTransformIterator {
   using iterator = BidirectionalTransformIterator;
   I it; const F fn;
   public:
-  ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(fn(*it)), const value_type*)
   BidirectionalTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
-  ITERATOR_DEREF(inline, const, fn(*it))
-  ITERATOR_NEXT(inline,, ++it, --it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
+  GVE_ITERATOR_DEREF(inline, const, fn(*it))
+  GVE_ITERATOR_NEXT(inline,, ++it, --it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
 };
 
 template <class I, class F>
@@ -1296,18 +1296,18 @@ class RandomAccessTransformIterator {
   using iterator = RandomAccessTransformIterator;
   I it; const F fn;
   public:
-  ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(fn(*it)), const value_type*)
   RandomAccessTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
-  ITERATOR_DEREF(inline, const, fn(*it))
-  ITERATOR_LOOKUP(inline, const, i, fn(it[i]))
-  ITERATOR_NEXT(inline,, ++it, --it)
-  ITERATOR_ADVANCE(inline,, n, it+=n, it-=n)
-  ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.it+n, l.fn), iterator(l.it-n, l.fn))
-  ITERATOR_DIFFERENCE(inline,, l, r, l.it-r.it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  ITERATOR_COMPARE_GTLT(inline,, l, r, l.it>r.it, l.it<r.it)
-  ITERATOR_COMPARE_GELE(inline,, l, r, l.it>=r.it, l.it<=r.it)
-  TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
+  GVE_ITERATOR_DEREF(inline, const, fn(*it))
+  GVE_ITERATOR_LOOKUP(inline, const, i, fn(it[i]))
+  GVE_ITERATOR_NEXT(inline,, ++it, --it)
+  GVE_ITERATOR_ADVANCE(inline,, n, it+=n, it-=n)
+  GVE_ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.it+n, l.fn), iterator(l.it-n, l.fn))
+  GVE_ITERATOR_DIFFERENCE(inline,, l, r, l.it-r.it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_ITERATOR_COMPARE_GTLT(inline,, l, r, l.it>r.it, l.it<r.it)
+  GVE_ITERATOR_COMPARE_GELE(inline,, l, r, l.it>=r.it, l.it<=r.it)
+  GVE_TRANSFORM_ITERATOR_ACCESS(I, F, it, fn)
 };
 
 template <class I, class F>
@@ -1318,8 +1318,8 @@ class InputTransformIterable {
   InputTransformIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return InputTransformIterator<I, F>(ib, fn); }
   inline auto end()   const { return InputTransformIterator<I, F>(ie, fn); }
-  TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1330,8 +1330,8 @@ class OutputTransformIterable {
   OutputTransformIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return OutputTransformIterator<I, F>(ib, fn); }
   inline auto end()   const { return OutputTransformIterator<I, F>(ie, fn); }
-  TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1342,8 +1342,8 @@ class ForwardTransformIterable {
   ForwardTransformIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return ForwardTransformIterator<I, F>(ib, fn); }
   inline auto end()   const { return ForwardTransformIterator<I, F>(ie, fn); }
-  TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1354,8 +1354,8 @@ class BidirectionalTransformIterable {
   BidirectionalTransformIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return BidirectionalTransformIterator<I, F>(ib, fn); }
   inline auto end()   const { return BidirectionalTransformIterator<I, F>(ie, fn); }
-  TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1366,8 +1366,8 @@ class RandomAccessTransformIterable {
   RandomAccessTransformIterable(I ib, I ie, F fn) noexcept : ib(ib), ie(ie), fn(fn) {}
   inline auto begin() const { return RandomAccessTransformIterator<I, F>(ib, fn); }
   inline auto end()   const { return RandomAccessTransformIterator<I, F>(ie, fn); }
-  TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
-  ITERABLE_SIZES_DEFAULT(ib, ie)
+  GVE_TRANSFORM_ITERABLE_ACCESS(I, F, ib, ie, fn)
+  GVE_ITERABLE_SIZES_DEFAULT(ib, ie)
 };
 
 template <class I, class F>
@@ -1453,8 +1453,8 @@ inline auto transformIterable(const J& x, F fn) {
 // STATIC TRANSFORM ITERATOR
 // -------------------------
 
-#ifndef STATIC_TRANSFORM_ITERATOR
-#define STATIC_TRANSFORM_ITERATOR(I, F, it) \
+#ifndef GVE_STATIC_TRANSFORM_ITERATOR
+#define GVE_STATIC_TRANSFORM_ITERATOR(I, F, it) \
   inline I value()     const noexcept { return it; } \
   inline F operation() const noexcept { return F(); }
 #endif
@@ -1465,12 +1465,12 @@ class InputStaticTransformIterator {
   using iterator = InputStaticTransformIterator;
   I it;
   public:
-  ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(F()(*it)), const value_type*)
   InputStaticTransformIterator(I it) noexcept : it(it) {}
-  ITERATOR_DEREF_VALUE(inline, const, F()(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  STATIC_TRANSFORM_ITERATOR(I, F, it)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, F()(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_STATIC_TRANSFORM_ITERATOR(I, F, it)
 };
 
 template <class I, class F>
@@ -1478,11 +1478,11 @@ class OutputStaticTransformIterator {
   using iterator = OutputStaticTransformIterator;
   I it;
   public:
-  ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(F()(*it)), const value_type*)
   OutputStaticTransformIterator(I it) noexcept : it(it) {}
-  ITERATOR_DEREF(inline, const, F()(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  STATIC_TRANSFORM_ITERATOR(I, F, it)
+  GVE_ITERATOR_DEREF(inline, const, F()(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_STATIC_TRANSFORM_ITERATOR(I, F, it)
 };
 
 template <class I, class F>
@@ -1490,12 +1490,12 @@ class ForwardStaticTransformIterator {
   using iterator = ForwardStaticTransformIterator;
   I it;
   public:
-  ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(F()(*it)), const value_type*)
   ForwardStaticTransformIterator(I it) noexcept : it(it) {}
-  ITERATOR_DEREF(inline, const, F()(*it))
-  ITERATOR_INCREMENT(inline,, ++it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  STATIC_TRANSFORM_ITERATOR(I, F, it)
+  GVE_ITERATOR_DEREF(inline, const, F()(*it))
+  GVE_ITERATOR_INCREMENT(inline,, ++it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_STATIC_TRANSFORM_ITERATOR(I, F, it)
 };
 
 template <class I, class F>
@@ -1503,12 +1503,12 @@ class BidirectionalStaticTransformIterator {
   using iterator = BidirectionalStaticTransformIterator;
   I it;
   public:
-  ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(F()(*it)), const value_type*)
   BidirectionalStaticTransformIterator(I it) noexcept : it(it) {}
-  ITERATOR_DEREF(inline, const, F()(*it))
-  ITERATOR_NEXT(inline,, ++it, --it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  STATIC_TRANSFORM_ITERATOR(I, F, it)
+  GVE_ITERATOR_DEREF(inline, const, F()(*it))
+  GVE_ITERATOR_NEXT(inline,, ++it, --it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_STATIC_TRANSFORM_ITERATOR(I, F, it)
 };
 
 template <class I, class F>
@@ -1516,18 +1516,18 @@ class RandomAccessStaticTransformIterator {
   using iterator = RandomAccessStaticTransformIterator;
   I it;
   public:
-  ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(F()(*it)), const value_type*)
   RandomAccessStaticTransformIterator(I it) noexcept : it(it) {}
-  ITERATOR_DEREF(inline, const, F()(*it))
-  ITERATOR_LOOKUP(inline, const, i, F()(it[i]))
-  ITERATOR_NEXT(inline,, ++it, --it)
-  ITERATOR_ADVANCE(inline,, n, it+=n, it-=n)
-  ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.it+n), iterator(l.it-n))
-  ITERATOR_DIFFERENCE(inline,, l, r, l.it-r.it)
-  ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
-  ITERATOR_COMPARE_GTLT(inline,, l, r, l.it>r.it, l.it<r.it)
-  ITERATOR_COMPARE_GELE(inline,, l, r, l.it>=r.it, l.it<=r.it)
-  STATIC_TRANSFORM_ITERATOR(I, F, it)
+  GVE_ITERATOR_DEREF(inline, const, F()(*it))
+  GVE_ITERATOR_LOOKUP(inline, const, i, F()(it[i]))
+  GVE_ITERATOR_NEXT(inline,, ++it, --it)
+  GVE_ITERATOR_ADVANCE(inline,, n, it+=n, it-=n)
+  GVE_ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.it+n), iterator(l.it-n))
+  GVE_ITERATOR_DIFFERENCE(inline,, l, r, l.it-r.it)
+  GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.it==r.it, l.it!=r.it)
+  GVE_ITERATOR_COMPARE_GTLT(inline,, l, r, l.it>r.it, l.it<r.it)
+  GVE_ITERATOR_COMPARE_GELE(inline,, l, r, l.it>=r.it, l.it<=r.it)
+  GVE_STATIC_TRANSFORM_ITERATOR(I, F, it)
 };
 
 template <class I, class F>
@@ -1619,8 +1619,8 @@ inline auto staticTransformIterable(const J& x, F _) {
 // ----------------
 // Select iterator by boolean.
 
-#ifndef TERNARY_ITERATOR_ACCESS
-#define TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0) \
+#ifndef GVE_TERNARY_ITERATOR_ACCESS
+#define GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0) \
   inline bool select() const noexcept { return sel; } \
   inline I1 truthy()   const noexcept { return i1; } \
   inline I0 falsy()    const noexcept { return i0; }
@@ -1633,14 +1633,14 @@ class InputTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  ITERATOR_USING_XC(I1, input_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, input_iterator_tag)
   InputTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
-  ITERATOR_DEREF_VALUE(inline, const, sel? *i1 : *i0)
-  ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
-  ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
-  ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
-  ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
-  TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
+  GVE_ITERATOR_DEREF_VALUE(inline, const, sel? *i1 : *i0)
+  GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
+  GVE_ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
+  GVE_ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
+  GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
 };
 
 template <class I1, class I0>
@@ -1649,11 +1649,11 @@ class OutputTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  ITERATOR_USING_XC(I1, output_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, output_iterator_tag)
   OutputTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
-  ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
-  ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
-  TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
+  GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
+  GVE_ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
+  GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
 };
 
 template <class I1, class I0>
@@ -1662,14 +1662,14 @@ class ForwardTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  ITERATOR_USING_XC(I1, forward_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, forward_iterator_tag)
   ForwardTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
-  ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
-  ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
-  ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
-  ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
-  ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
-  TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
+  GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
+  GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
+  GVE_ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
+  GVE_ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
+  GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
 };
 
 template <class I1, class I0>
@@ -1678,15 +1678,15 @@ class BidirectionalTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  ITERATOR_USING_XC(I1, bidirectional_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, bidirectional_iterator_tag)
   BidirectionalTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
-  ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
-  ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
-  ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
-  ITERATOR_DECREMENT(inline,, if (sel) --i1; else --i0)
-  ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
-  ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
-  TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
+  GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
+  GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
+  GVE_ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
+  GVE_ITERATOR_DECREMENT(inline,, if (sel) --i1; else --i0)
+  GVE_ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
+  GVE_ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
+  GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
 };
 
 template <class I1, class I0>
@@ -1695,22 +1695,22 @@ class RandomAccessTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  ITERATOR_USING_XC(I1, random_access_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, random_access_iterator_tag)
   RandomAccessTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
-  ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
-  ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
-  ITERATOR_LOOKUP(inline, const, i, sel? i1[i] : i0[i])
-  ITERATOR_NEXT(inline,, if (sel) ++i1; else ++i0, if (sel) --i1; else --i0)
-  ITERATOR_ADVANCE(inline,, n, if (sel) i1+=n; else i0+=n, if (sel) i1-=n; else i0-=n)
-  ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.sel, l.sel? l.i1+n:l.i1, l.sel? l.i0:l.i0+n), iterator(l.sel, l.sel? l.i1-n:l.i1, l.sel? l.i0:l.i0-n))
-  ITERATOR_DIFFERENCE(inline,, l, r, l.sel==r.sel? (l.sel? l.i1-r.i1 : l.i0-r.i0) : 0)
-  ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
-  ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
-  ITERATOR_COMPARE_GT(inline,, l, r, l.sel==r.sel && (l.sel? l.i1>r.i1 : l.i0>r.i0))
-  ITERATOR_COMPARE_LT(inline,, l, r, l.sel==r.sel && (l.sel? l.i1<r.i1 : l.i0<r.i0))
-  ITERATOR_COMPARE_GE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1>=r.i1 : l.i0>=r.i0))
-  ITERATOR_COMPARE_LE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1<=r.i1 : l.i0<=r.i0))
-  TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
+  GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
+  GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
+  GVE_ITERATOR_LOOKUP(inline, const, i, sel? i1[i] : i0[i])
+  GVE_ITERATOR_NEXT(inline,, if (sel) ++i1; else ++i0, if (sel) --i1; else --i0)
+  GVE_ITERATOR_ADVANCE(inline,, n, if (sel) i1+=n; else i0+=n, if (sel) i1-=n; else i0-=n)
+  GVE_ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.sel, l.sel? l.i1+n:l.i1, l.sel? l.i0:l.i0+n), iterator(l.sel, l.sel? l.i1-n:l.i1, l.sel? l.i0:l.i0-n))
+  GVE_ITERATOR_DIFFERENCE(inline,, l, r, l.sel==r.sel? (l.sel? l.i1-r.i1 : l.i0-r.i0) : 0)
+  GVE_ITERATOR_COMPARE_EQ(inline,, l, r, l.sel==r.sel && (l.sel? l.i1==r.i1 : l.i0==r.i0))
+  GVE_ITERATOR_COMPARE_NE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1!=r.i1 : l.i0!=r.i0))
+  GVE_ITERATOR_COMPARE_GT(inline,, l, r, l.sel==r.sel && (l.sel? l.i1>r.i1 : l.i0>r.i0))
+  GVE_ITERATOR_COMPARE_LT(inline,, l, r, l.sel==r.sel && (l.sel? l.i1<r.i1 : l.i0<r.i0))
+  GVE_ITERATOR_COMPARE_GE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1>=r.i1 : l.i0>=r.i0))
+  GVE_ITERATOR_COMPARE_LE(inline,, l, r, l.sel==r.sel && (l.sel? l.i1<=r.i1 : l.i0<=r.i0))
+  GVE_TERNARY_ITERATOR_ACCESS(I1, I0, sel, i1, i0)
 };
 
 template <class I1, class I0>

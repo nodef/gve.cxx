@@ -3,7 +3,7 @@
 // See LICENSE for full terms
 #pragma once
 
-#define BUILD  0  // 5 == BUILD_TRACE
+#define GVE_BUILD  0  // 5 == GVE_BUILD_TRACE
 #define _OPENMP 1
 #include "_main.hxx"
 #include "Graph.hxx"

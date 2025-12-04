@@ -14,9 +14,9 @@
 namespace gve {
 namespace detail {
 #pragma region CONSTANTS
-#ifndef MAX_THREADS
+#ifndef _OPENMP_MAX_THREADS
 /** Maximum number of threads. */
-#define MAX_THREADS 128
+#define _OPENMP_MAX_THREADS 128
 #endif
 #pragma endregion
 
