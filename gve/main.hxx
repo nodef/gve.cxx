@@ -4,7 +4,7 @@
 #pragma once
 
 #define GVE_BUILD  0  // 5 == GVE_BUILD_TRACE
-#define _OPENMP 1
+// #define _OPENMP 1
 #include "_main.hxx"
 #include "Graph.hxx"
 #include "update.hxx"
