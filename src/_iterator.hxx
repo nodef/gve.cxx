@@ -11,18 +11,13 @@
 #include <type_traits>
 #include "_utility.hxx"
 
+
+
+
+namespace gve {
+namespace detail {
 using std::pair;
-using std::ptrdiff_t;
-using std::remove_reference_t;
-using std::input_iterator_tag;
-using std::output_iterator_tag;
-using std::forward_iterator_tag;
-using std::bidirectional_iterator_tag;
-using std::random_access_iterator_tag;
-using std::iterator_traits;
 using std::vector;
-using std::make_pair;
-using std::distance;
 using std::max;
 
 
@@ -136,7 +131,7 @@ using std::max;
 #define GVE_ITERATOR_USING_XCRP(X, cat, ref, ptr) \
   using iterator_category = cat; \
   using difference_type   = typename X::difference_type; \
-  using value_type        = remove_reference_t<ref>; \
+  using value_type        = std::remove_reference_t<ref>; \
   using reference         = ref; \
   using pointer           = ptr;
 #endif
@@ -447,7 +442,7 @@ using std::max;
   GVE_ITERABLE_SIZE(f0, f1, se) \
   GVE_ITERABLE_EMPTY(f0, f1, ee)
 #define GVE_ITERABLE_SIZES_DEFAULT(ib, ie) \
-  GVE_ITERABLE_SIZES(inline, const, distance(ib, ie), ib == ie)
+  GVE_ITERABLE_SIZES(inline, const, std::distance(ib, ie), ib == ie)
 #endif
 
 
@@ -488,7 +483,7 @@ class SizedIterable {
   const size_t N;
   public:
   SizedIterable(I ib, I ie, size_t N) noexcept : ib(ib), ie(ie), N(N) {}
-  SizedIterable(I ib, I ie) : ib(ib), ie(ie), N(distance(ib, ie)) {}
+  SizedIterable(I ib, I ie) : ib(ib), ie(ie), N(std::distance(ib, ie)) {}
   public:
   GVE_ITERABLE_ITERATOR_DEFAULT(ib, ie)
   GVE_ITERABLE_SIZES(inline, const, N, N == 0)
@@ -648,7 +643,7 @@ class DefaultIterator {
   using iterator = DefaultIterator;
   const T x;
   public:
-  GVE_ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, const T&, const T*)
+  GVE_ITERATOR_USING(std::random_access_iterator_tag, std::ptrdiff_t, T, const T&, const T*)
   DefaultIterator() noexcept : x() {}
   GVE_ITERATOR_DEREF(inline, const noexcept, x)
   GVE_ITERATOR_POINTER(inline, const noexcept, &x)
@@ -664,7 +659,7 @@ template <class T>
 class DefaultValueIterator {
   using iterator = DefaultValueIterator;
   public:
-  GVE_ITERATOR_USING(random_access_iterator_tag, ptrdiff_t, T, T, const T*)
+  GVE_ITERATOR_USING(std::random_access_iterator_tag, std::ptrdiff_t, T, T, const T*)
   DefaultValueIterator() noexcept {}
   GVE_ITERATOR_DEREF_VALUE(inline, const noexcept, T())
   GVE_ITERATOR_LOOKUP(inline, const noexcept, i, T())
@@ -695,7 +690,7 @@ class RangeIterator {
   using iterator = RangeIterator;
   T v;
   public:
-  GVE_ITERATOR_USING(random_access_iterator_tag, T, T, T, const T*)
+  GVE_ITERATOR_USING(std::random_access_iterator_tag, T, T, T, const T*)
   RangeIterator(T v) noexcept : v(v) {}
   GVE_ITERATOR_DEREF(inline, const noexcept, v)
   GVE_ITERATOR_POINTER(inline, const noexcept, &v)
@@ -774,7 +769,7 @@ class InputCircularIterator {
   using iterator = InputCircularIterator;
   const I xb, xe; I it;
   public:
-  GVE_ITERATOR_USING_XC(I, input_iterator_tag)
+  GVE_ITERATOR_USING_XC(I, std::input_iterator_tag)
   InputCircularIterator(I xb, I xe, I it) noexcept : xb(xb), xe(xe), it(it) {}
   GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
   GVE_ITERATOR_INCREMENT(inline,, ++it; if (it == xe) it = xb)
@@ -832,9 +827,9 @@ class InputPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  GVE_ITERATOR_USING_XCVRP(I0, input_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, std::input_iterator_tag, VP, VP, const VP*)
   InputPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  GVE_ITERATOR_DEREF_VALUE(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_DEREF_VALUE(inline, const, std::make_pair(*i0, *i1))
   GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
   GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
   GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
@@ -848,9 +843,9 @@ class OutputPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  GVE_ITERATOR_USING_XCVRP(I0, output_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, std::output_iterator_tag, VP, VP, const VP*)
   OutputPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_DEREF(inline, const, std::make_pair(*i0, *i1))
   GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
   GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
 };
@@ -863,9 +858,9 @@ class ForwardPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  GVE_ITERATOR_USING_XCVRP(I0, forward_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, std::forward_iterator_tag, VP, VP, const VP*)
   ForwardPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_DEREF(inline, const, std::make_pair(*i0, *i1))
   GVE_ITERATOR_INCREMENT(inline,, ++i0; ++i1)
   GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
   GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
@@ -879,9 +874,9 @@ class BidirectionalPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  GVE_ITERATOR_USING_XCVRP(I0, bidirectional_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, std::bidirectional_iterator_tag, VP, VP, const VP*)
   BidirectionalPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
+  GVE_ITERATOR_DEREF(inline, const, std::make_pair(*i0, *i1))
   GVE_ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
   GVE_ITERATOR_COMPARE_EQNE(inline,, l, r, l.i0==r.i0, l.i0!=r.i0)
   GVE_PAIR_ITERATOR_ACCESS(I0, I1, i0, i1)
@@ -895,10 +890,10 @@ class RandomAccessPairIterator {
   using VP = pair<V0, V1>;
   I0 i0; I1 i1;
   public:
-  GVE_ITERATOR_USING_XCVRP(I0, random_access_iterator_tag, VP, VP, const VP*)
+  GVE_ITERATOR_USING_XCVRP(I0, std::random_access_iterator_tag, VP, VP, const VP*)
   RandomAccessPairIterator(I0 i0, I1 i1) noexcept : i0(i0), i1(i1) {}
-  GVE_ITERATOR_DEREF(inline, const, make_pair(*i0, *i1))
-  GVE_ITERATOR_LOOKUP(inline, const, i, make_pair(i0[i], i1[i]))
+  GVE_ITERATOR_DEREF(inline, const, std::make_pair(*i0, *i1))
+  GVE_ITERATOR_LOOKUP(inline, const, i, std::make_pair(i0[i], i1[i]))
   GVE_ITERATOR_NEXT(inline,, ++i0; ++i1, --i0; --i1)
   GVE_ITERATOR_ADVANCE(inline,, n, i0+=n; i1+=n, i0-=n; i1-=n)
   GVE_ITERATOR_ARITHMETIC(inline,, l, n, iterator(l.i0+n, l.i1+n), iterator(l.i0-n, l.i1-n))
@@ -1017,7 +1012,7 @@ class InputFilterIterator {
   I it; const I ie; const F fn;
   inline void next() { while (it!=ie && !fn(*it)) ++it; }
   public:
-  GVE_ITERATOR_USING_XC(I, input_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, std::input_iterator_tag);
   InputFilterIterator(I it, I ie, F fn) : it(it), ie(ie), fn(fn) { next(); }
   GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
   GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
@@ -1032,7 +1027,7 @@ class ForwardFilterIterator {
   I it; const I ie; const F fn;
   inline void next() { while (it!=ie && !fn(*it)) ++it; }
   public:
-  GVE_ITERATOR_USING_XC(I, forward_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, std::forward_iterator_tag);
   ForwardFilterIterator(I it, I ie, F fn) : it(it), ie(ie), fn(fn) { next(); }
   GVE_ITERATOR_DEREF(inline, const, *it)
   GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
@@ -1122,7 +1117,7 @@ inline auto filterIterable(const J& x, F fn) {
 #ifndef GVE_CONDITIONAL_ITERABLE_ACCESS
 #define GVE_CONDITIONAL_ITERABLE_ACCESS(I, IC, ib, ie, ic) \
   inline auto values()     const noexcept { return Iterable<I>(ib, ie); } \
-  inline auto conditions() const noexcept { return Iterable<I>(ic, ic+distance(ib, ie)); }
+  inline auto conditions() const noexcept { return Iterable<I>(ic, ic + std::distance(ib, ie)); }
 #endif
 
 
@@ -1132,7 +1127,7 @@ class InputConditionalIterator {
   I it; const I ie; IC ic;
   inline void next() { while (it!=ie && !(*ic)) { ++it; ++ic; } }
   public:
-  GVE_ITERATOR_USING_XC(I, input_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, std::input_iterator_tag);
   InputConditionalIterator(I it, I ie, IC ic) : it(it), ie(ie), ic(ic) { next(); }
   GVE_ITERATOR_DEREF_VALUE(inline, const, *it)
   GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
@@ -1147,7 +1142,7 @@ class ForwardConditionalIterator {
   I it; const I ie; IC ic;
   inline void next() { while (it!=ie && !(*ic)) { ++it; ++ic; } }
   public:
-  GVE_ITERATOR_USING_XC(I, forward_iterator_tag);
+  GVE_ITERATOR_USING_XC(I, std::forward_iterator_tag);
   ForwardConditionalIterator(I it, I ie, IC ic) : it(it), ie(ie), ic(ic) { next(); }
   GVE_ITERATOR_DEREF(inline, const, *it)
   GVE_ITERATOR_POINTER(inline, const noexcept, it.I::operator->())
@@ -1245,7 +1240,7 @@ class InputTransformIterator {
   using iterator = InputTransformIterator;
   I it; const F fn;
   public:
-  GVE_ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::input_iterator_tag, decltype(fn(*it)), const value_type*)
   InputTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
   GVE_ITERATOR_DEREF_VALUE(inline, const, fn(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1258,7 +1253,7 @@ class OutputTransformIterator {
   using iterator = OutputTransformIterator;
   I it; const F fn;
   public:
-  GVE_ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::output_iterator_tag, decltype(fn(*it)), const value_type*)
   OutputTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
   GVE_ITERATOR_DEREF(inline, const, fn(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1270,7 +1265,7 @@ class ForwardTransformIterator {
   using iterator = ForwardTransformIterator;
   I it; const F fn;
   public:
-  GVE_ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::forward_iterator_tag, decltype(fn(*it)), const value_type*)
   ForwardTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
   GVE_ITERATOR_DEREF(inline, const, fn(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1283,7 +1278,7 @@ class BidirectionalTransformIterator {
   using iterator = BidirectionalTransformIterator;
   I it; const F fn;
   public:
-  GVE_ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::bidirectional_iterator_tag, decltype(fn(*it)), const value_type*)
   BidirectionalTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
   GVE_ITERATOR_DEREF(inline, const, fn(*it))
   GVE_ITERATOR_NEXT(inline,, ++it, --it)
@@ -1296,7 +1291,7 @@ class RandomAccessTransformIterator {
   using iterator = RandomAccessTransformIterator;
   I it; const F fn;
   public:
-  GVE_ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(fn(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::random_access_iterator_tag, decltype(fn(*it)), const value_type*)
   RandomAccessTransformIterator(I it, F fn) noexcept : it(it), fn(fn) {}
   GVE_ITERATOR_DEREF(inline, const, fn(*it))
   GVE_ITERATOR_LOOKUP(inline, const, i, fn(it[i]))
@@ -1465,7 +1460,7 @@ class InputStaticTransformIterator {
   using iterator = InputStaticTransformIterator;
   I it;
   public:
-  GVE_ITERATOR_USING_XCRP(I, input_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::input_iterator_tag, decltype(F()(*it)), const value_type*)
   InputStaticTransformIterator(I it) noexcept : it(it) {}
   GVE_ITERATOR_DEREF_VALUE(inline, const, F()(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1478,7 +1473,7 @@ class OutputStaticTransformIterator {
   using iterator = OutputStaticTransformIterator;
   I it;
   public:
-  GVE_ITERATOR_USING_XCRP(I, output_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::output_iterator_tag, decltype(F()(*it)), const value_type*)
   OutputStaticTransformIterator(I it) noexcept : it(it) {}
   GVE_ITERATOR_DEREF(inline, const, F()(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1490,7 +1485,7 @@ class ForwardStaticTransformIterator {
   using iterator = ForwardStaticTransformIterator;
   I it;
   public:
-  GVE_ITERATOR_USING_XCRP(I, forward_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::forward_iterator_tag, decltype(F()(*it)), const value_type*)
   ForwardStaticTransformIterator(I it) noexcept : it(it) {}
   GVE_ITERATOR_DEREF(inline, const, F()(*it))
   GVE_ITERATOR_INCREMENT(inline,, ++it)
@@ -1503,7 +1498,7 @@ class BidirectionalStaticTransformIterator {
   using iterator = BidirectionalStaticTransformIterator;
   I it;
   public:
-  GVE_ITERATOR_USING_XCRP(I, bidirectional_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::bidirectional_iterator_tag, decltype(F()(*it)), const value_type*)
   BidirectionalStaticTransformIterator(I it) noexcept : it(it) {}
   GVE_ITERATOR_DEREF(inline, const, F()(*it))
   GVE_ITERATOR_NEXT(inline,, ++it, --it)
@@ -1516,7 +1511,7 @@ class RandomAccessStaticTransformIterator {
   using iterator = RandomAccessStaticTransformIterator;
   I it;
   public:
-  GVE_ITERATOR_USING_XCRP(I, random_access_iterator_tag, decltype(F()(*it)), const value_type*)
+  GVE_ITERATOR_USING_XCRP(I, std::random_access_iterator_tag, decltype(F()(*it)), const value_type*)
   RandomAccessStaticTransformIterator(I it) noexcept : it(it) {}
   GVE_ITERATOR_DEREF(inline, const, F()(*it))
   GVE_ITERATOR_LOOKUP(inline, const, i, F()(it[i]))
@@ -1633,7 +1628,7 @@ class InputTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  GVE_ITERATOR_USING_XC(I1, input_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, std::input_iterator_tag)
   InputTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
   GVE_ITERATOR_DEREF_VALUE(inline, const, sel? *i1 : *i0)
   GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
@@ -1649,7 +1644,7 @@ class OutputTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  GVE_ITERATOR_USING_XC(I1, output_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, std::output_iterator_tag)
   OutputTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
   GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
   GVE_ITERATOR_INCREMENT(inline,, if (sel) ++i1; else ++i0)
@@ -1662,7 +1657,7 @@ class ForwardTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  GVE_ITERATOR_USING_XC(I1, forward_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, std::forward_iterator_tag)
   ForwardTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
   GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
   GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
@@ -1678,7 +1673,7 @@ class BidirectionalTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  GVE_ITERATOR_USING_XC(I1, bidirectional_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, std::bidirectional_iterator_tag)
   BidirectionalTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
   GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
   GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
@@ -1695,7 +1690,7 @@ class RandomAccessTernaryIterator {
   using T = typename I1::value_type;
   const bool sel; I1 i1; I0 i0;
   public:
-  GVE_ITERATOR_USING_XC(I1, random_access_iterator_tag)
+  GVE_ITERATOR_USING_XC(I1, std::random_access_iterator_tag)
   RandomAccessTernaryIterator(bool sel, I1 i1, I0 i0) noexcept : sel(sel), i1(i1), i0(i0) {}
   GVE_ITERATOR_DEREF(inline, const, sel? *i1 : *i0)
   GVE_ITERATOR_POINTER(inline, const, sel? i1.I1::operator->() : i0.I0::operator->())
@@ -1807,3 +1802,5 @@ inline auto ternaryIterable(bool sel, const J1& x1, const J0& x0) {
 // ---------------
 // Select iterator by index.
 // Can be done using tuples.
+} // namespace detail
+} // namespace gve
