@@ -19,3 +19,4 @@
 #include "bfs.hxx"
 #include "partition.hxx"
 #include "batch.hxx"
+#include "louvain.hxx"
