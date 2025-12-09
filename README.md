@@ -44,7 +44,7 @@ int main() { /* ... */ }
 And then compile with `clang` or `gcc` as usual.
 
 ```bash
-$ clang -std=c++17 -target x86_64-pc-windows-msvc main.cxx  # or, use gcc
+$ clang -std=c++17 -target -fopenmp x86_64-pc-windows-msvc main.cxx  # or, use gcc
 ```
 
 You may also use a simpler approach:
@@ -59,7 +59,7 @@ int main() { /* ... */ }
 If you add the path to `node_modules/gve.cxx` to your compiler's include paths.
 
 ```bash
-$ clang -I./node_modules/gve.cxx -std=c++17 -target x86_64-pc-windows-msvc main.cxx
+$ clang -I./node_modules/gve.cxx -std=c++17 -fopenmp -target x86_64-pc-windows-msvc main.cxx
 ```
 
 <br>

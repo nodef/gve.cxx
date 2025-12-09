@@ -26,6 +26,7 @@ namespace detail {
 using std::string;
 using std::string_view;
 using std::vector;
+using std::min;
 
 
 
@@ -217,7 +218,7 @@ inline void readEdgelistFormatToListsU(IK degrees, IK sources, IK targets, IE we
  */
 inline string_view readEdgelistFormatBlock(string_view data, size_t b, size_t B) {
   auto db = data.begin(), de = data.end();
-  auto bb = db+b, be = std::min(bb+B, de);
+  auto bb = db+b, be = min(bb+B, de);
   if (bb!=db && !isNewline(*bb-1)) bb = findNextLine(bb, de);
   if (be!=db && !isNewline(*be-1)) be = findNextLine(be, de);
   return data.substr(bb-db, be-bb);
@@ -427,6 +428,7 @@ template <bool WEIGHTED=false, int BASE=1, bool CHECK=false, class G>
 inline void readMtxFormatToCsrW(G& a, string_view data) {
   using K = typename G::key_type;
   using E = typename G::edge_value_type;
+  using O = typename G::offset_type;
   // Read MTX format header.
   bool symmetric; size_t rows, cols, size;
   size_t head = readMtxFormatHeaderW(symmetric, rows, cols, size, data);
@@ -440,7 +442,7 @@ inline void readMtxFormatToCsrW(G& a, string_view data) {
   K *targets = new K[M];
   E *weights = WEIGHTED? new E[M] : nullptr;
   K *degrees    = a.degrees;
-  K *offsets    = a.offsets;
+  O *offsets    = a.offsets;
   K *edgeKeys   = a.edgeKeys;
   E *edgeValues = WEIGHTED? a.edgeValues : nullptr;
   fillValueU(degrees, N, K());

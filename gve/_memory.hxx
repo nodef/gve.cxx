@@ -499,7 +499,7 @@ inline T* allocateValues(size_t NUM, size_t RES=0, const T& def=T()) {
  */
 template <class T>
 inline T* allocateValuesOmp(size_t NUM, size_t RES=0, const T& def=T()) {
-  size_t L = std::max(NUM, RES);
+  size_t L = max(NUM, RES);
   T   *ptr = new T[L];
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<NUM; ++i)
@@ -557,7 +557,7 @@ inline T* reallocateValuesOmp(T *ptr, size_t NUM0, size_t RES0, size_t NUM1, siz
     return ptr;
   }
   T   *tmp = new T[RES1];
-  size_t M = std::min(NUM0, NUM1);
+  size_t M = min(NUM0, NUM1);
   #pragma omp parallel for schedule(auto)
   for (size_t i=0; i<M; ++i)
     tmp[i] = ptr[i];
