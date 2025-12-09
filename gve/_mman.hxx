@@ -290,4 +290,14 @@ struct MappedPtr {
 
 // Now, we export the public API.
 EXPORT namespace gve {
+  // Types
+  using detail::mmap_fd_t;
+  // Classes
+  using detail::MappedFile;
+  using detail::MappedPtr;
+  // Methods
+  using detail::mmapOpenFile;
+  using detail::mmapCloseFile;
+  using detail::mmapAlloc;
+  using detail::mmapFree;
 } // namespace gve
