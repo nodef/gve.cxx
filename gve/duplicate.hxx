@@ -178,6 +178,7 @@ inline G duplicateOmp(const G& x) {
 template <class H, class G>
 inline void duplicateArenaOmpW(H& a, const G& x) {
   using  K = typename G::key_type;
+  using  E = typename G::edge_value_type;
   size_t S = x.span();
   // Delete existing data.
   a.clear();

@@ -41,6 +41,12 @@ struct None {
   #pragma endregion
 
 
+  #pragma region AUTOMATIC CONVERSIONS TO INTEGRAL AND FLOATING TYPES
+  template <class T, typename = std::enable_if_t<std::is_integral_v<T> || std::is_floating_point_v<T>>>
+  operator T() const noexcept { return T(1); }
+  #pragma endregion
+
+
   #pragma region STREAM OPERATORS
   friend inline std::istream& operator>>(std::istream& a, None& x) noexcept { return a; }
   friend inline std::ostream& operator<<(std::ostream& a, None x)  noexcept { return a; }
@@ -62,7 +68,7 @@ struct None {
   explicit None(T _) {}
   #pragma endregion
 };
-#define GVE_NONE None
+#define GVE_NONE gve::detail::None
 #endif
 
 
@@ -80,7 +86,7 @@ struct ShowType;
  * Show type of template parameter at compile time.
  * @param T type to show
  */
-#define GVE_SHOW_TYPE(T) ShowType<T>{}
+#define GVE_SHOW_TYPE(T) gve::detail::ShowType<T>{}
 
 /**
  * Show type of template parameter at compile time, only if build mode is error or higher.

@@ -22,6 +22,13 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::pair;
+using std::array;
+using std::vector;
+
+
+
+
 #pragma region WRITE
 /**
  * Write values to a stream.
@@ -64,7 +71,7 @@ inline void writeValues(std::ostream& a, const J& x) {
  * @param x the pair
  */
 template <class K, class V>
-inline void write(std::ostream& a, const std::pair<K, V>& x) {
+inline void write(std::ostream& a, const pair<K, V>& x) {
   a << x.first << ": " << x.second;
 }
 
@@ -75,7 +82,7 @@ inline void write(std::ostream& a, const std::pair<K, V>& x) {
  * @param x the array
  */
 template <class T, size_t N>
-inline void write(std::ostream& a, const std::array<T, N>& x) {
+inline void write(std::ostream& a, const array<T, N>& x) {
   writeValues(a, x);
 }
 
@@ -86,7 +93,7 @@ inline void write(std::ostream& a, const std::array<T, N>& x) {
  * @param x the vector
  */
 template <class T>
-inline void write(std::ostream& a, const std::vector<T>& x) {
+inline void write(std::ostream& a, const vector<T>& x) {
   writeValues(a, x);
 }
 
@@ -97,7 +104,7 @@ inline void write(std::ostream& a, const std::vector<T>& x) {
  * @param x the pair
  */
 template <class K, class V>
-inline std::ostream& operator<<(std::ostream& a, const std::pair<K, V>& x) {
+inline std::ostream& operator<<(std::ostream& a, const pair<K, V>& x) {
   write(a, x); return a;
 }
 
@@ -108,7 +115,7 @@ inline std::ostream& operator<<(std::ostream& a, const std::pair<K, V>& x) {
  * @param x the array
  */
 template <class T, size_t N>
-inline std::ostream& operator<<(std::ostream& a, const std::array<T, N>& x) {
+inline std::ostream& operator<<(std::ostream& a, const array<T, N>& x) {
   write(a, x); return a;
 }
 
@@ -120,7 +127,7 @@ inline std::ostream& operator<<(std::ostream& a, const std::array<T, N>& x) {
  * @returns the stream
  */
 template <class T>
-inline std::ostream& operator<<(std::ostream& a, const std::vector<T>& x) {
+inline std::ostream& operator<<(std::ostream& a, const vector<T>& x) {
   write(a, x); return a;
 }
 #pragma endregion

@@ -17,6 +17,11 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::pair;
+
+
+
+
 #pragma region PAIR ACCESSORS
 /**
  * Accessor for the first element (key) of a pair.
@@ -24,7 +29,7 @@ namespace detail {
  * @tparam V value type
  */
 template <class K, class V>
-struct PairFirst  { inline K& operator()(std::pair<K, V>& x) noexcept { return x.first; } };
+struct PairFirst  { inline K& operator()(pair<K, V>& x) noexcept { return x.first; } };
 
 /**
  * Accessor for the second element (value) of a pair.
@@ -32,7 +37,7 @@ struct PairFirst  { inline K& operator()(std::pair<K, V>& x) noexcept { return x
  * @tparam V value type
  */
 template <class K, class V>
-struct PairSecond { inline V& operator()(std::pair<K, V>& x) noexcept { return x.second; } };
+struct PairSecond { inline V& operator()(pair<K, V>& x) noexcept { return x.second; } };
 
 /**
  * Read-only accessor for the first element (key) of a pair.
@@ -40,7 +45,7 @@ struct PairSecond { inline V& operator()(std::pair<K, V>& x) noexcept { return x
  * @tparam V value type
  */
 template <class K, class V>
-struct ConstPairFirst  { inline const K& operator()(const std::pair<K, V>& x) noexcept { return x.first; } };
+struct ConstPairFirst  { inline const K& operator()(const pair<K, V>& x) noexcept { return x.first; } };
 
 /**
  * Read-only accessor for the second element (value) of a pair.
@@ -48,7 +53,7 @@ struct ConstPairFirst  { inline const K& operator()(const std::pair<K, V>& x) no
  * @tparam V value type
  */
 template <class K, class V>
-struct ConstPairSecond { inline const V& operator()(const std::pair<K, V>& x) noexcept { return x.second; } };
+struct ConstPairSecond { inline const V& operator()(const pair<K, V>& x) noexcept { return x.second; } };
 
 /**
  * Value accessor for the first element (key) of a pair.
@@ -56,7 +61,7 @@ struct ConstPairSecond { inline const V& operator()(const std::pair<K, V>& x) no
  * @tparam V value type
  */
 template <class K, class V>
-struct PairFirstValue  { inline K operator()(const std::pair<K, V>& x) noexcept { return x.first; } };
+struct PairFirstValue  { inline K operator()(const pair<K, V>& x) noexcept { return x.first; } };
 
 /**
  * Value accessor for the second element (value) of a pair.
@@ -64,7 +69,7 @@ struct PairFirstValue  { inline K operator()(const std::pair<K, V>& x) noexcept 
  * @tparam V value type
  */
 template <class K, class V>
-struct PairSecondValue { inline V operator()(const std::pair<K, V>& x) noexcept { return x.second; } };
+struct PairSecondValue { inline V operator()(const pair<K, V>& x) noexcept { return x.second; } };
 #pragma endregion
 
 
@@ -261,7 +266,7 @@ inline bool retry(F fn, int N=2) {
  * @returns move(t) if c, otherwise f
  */
 #define GVE_CMOVE(c, t, f) \
-  ((c)? move(t) : (f))
+  ((c)? std::move(t) : (f))
 
 
 /**

@@ -19,6 +19,7 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::vector;
 using std::min;
 using std::max;
 
@@ -61,7 +62,7 @@ class FixedArenaAllocator {
   #pragma region DATA
   protected:
   /** These allocations have been freed, and can be reused. */
-  std::vector<void*> freed {};
+  vector<void*> freed {};
   /** Number of bytes used in the memory pool. */
   size_t used = 0;
   /** The memory pool. */
@@ -146,11 +147,11 @@ class ArenaAllocator {
   #pragma region DATA
   protected:
   /** These allocations have been freed, and can be reused. */
-  std::vector<void*> freed {};
+  vector<void*> freed {};
   /** Number of bytes used in the last memory pool. */
   size_t used = pool_size;
   /** Memory pools. */
-  std::vector<void*> pools {};
+  vector<void*> pools {};
   #pragma endregion
 
 
@@ -382,7 +383,7 @@ class ConcurrentPow2Allocator {
 
   #pragma region DATA
   protected:
-  std::vector<Pow2Allocator<CAPACITY>*> a;
+  vector<Pow2Allocator<CAPACITY>*> a;
   #pragma endregion
 
 

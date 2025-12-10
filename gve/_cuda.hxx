@@ -24,6 +24,14 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::vector;
+using std::abs;
+using std::min;
+using std::max;
+
+
+
+
 #pragma region TYPES
 /** 64-bit signed integer (CUDA specific). */
 typedef long long int          int64_cu;
@@ -122,7 +130,7 @@ dim3 gridDim;
  */
 template <bool COARSE=false>
 inline int blockSizeCu(size_t N, int BLIM=GVE_BLOCK_LIMIT_CUDA) noexcept {
-  return COARSE? BLIM : int(std::min(N, size_t(BLIM)));
+  return COARSE? BLIM : int(min(N, size_t(BLIM)));
 }
 
 
@@ -136,7 +144,7 @@ inline int blockSizeCu(size_t N, int BLIM=GVE_BLOCK_LIMIT_CUDA) noexcept {
  */
 template <bool COARSE=false>
 inline int gridSizeCu(size_t N, int B, int GLIM=GVE_GRID_LIMIT_CUDA) noexcept {
-  return COARSE? int(std::min(N, size_t(GLIM))) : int(std::min(ceilDiv(N, size_t(B)), size_t(GLIM)));
+  return COARSE? int(min(N, size_t(GLIM))) : int(min(ceilDiv(N, size_t(B)), size_t(GLIM)));
 }
 
 
@@ -181,7 +189,7 @@ void tryFailedCuda(cudaError err, const char* exp, const char* func, int line, c
  * Try to execute a CUDA function call.
  * @param exp expression to execute
  */
-#define GVE_TRY_CUDA(exp)  do { cudaError err = exp; if (err != cudaSuccess) tryFailedCuda(err, #exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_TRY_CUDA(exp)  do { cudaError err = exp; if (err != cudaSuccess) gve::detail::tryFailedCuda(err, #exp, __func__, __LINE__, __FILE__); } while (0)
 
 /**
  * Try to execute a CUDA function call only if build mode is error or higher.
@@ -231,7 +239,7 @@ inline void __device__ unusedCuda(T&&) {}
  * Mark CUDA variable as unused.
  * @param x variable to mark as unused
  */
-#define GVE_UNUSED_CUDA(x)  unusedCuda(x)
+#define GVE_UNUSED_CUDA(x)  gve::detail::unusedCuda(x)
 #endif
 #pragma endregion
 
@@ -315,9 +323,9 @@ inline T readValueCu(const T *v) {
  * @returns values as vector
  */
 template <class T>
-inline std::vector<T> readValuesCu(const T *v, size_t N) {
+inline vector<T> readValuesCu(const T *v, size_t N) {
   GVE_ASSERT(v);
-  std::vector<T> vH(N);
+  vector<T> vH(N);
   GVE_TRY_CUDA( cudaMemcpy(vH.data(), v, N * sizeof(T), cudaMemcpyDeviceToHost) );
   return vH;
 }
@@ -605,7 +613,7 @@ inline T __device__ liNormThreadCud(const T *x, size_t N, size_t i, size_t DI) {
   GVE_ASSERT(x && DI);
   T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
-    a = std::max(a, x[i]);
+    a = max(a, x[i]);
   return a;
 }
 
@@ -622,7 +630,7 @@ inline void __device__ liNormBlockReduceCudU(T *a, size_t N, size_t i) {
   // Reduce values in a to a[0] in reverse binary tree fashion.
   for (; N>1;) {
     size_t DN = (N+1)/2;
-    if (i<N/2) a[i] = std::max(a[i], a[DN+i]);
+    if (i<N/2) a[i] = max(a[i], a[DN+i]);
     __syncthreads();
     N = DN;
   }
@@ -702,7 +710,7 @@ inline T __device__ liNormDeltaThreadCud(const T *x, const T *y, size_t N, size_
   GVE_ASSERT(x && y && DI);
   T a = T();  // TODO: use numeric_limits<T>::min()?
   for (; i<N; i+=DI)
-    a = std::max(a, std::abs(x[i] - y[i]));
+    a = max(a, abs(x[i] - y[i]));
   return a;
 }
 

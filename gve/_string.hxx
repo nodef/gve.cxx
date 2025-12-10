@@ -21,6 +21,11 @@
 // This is particularly useful for pre-C++20 modules.
 namespace gve {
 namespace detail {
+using std::pair;
+
+
+
+
 #pragma region METHODS
 #pragma region COUNT LINES
 /**
@@ -163,7 +168,7 @@ inline I findNextNonDigit(I ib, I ie) {
  * @returns [begin, end) iterators to next token
  */
 template <class I, class FU, class FW>
-inline std::pair<I, I> findNextToken(I ib, I ie, FU fu, FW fw) {
+inline pair<I, I> findNextToken(I ib, I ie, FU fu, FW fw) {
   auto tb = findNextNonBlank(ib, ie, fu);
   auto te = findNextWhitespace(tb+1, ie, fw);
   return {tb, te};

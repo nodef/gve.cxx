@@ -23,10 +23,6 @@
 
 
 
-// An internal namespace helps to hide implementation details.
-// This is particularly useful for pre-C++20 modules.
-namespace gve {
-namespace detail {
 #pragma region GVE_BUILD MODES
 #ifndef GVE_BUILD_RELEASE
 /** Build has no debug information. */
@@ -173,6 +169,8 @@ namespace detail {
 
 #pragma region GVE_LOG
 #ifndef GVE_LOG
+namespace gve {
+namespace detail {
 /**
  * Get current time safely.
  * @param time time
@@ -206,18 +204,24 @@ inline void logPrefix() {
     , t.tm_sec
   );
 }
+} // namespace detail
+} // namespace gve
 
 #if defined(MPI_VERSION) || defined(USE_MPI) || defined(MPI_ENABLED)
+namespace gve {
+namespace detail {
 /**
  * Print log prefix.
  */
 void logPrefixMpi();
+} // namespace detail
+} // namespace gve
 
 /** Log using format. */
-#define GVE_LOG(...)  do { logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { gve::detail::logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
 #else
 /** Log using format. */
-#define GVE_LOG(...)  do { logPrefix(); std::printf(" " __VA_ARGS__); } while (0)
+#define GVE_LOG(...)  do { gve::detail::logPrefix(); std::printf(" " __VA_ARGS__); } while (0)
 #endif
 #endif
 
@@ -264,7 +268,8 @@ void logPrefixMpi();
 #define GVE_STACK_TRACE_SIZE  32
 #endif
 
-
+namespace gve {
+namespace detail {
 /**
  * Handle SIGSEGV signal.
  * @param sig signal number
@@ -293,11 +298,11 @@ inline void install_sigsegv() {
   signal(SIGSEGV, on_sigsegv);
   #endif
 }
+} // namespace detail
+} // namespace gve
 // - https://stackoverflow.com/a/77336/1413259
 #pragma endregion
 #pragma endregion
-} // namespace detail
-} // namespace gve
 
 
 

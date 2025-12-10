@@ -14,12 +14,10 @@
 
 
 
-// An internal namespace helps to hide implementation details.
-// This is particularly useful for pre-C++20 modules.
-namespace gve {
-namespace detail {
 #pragma region ERROR
 #ifndef GVE_TRY_MPI
+namespace gve {
+namespace detail {
 /**
  * Log error on MPI function call failure.
  * @param err error code
@@ -38,12 +36,14 @@ void tryFailedMpi(int err, const char* exp, const char* func, int line, const ch
     buf, exp, func, line, file);
   MPI_Abort(MPI_COMM_WORLD, err);
 }
+} // namespace detail
+} // namespace gve
 
 /**
  * Try to execute an MPI function call.
  * @param exp expression to execute
  */
-#define GVE_TRY_MPI(exp)  do { int err = exp; if (err != MPI_SUCCESS) tryFailedMpi(err, #exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_TRY_MPI(exp)  do { int err = exp; if (err != MPI_SUCCESS) gve::detail::tryFailedMpi(err, #exp, __func__, __LINE__, __FILE__); } while (0)
 
 /**
  * Try to execute an MPI function call only if build mode is error or higher.
@@ -80,6 +80,8 @@ void tryFailedMpi(int err, const char* exp, const char* func, int line, const ch
 
 
 #ifndef GVE_ASSERT_MPI
+namespace gve {
+namespace detail {
 /**
  * Log error on assertion failure.
  * @param exp expression string
@@ -95,18 +97,22 @@ void assertFailedMpi(const char* exp, const char* func, int line, const char* fi
     exp, func, line, file);
   MPI_Abort(MPI_COMM_WORLD, 1);
 }
+} // namespace detail
+} // namespace gve
 
 /**
  * Assert that expression is true.
  * @param exp expression that should be true
  */
-#define GVE_ASSERT_MPI(exp)  do { if (!(exp)) assertFailedMpi(#exp, __func__, __LINE__, __FILE__); } while (0)
+#define GVE_ASSERT_MPI(exp)  do { if (!(exp)) gve::detail::assertFailedMpi(#exp, __func__, __LINE__, __FILE__); } while (0)
 #endif
 #pragma endregion
 
 
 
 #pragma region BASIC
+namespace gve {
+namespace detail {
 /**
  * Get the size of the communicator.
  * @param comm communicator
@@ -127,6 +133,8 @@ inline int mpi_comm_rank(MPI_Comm comm=MPI_COMM_WORLD) {
   int rank; MPI_Comm_rank(comm, &rank);
   return rank;
 }
+}
+}
 #pragma endregion
 
 
@@ -134,6 +142,8 @@ inline int mpi_comm_rank(MPI_Comm comm=MPI_COMM_WORLD) {
 
 #pragma region GVE_LOG
 #ifndef GVE_LOG_MPI
+namespace gve {
+namespace detail {
 /**
  * Print log prefix.
  */
@@ -150,11 +160,11 @@ void logPrefixMpi() {
     , mpi_comm_rank()
   );
 }
-
-/** Log using format. */
-#define GVE_LOG_MPI(...) do { logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
-#endif
-#pragma endregion
 } // namespace detail
 } // namespace gve
+
+/** Log using format. */
+#define GVE_LOG_MPI(...) do { gve::detail::logPrefixMpi(); std::printf(" " __VA_ARGS__); } while (0)
+#endif
+#pragma endregion
 #endif

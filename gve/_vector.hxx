@@ -21,6 +21,9 @@
 namespace gve {
 namespace detail {
 using std::vector;
+using std::abs;
+using std::min;
+using std::max;
 
 
 
@@ -825,7 +828,7 @@ template <class TX, class TA=TX>
 inline TA l1Norm(const TX *x, size_t N, TA a=TA()) {
   GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
-    a += TA(std::abs(x[i]));
+    a += TA(abs(x[i]));
   return a;
 }
 
@@ -854,7 +857,7 @@ inline TA l1NormOmp(const TX *x, size_t N, TA a=TA()) {
   GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
-    a += TA(std::abs(x[i]));
+    a += TA(abs(x[i]));
   return a;
 }
 
@@ -887,7 +890,7 @@ template <class TX, class TY, class TA=TX>
 inline TA l1NormDelta(const TX *x, const TY *y, size_t N, TA a=TA()) {
   GVE_ASSERT(x && y);
   for (size_t i=0; i<N; ++i)
-    a += TA(std::abs(x[i] - y[i]));
+    a += TA(abs(x[i] - y[i]));
   return a;
 }
 
@@ -918,7 +921,7 @@ inline TA l1NormDeltaOmp(const TX *x, const TY *y, size_t N, TA a=TA()) {
   GVE_ASSERT(x && y);
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t i=0; i<N; ++i)
-    a += TA(std::abs(x[i] - y[i]));
+    a += TA(abs(x[i] - y[i]));
   return a;
 }
 
@@ -954,7 +957,7 @@ inline TA l1NormDeltaAt(const TX *x, const TY *y, const TI *is, size_t IS, TA a=
   GVE_ASSERT(x && y && is);
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
-    a += TA(std::abs(x[i] - y[i]));
+    a += TA(abs(x[i] - y[i]));
   }
   return a;
 }
@@ -989,7 +992,7 @@ inline TA l1NormDeltaAtOmp(const TX *x, const TY *y, const TI *is, size_t IS, TA
   #pragma omp parallel for schedule(auto) reduction(+:a)
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
-    a += TA(std::abs(x[i] - y[i]));
+    a += TA(abs(x[i] - y[i]));
   }
   return a;
 }
@@ -1223,7 +1226,7 @@ template <class TX, class TA=TX>
 inline TA liNorm(const TX *x, size_t N, TA a=TA()) {
   GVE_ASSERT(x);
   for (size_t i=0; i<N; ++i)
-    a = std::max(a, TA(std::abs(x[i])));
+    a = max(a, TA(abs(x[i])));
   return a;
 }
 
@@ -1252,7 +1255,7 @@ inline TA liNormOmp(const TX *x, size_t N, TA a=TA()) {
   GVE_ASSERT(x);
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t i=0; i<N; ++i)
-    a = std::max(a, TA(std::abs(x[i])));
+    a = max(a, TA(abs(x[i])));
   return a;
 }
 
@@ -1285,7 +1288,7 @@ template <class TX, class TY, class TA=TX>
 inline TA liNormDelta(const TX *x, const TY *y, size_t N, TA a=TA()) {
   GVE_ASSERT(x && y);
   for (size_t i=0; i<N; ++i)
-    a = std::max(a, TA(std::abs(x[i] - y[i])));
+    a = max(a, TA(abs(x[i] - y[i])));
   return a;
 }
 
@@ -1316,7 +1319,7 @@ inline TA liNormDeltaOmp(const TX *x, const TY *y, size_t N, TA a=TA()) {
   GVE_ASSERT(x && y);
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t i=0; i<N; ++i)
-    a = std::max(a, TA(std::abs(x[i] - y[i])));
+    a = max(a, TA(abs(x[i] - y[i])));
   return a;
 }
 
@@ -1352,7 +1355,7 @@ inline TA liNormDeltaAt(const TX *x, const TY *y, const TI *is, size_t IS, TA a=
   GVE_ASSERT(x && y && is);
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
-    a = std::max(a, TA(std::abs(x[i] - y[i])));
+    a = max(a, TA(abs(x[i] - y[i])));
   }
   return a;
 }
@@ -1387,7 +1390,7 @@ inline TA liNormDeltaAtOmp(const TX *x, const TY *y, const TI *is, size_t IS, TA
   #pragma omp parallel for schedule(auto) reduction(max:a)
   for (size_t l=0; l<IS; ++l) {
     TI i = is[l];
-    a = std::max(a, TA(std::abs(x[i] - y[i])));
+    a = max(a, TA(abs(x[i] - y[i])));
   }
   return a;
 }
@@ -1463,8 +1466,8 @@ inline TA inclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) 
     int T = omp_get_num_threads();
     int t = omp_get_thread_num();
     size_t chunkSize = (N + T - 1) / T;
-    size_t i = std::min(t * chunkSize, N);
-    size_t I = std::min(i + chunkSize, N);
+    size_t i = min(t * chunkSize, N);
+    size_t I = min(i + chunkSize, N);
     buf[t]   = inclusiveScanW(a+i, x+i, I-i);
   }
   // The global scan is computed on the local scans.
@@ -1475,8 +1478,8 @@ inline TA inclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) 
     int T = omp_get_num_threads();
     int t = omp_get_thread_num();
     size_t chunkSize = (N + T - 1) / T;
-    size_t i = std::min(t * chunkSize, N);
-    size_t I = std::min(i + chunkSize, N);
+    size_t i = min(t * chunkSize, N);
+    size_t I = min(i + chunkSize, N);
     addValueU(a+i, I-i, t==0? acc : buf[t-1] + acc);
   }
   return buf[H-1] + acc;
@@ -1553,8 +1556,8 @@ inline TA exclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) 
     int T = omp_get_num_threads();
     int t = omp_get_thread_num();
     size_t chunkSize = (N + T - 1) / T;
-    size_t i = std::min(t * chunkSize, N);
-    size_t I = std::min(i + chunkSize, N);
+    size_t i = min(t * chunkSize, N);
+    size_t I = min(i + chunkSize, N);
     buf[t]   = exclusiveScanW(a+i, x+i, I-i);
   }
   // The global scan is computed on the local scans.
@@ -1565,8 +1568,8 @@ inline TA exclusiveScanOmpW(TA *a, TA *buf, const TX *x, size_t N, TA acc=TA()) 
     int T = omp_get_num_threads();
     int t = omp_get_thread_num();
     size_t chunkSize = (N + T - 1) / T;
-    size_t i = std::min(t * chunkSize, N);
-    size_t I = std::min(i + chunkSize, N);
+    size_t i = min(t * chunkSize, N);
+    size_t I = min(i + chunkSize, N);
     addValueU(a+i, I-i, t==0? acc : buf[t-1] + acc);
   }
   return buf[H-1] + acc;

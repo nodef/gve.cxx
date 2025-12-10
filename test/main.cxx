@@ -29,8 +29,11 @@ int main(int argc, char** argv) {
   printf("Graph y has %zu vertices and %zu edges.\n\n", y.order(), y.size());
   // Copy graph y to graph z.
   printf("Duplicating graph y to z ...\n");
-  gve::ArenaDiGraph<uint32_t, gve::None, gve::None> z;
+  gve::ArenaDiGraph<uint32_t, GVE_NONE, double> z;
   gve::duplicateArenaOmpW(z, y);
   printf("Graph z has %zu vertices and %zu edges.\n\n", z.order(), z.size());
+  // Run Louvain on graph z.
+  auto a0 = gve::louvainStaticOmp(z);
+  printf("Louvain detected communities in %.3f ms with %d iterations and %d passes.\n", a0.time, a0.iterations, a0.passes);
   return 0;
 }
