@@ -1294,6 +1294,8 @@ class DiGraphCsr {
   E *edgeValues = nullptr;
   /** Span of the graph. */
   size_t SPAN = 0;
+  /** Capacity of the graph, i.e., the maximum number of edges that can be stored. */
+  size_t CAPACITY = 0;
   /** Vertex values. */
   V *values = nullptr;
   #pragma endregion
@@ -1329,6 +1331,14 @@ class DiGraphCsr {
     for (size_t u=0; u<SPAN; ++u)
       M += degrees[u];
     return M;
+  }
+
+  /**
+   * Get the capacity of the graph, i.e., the maximum number of edges that can be stored.
+   * @returns capacity of the graph
+   */
+  inline size_t capacity() const noexcept {
+    return CAPACITY;
   }
 
   /**
@@ -1523,6 +1533,7 @@ class DiGraphCsr {
     offsets  = new O[n+1];
     degrees  = new K[n];
     edgeKeys = new K[n];
+    SPAN = CAPACITY = n;
   }
 
 
@@ -1540,6 +1551,7 @@ class DiGraphCsr {
     edgeKeys = new K[m];
     edgeValues = new E[m];
     SPAN = n;
+    CAPACITY = m;
   }
 
 

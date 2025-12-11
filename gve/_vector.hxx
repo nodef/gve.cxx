@@ -3,6 +3,7 @@
 // See LICENSE for full terms
 #pragma once
 
+#include <limits>
 #include <vector>
 #include <algorithm>
 // #include <cstdint>
@@ -35,6 +36,284 @@ using std::max;
  */
 template <class T>
 using vector2d = vector<vector<T>>;
+
+
+
+
+/**
+ * A vector-like non-owning array view.
+ */
+template <typename T>
+struct ArrayView {
+  #pragma region TYPES
+  public:
+  /** Element type of the array. */
+  using value_type = T;
+  /** Pointer type of the array. */
+  using pointer = T*;
+  /** Const pointer type of the array. */
+  using const_pointer = const T*;
+  /** Reference type of the array. */
+  using reference = T&;
+  /** Const reference type of the array. */
+  using const_reference = const T&;
+  #pragma endregion
+
+
+  #pragma region DATA
+  protected:
+  /** Pointer to the data. */
+  T* _data;
+  /** Size of the array. */
+  size_t _size;
+  #pragma endregion
+
+
+  #pragma region METHODS
+  public:
+  /**
+   * Get reference to the element at the given index.
+   * @param i index
+   * @returns reference to the element
+   */
+  inline reference at(size_t i) {
+    GVE_ASSERT(i < _size);
+    return _data[i];
+  }
+  /**
+   * Get const reference to the element at the given index.
+   * @param i index
+   * @returns const reference to the element
+   */
+  inline const_reference at(size_t i) const {
+    GVE_ASSERT(i < _size);
+    return _data[i];
+  }
+
+  /**
+   * Get reference to the element at the given index.
+   * @param i index
+   * @returns reference to the element
+   */
+  inline reference operator[](size_t i) {
+    return _data[i];
+  }
+  /**
+   * Get const reference to the element at the given index.
+   * @param i index
+   * @returns const reference to the element
+   */
+  inline const_reference operator[](size_t i) const {
+    return _data[i];
+  }
+
+  /**
+   * Get reference to the first element of the array view.
+   * @returns reference to the first element
+   */
+  inline reference front() {
+    return _data[0];
+  }
+  /**
+   * Get const reference to the first element of the array view.
+   * @returns const reference to the first element
+   */
+  inline const_reference front() const {
+    return _data[0];
+  }
+
+  /**
+   * Get reference to the last element of the array view.
+   * @returns reference to the last element
+   */
+  inline reference back() {
+    return _data[_size - 1];
+  }
+  /**
+   * Get const reference to the last element of the array view.
+   * @returns const reference to the last element
+   */
+  inline const_reference back() const {
+    return _data[_size - 1];
+  }
+
+  /**
+   * Get pointer of the array view.
+   */
+  inline pointer data() {
+    return _data;
+  }
+  /**
+   * Get const pointer of the array view.
+   */
+  inline const_pointer data() const {
+    return _data;
+  }
+
+  /**
+   * Get begin pointer of the array view.
+   */
+  inline pointer begin() {
+    return _data;
+  }
+  /**
+   * Get const begin pointer of the array view.
+   */
+  inline const_pointer begin() const {
+    return _data;
+  }
+  /**
+   * Get const begin pointer of the array view.
+   */
+  inline const_pointer cbegin() const {
+    return _data;
+  }
+
+  /**
+   * Get end pointer of the array view.
+   * @returns end pointer
+   */
+  inline pointer end() {
+    return _data + _size;
+  }
+  /**
+   * Get const end pointer of the array view.
+   * @returns const end pointer
+   */
+  inline const_pointer end() const {
+    return _data + _size;
+  }
+  /**
+   * Get const end pointer of the array view.
+   * @returns const end pointer
+   */
+  inline const_pointer cend() const {
+    return _data + _size;
+  }
+
+  /**
+   * Check if the array view is empty.
+   * @returns true if empty, false otherwise
+   */
+  inline bool empty() const {
+    return _size == 0;
+  }
+  /**
+   * Get the size of the array view.
+   * @returns size
+   */
+  inline size_t size() const {
+    return _size;
+  }
+  /**
+   * Get the capacity of the array view.
+   * @returns capacity
+   */
+  inline size_t capacity() const {
+    return _size;
+  }
+  /**
+   * Get the maximum size of the array view.
+   * @returns maximum size
+   */
+  inline size_t max_size() const {
+    return std::numeric_limits<size_t>::max();
+  }
+
+  /**
+   * Reserve capacity for the array view.
+   * @param n new capacity
+   */
+  inline void reserve(size_t n) {
+    // No-op for non-owning view
+  }
+  /**
+   * Shrink to fit the array view.
+   */
+  inline void shrink_to_fit() {
+    // No-op for non-owning view
+  }
+
+  /**
+   * Clear the array view.
+   */
+  inline void clear() {
+    _size = 0;
+  }
+
+  /**
+   * Insert an element at a given position.
+   * @param pos position to insert
+   * @param value value to insert
+   */
+  inline void insert(size_t pos, const T& value) {
+    GVE_ASSERT(pos <= _size);
+    for (size_t i = _size; i > pos; --i)
+      _data[i] = _data[i - 1];
+    _data[pos] = value;
+    ++_size;
+  }
+
+  /**
+   * Erase an element at a given position.
+   * @param pos position to erase
+   */
+  inline void erase(size_t pos) {
+    GVE_ASSERT(pos < _size);
+    for (size_t i = pos; i < _size - 1; ++i)
+      _data[i] = _data[i + 1];
+    --_size;
+  }
+
+  /**
+   * Add an element to the end of the array.
+   * @param value value to add
+   */
+  inline void push_back(const T& value) {
+    _data[_size++] = value;
+  }
+  /**
+   * Remove the last element of the array.
+   */
+  inline void pop_back() {
+    GVE_ASSERT(_size > 0);
+    --_size;
+  }
+
+  /**
+   * Resize the array view.
+   * @param n new size
+   */
+  inline void resize(size_t n) {
+    _size = n;
+  }
+
+  /**
+   * Swap with another array view.
+   * @param other another array view
+   */
+  inline void swap(ArrayView<T>& other) noexcept {
+    std::swap(_data, other._data);
+    std::swap(_size, other._size);
+  }
+  #pragma endregion
+
+
+  #pragma region CONSTRUCTORS
+  public:
+  /**
+   * Create an empty array view.
+   */
+  ArrayView() : _data(nullptr), _size(0) {}
+
+  /**
+   * Create an array view from a given buffer and size.
+   * @param data pointer to the data
+   * @param size size of the array
+   */
+  ArrayView(T* data, size_t size) : _data(data), _size(size) {}
+  #pragma endregion
+};
 #pragma endregion
 
 
@@ -425,8 +704,8 @@ inline void fillValueU(T *a, size_t N, const T& v) {
  * @param a output vector (a[i] = v, updated)
  * @param v value to fill
  */
-template <class T>
-inline void fillValueU(vector<T>& a, const T& v) {
+template <class VT, class T>
+inline void fillValueU(VT& a, const T& v) {
   std::fill(a.begin(), a.end(), v);
 }
 
@@ -451,11 +730,12 @@ inline void fillValueOmpU(T *a, size_t N, const T& v) {
  * @param a output vector (a[i] = v, updated)
  * @param v value to fill
  */
-template <class T>
-inline void fillValueOmpU(vector<T>& a, const T& v) {
+template <class VT, class T>
+inline void fillValueOmpU(VT& a, const T& v) {
   fillValueOmpU(a.data(), a.size(), v);
 }
-inline void fillValueOmpU(vector<bool>& a, const bool& v) {
+template <class VB>
+inline void fillValueOmpU(VB& a, const bool& v) {
   std::fill(a.begin(), a.end(), v);
 }
 #endif
