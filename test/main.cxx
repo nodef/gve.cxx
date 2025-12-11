@@ -32,8 +32,8 @@ int main(int argc, char** argv) {
   gve::ArenaDiGraph<uint32_t, GVE_NONE, double> z;
   gve::duplicateArenaOmpW(z, y);
   printf("Graph z has %zu vertices and %zu edges.\n\n", z.order(), z.size());
-  // Run Louvain on graph z.
-  auto a0 = gve::louvainStaticOmp(z);
-  printf("Louvain detected communities in %.3f ms with %d iterations and %d passes.\n", a0.time, a0.iterations, a0.passes);
+  // Run PageRank on graph z.
+  auto a0 = gve::pagerankStaticOmp(z, gve::PagerankOptions<float>());
+  printf("PageRank completed in %.3f ms with %d iterations.\n", a0.time, a0.iterations);
   return 0;
 }

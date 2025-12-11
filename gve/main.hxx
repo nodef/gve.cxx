@@ -19,4 +19,6 @@
 #include "bfs.hxx"
 #include "partition.hxx"
 #include "batch.hxx"
-#include "louvain.hxx"
+#include "pagerank.hxx"
+#include "pagerankPrune.hxx"
+// #include "louvain.hxx"
