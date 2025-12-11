@@ -21,4 +21,5 @@
 #include "batch.hxx"
 #include "pagerank.hxx"
 #include "pagerankPrune.hxx"
-// #include "louvain.hxx"
+#include "louvain.hxx"
+#include "leiden.hxx"

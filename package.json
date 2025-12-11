@@ -1,6 +1,6 @@
 {
   "name": "gve.cxx",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "A high-performance parallel Graph interface supporting efficient Dynamic batch updates.",
   "keywords": [
     "c++",
@@ -14,8 +14,10 @@
     "update",
     "gve",
     "static",
+    "dynamic",
     "louvain",
-    "leiden"
+    "leiden",
+    "pagerank"
   ],
   "license": "AGPL-3.0",
   "author": "wolfram77@gmail.com",

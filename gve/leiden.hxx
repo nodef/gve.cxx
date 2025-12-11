@@ -1102,9 +1102,9 @@ inline auto leidenInvoke(const G& x, const LeidenOptions& o, FI fi, FM fm, FA fa
   if (!DYNAMIC) ctot.resize(S);
   size_t Z = max(size_t(o.aggregationTolerance * X), X);
   size_t Y = max(size_t(o.aggregationTolerance * Z), Z);
-  DiGraphCsr<K, None, None, K> cv(S, S);  // CSR for community vertices
-  DiGraphCsr<K, None, W> y(S, Y);         // CSR for aggregated graph (input);  y(S, X)
-  DiGraphCsr<K, None, W> z(S, Z);         // CSR for aggregated graph (output); z(S, X)
+  DiGraphCsrVector<K, None, None, K> cv(S, S);  // CSR for community vertices
+  DiGraphCsrVector<K, None, W> y(S, Y);         // CSR for aggregated graph (input);  y(S, X)
+  DiGraphCsrVector<K, None, W> z(S, Z);         // CSR for aggregated graph (output); z(S, X)
   // Perform Leiden algorithm.
   float tm = 0, ti = 0, tp = 0, tl = 0, tr = 0, ta = 0;  // Time spent in different phases
   float t  = measureDurationMarked([&](auto mark) {
@@ -1228,9 +1228,9 @@ inline auto leidenInvokeOmp(const G& x, const LeidenOptions& o, FI fi, FM fm, FA
   leidenAllocateHashtablesW(vcs, vcout, S);
   size_t Z = max(size_t(o.aggregationTolerance * X), X);
   size_t Y = max(size_t(o.aggregationTolerance * Z), Z);
-  DiGraphCsr<K, None, None, K> cv(S, S);  // CSR for community vertices
-  DiGraphCsr<K, None, W> y(S, Y);         // CSR for aggregated graph (input);  y(S, X)
-  DiGraphCsr<K, None, W> z(S, Z);         // CSR for aggregated graph (output); z(S, X)
+  DiGraphCsrVector<K, None, None, K> cv(S, S);  // CSR for community vertices
+  DiGraphCsrVector<K, None, W> y(S, Y);         // CSR for aggregated graph (input);  y(S, X)
+  DiGraphCsrVector<K, None, W> z(S, Z);         // CSR for aggregated graph (output); z(S, X)
   // Perform Leiden algorithm.
   float tm = 0, ti = 0, tp = 0, tl = 0, tr = 0, ta = 0;  // Time spent in different phases
   float t  = measureDurationMarked([&](auto mark) {

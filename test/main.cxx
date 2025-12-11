@@ -35,5 +35,11 @@ int main(int argc, char** argv) {
   // Run PageRank on graph z.
   auto a0 = gve::pagerankStaticOmp(z, gve::PagerankOptions<float>());
   printf("PageRank completed in %.3f ms with %d iterations.\n", a0.time, a0.iterations);
+  // Run Louvain on graph z.
+  auto a1 = gve::louvainStaticOmp(z);
+  printf("Louvain completed in %.3f ms with %d iterations and %d passes.\n", a1.time, a1.iterations, a1.passes);
+  // Run Leiden on graph z.
+  auto a2 = gve::leidenStaticOmp(z);
+  printf("Leiden completed in %.3f ms with %d iterations and %d passes.\n", a2.time, a2.iterations, a2.passes);
   return 0;
 }
