@@ -1,6 +1,6 @@
 {
   "name": "gve.cxx",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "A high-performance parallel Graph interface supporting efficient Dynamic batch updates.",
   "keywords": [
     "c++",

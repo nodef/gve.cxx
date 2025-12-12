@@ -917,6 +917,8 @@ class DiGraph {
   using vertex_value_type = V;
   /** Edge value type (edge weight). */
   using edge_value_type   = E;
+  /** Offset type (edge offset). */
+  using offset_type       = size_t;
   #pragma endregion
 
 
