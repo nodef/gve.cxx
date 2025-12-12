@@ -97,6 +97,89 @@ int main() {
 ```
 
 <br>
+
+
+## API Overview
+
+### Core Classes
+
+#### Graphs
+
+*   **`ArenaDiGraph<K, V, E>`**
+    Directed graph implementation using arena allocation. Optimized for high-performance scenarios with static or append-only workloads.
+    *   `K`: Key type (vertex ID), default `uint32_t`.
+    *   `V`: Vertex value type, default `None`.
+    *   `E`: Edge value type (weight), default `None`.
+
+*   **`DiGraph<K, V, E>`**
+    Standard directed graph implementation using `std::vector`. more flexible than `ArenaDiGraph` but potentially higher memory overhead.
+
+*   **`DiGraphCsr<K, V, E, O>`**
+    Read-only directed graph using Compressed Sparse Row (CSR) format. Best for static graph analysis.
+    *   `O`: Offset type, default `size_t`.
+
+### Graph Operations
+
+#### Construction & Modification
+*   **`addVertex(G& a, K u, V d)`**: Add a vertex `u` with data `d` to graph `a`.
+*   **`addEdgeU(G& a, K u, K v, E w)`**: Add an edge `(u, v)` with weight `w`.
+*   **`removeEdgeU(G& a, K u, K v)`**: Remove edge `(u, v)`.
+*   **`updateU(G& a)`**: Commit changes to the graph structure (required after batch modifications).
+*   **`duplicate(const G& x)`**: Create and return a deep copy of graph `x`.
+*   **`transpose(const G& x)`**: Return the transpose (reversed edges) of graph `x`.
+*   **`symmetrizeU(G& a)`**: specific method to make graph symmetric (undirected) in-place.
+
+#### Partitioning
+*   **`partitionById(const G& x, int p, int P)`**: Partition graph vertices based on ID ranges.
+*   **`partitionByBfs(const G& x, int p, int P, FC fc, FT ft)`**: Partition using BFS traversal and a cost function.
+
+#### Batch Updates
+*   **`generateEdgeDeletions`** / **`generateEdgeInsertions`**: Generate random sets of edge updates for testing.
+*   **`tidyBatchUpdateU`**: clean, sort, and deduplicate a batch of edge updates.
+*   **`applyBatchUpdateU`**: Apply a batch of edge insertions and deletions to a graph.
+
+#### Input / Output
+*   **`readMtxFormatToGraphW`**: Read a graph from a Matrix Market field.
+*   **`write(ostream& out, const G& graph, bool detailed)`**: specific method to write graph structure to an output stream.
+*   **`readEdgelistFormat*`**: Family of functions to read edge list formats.
+
+### Algorithms
+
+> **Note:** Most algorithms have a parallel version with the `Omp` suffix (e.g., `pagerankStaticOmp`) if OpenMP is enabled.
+
+#### Traversal
+*   **`bfsVisitedForEach(const G& x, K u, FT ft, FP fp)`**: Perform BFS starting at `u`.
+*   **`dfsVisitedForEach(const G& x, K u, FT ft, FP fp)`**: Perform DFS starting at `u`.
+
+#### PageRank
+*   **`PagerankOptions<V>`**: Configuration options (damping factor, tolerance, max iterations).
+*   **`PagerankResult<V>`**: Result structure containing ranks and timing statistics.
+*   **`pagerankStatic(const G& xt, const PagerankOptions& o)`**: Compute PageRank on a static graph.
+*   **`pagerankNaiveDynamic`**: Update PageRank using naive dynamic approach.
+*   **`pagerankDynamicTraversal`**: Update PageRank using dynamic traversal.
+*   **`pagerankDynamicFrontier`**: Update PageRank using dynamic frontier approach.
+
+#### Community Detection
+*   **`LouvainOptions<V>`** / **`LeidenOptions<V>`**: Configuration options.
+*   **`louvainStatic(const G& x, const LouvainOptions& o)`**: Detect communities using the Louvain method.
+*   **`leidenStatic(const G& x, const LeidenOptions& o)`**: Detect communities using the Leiden method.
+
+### Utilities
+
+*   **`timeNow()`**: Get current time point.
+*   **`duration(start, end)`**: Calculate duration in milliseconds.
+*   **`retry(Func f, int retries)`**: Helper to retry a function on failure.
+*   **`FormatError`**: Exception thrown for data format errors.
+
+### CUDA Utilities
+(Available when compiled with CUDA)
+*   **`copyValuesCuW`**: Copy memory between host and device.
+*   **`fillValueCuW`**: Fill device memory.
+*   **`sumValues*`**: Reduction operations.
+*   **`liNorm*`**: Norm calculations.
+
+
+<br>
 <br>
 
 
